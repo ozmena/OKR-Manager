@@ -280,3 +280,52 @@ Comprehensive review of the entire project to assess current state, documented d
 - Clear component separation
 
 ---
+
+## Session: Tech Stack Analysis & SSO Roadmap
+
+### Date: 2026-01-10
+
+### Current Tech Stack
+
+| Layer | Technology | Version |
+|-------|------------|---------|
+| Frontend | React | 19.2.3 |
+| Language | TypeScript | 5.9.3 |
+| Build Tool | Vite | 7.3.1 |
+| Data Storage | localStorage | Browser API |
+| Backend | None | - |
+
+### Roadmap: Microsoft SSO Integration Options (Kraft Heinz)
+
+**Context:** Kraft Heinz uses Microsoft as technology partner with Single Sign-On via Microsoft Entra ID (Azure AD). Target: 100 corporate users.
+
+#### Option 1: MSAL.js (Direct Microsoft Integration)
+- **Effort:** 2-3 days
+- **Library:** `@azure/msal-browser` + `@azure/msal-react`
+- **Cost:** Free (included in M365 license)
+- **Pros:** Native integration, no middleware needed
+- **Cons:** Still need separate backend for data storage
+
+#### Option 2: Auth0 / Okta with Microsoft Connection
+- **Effort:** 1 day
+- **Cost:** Auth0 free tier: 7,500 users; Okta: paid
+- **Pros:** Simpler developer experience, good admin dashboard
+- **Cons:** Additional vendor, monthly cost at scale
+
+#### Option 3: Supabase + Microsoft OAuth (Recommended)
+- **Effort:** 2-3 days for auth + database
+- **Cost:** Free tier: 50K monthly active users
+- **Pros:** Solves BOTH auth AND data storage, PostgreSQL included, row-level security
+- **Cons:** Data hosted on Supabase (may need security review)
+
+### What Kraft Heinz IT Would Provide
+1. Azure App Registration (Client ID, Tenant ID)
+2. Redirect URI approval
+3. API permissions (email, profile)
+
+*Typically a 30-minute task for their IT admin.*
+
+### Recommendation
+**Supabase with Microsoft OAuth** - solves SSO + data persistence together in 2-3 days.
+
+---
