@@ -1,10 +1,15 @@
 import { OKR } from './types';
+import { seedOKRs } from './seedData';
 
 const STORAGE_KEY = 'okrs';
 
 export function getOKRs(): OKR[] {
   const data = localStorage.getItem(STORAGE_KEY);
-  if (!data) return [];
+  if (!data) {
+    // Load seed data when localStorage is empty
+    saveOKRs(seedOKRs);
+    return seedOKRs;
+  }
   return JSON.parse(data);
 }
 

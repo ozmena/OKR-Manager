@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { OKR } from '../types';
 
 interface OKRTreeViewProps {
@@ -12,11 +13,18 @@ interface TreeCardProps {
 
 function TreeCard({ okr, allOkrs }: TreeCardProps) {
   const children = allOkrs.filter(o => o.parentId === okr.id);
+  const isGlobal = !okr.parentId;
 
   return (
     <div className="tree-node">
       <div className="tree-card">
-        <h4 className="tree-card-objective">{okr.objective}</h4>
+        <h4 className="tree-card-objective">
+          <span
+            className={`tree-card-icon ${isGlobal ? 'tree-card-icon-parent' : 'tree-card-icon-child'}`}
+            title={isGlobal ? 'Global OKR' : 'Area OKR'}
+          >◎</span>
+          {okr.objective}
+        </h4>
         <ul className="tree-card-krs">
           {okr.keyResults.map((kr) => (
             <li key={kr.id}>
@@ -39,6 +47,16 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
 
 export function OKRTreeView({ okrs, onBack }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
+  const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
+
+  // Pre-select the first global OKR on load or when OKRs change
+  useEffect(() => {
+    if (topLevelOkrs.length > 0 && !selectedOkrId) {
+      setSelectedOkrId(topLevelOkrs[0].id);
+    }
+  }, [topLevelOkrs, selectedOkrId]);
+
+  const selectedOkr = okrs.find(okr => okr.id === selectedOkrId);
 
   return (
     <div className="tree-view">
@@ -53,13 +71,26 @@ export function OKRTreeView({ okrs, onBack }: OKRTreeViewProps) {
           <p>No OKRs yet. Go back to create your first one!</p>
         </div>
       ) : (
-        <div className="tree-container">
-          <div className="tree-root">
+        <>
+          <div className="tree-tabs">
             {topLevelOkrs.map(okr => (
-              <TreeCard key={okr.id} okr={okr} allOkrs={okrs} />
+              <button
+                key={okr.id}
+                className={`tree-tab ${selectedOkrId === okr.id ? 'active' : ''}`}
+                onClick={() => setSelectedOkrId(okr.id)}
+              >
+                {okr.objective}
+              </button>
             ))}
           </div>
-        </div>
+          <div className="tree-container">
+            <div className="tree-root">
+              {selectedOkr && (
+                <TreeCard okr={selectedOkr} allOkrs={okrs} />
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

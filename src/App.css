@@ -609,6 +609,24 @@ body {
   margin-bottom: 10px;
   line-height: 1.4;
   text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tree-card-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.tree-card-icon-parent {
+  color: var(--notion-orange);
+}
+
+.tree-card-icon-child {
+  color: var(--notion-blue);
 }
 
 .tree-card-krs {
@@ -689,4 +707,39 @@ body {
   width: 2px;
   height: 20px;
   background: var(--notion-border);
+}
+
+/* Tree View Tabs */
+.tree-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tree-tab {
+  padding: 8px 16px;
+  background: var(--notion-bg-gray);
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  color: var(--notion-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-tab:hover {
+  background-color: var(--notion-hover);
+  border-color: var(--notion-icon);
+}
+
+.tree-tab.active {
+  background-color: var(--notion-orange);
+  border-color: var(--notion-orange);
+  color: white;
 }
