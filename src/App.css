@@ -27,10 +27,123 @@ body {
   font-size: 14px;
 }
 
-/* App Layout */
+/* App Layout with Sidebar */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  background: var(--notion-bg);
+  overflow-x: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #1a1a1a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-collapsed {
+  width: 56px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #333;
+  min-height: 56px;
+}
+
+.sidebar-title {
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #9b9a97;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.sidebar-toggle:hover {
+  background: #333;
+  color: #ffffff;
+}
+
+.sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding: 16px 8px;
+}
+
+.sidebar-nav {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: #9b9a97;
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 14px;
+  transition: background-color 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+
+.sidebar-collapsed .sidebar-item {
+  justify-content: center;
+  padding: 10px;
+}
+
+.sidebar-item:hover {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+.sidebar-item.active {
+  background: #333;
+  color: #ffffff;
+}
+
+.sidebar-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Main Content Area */
 .notion-app {
-  max-width: 900px;
-  margin: 0 auto;
   padding: 40px 60px;
   min-height: 100vh;
 }
@@ -537,9 +650,6 @@ body {
 /* Tree View - Keep existing styles but update colors */
 .tree-view {
   background: var(--notion-bg);
-  border: 1px solid var(--notion-border);
-  border-radius: 4px;
-  padding: 24px;
 }
 
 .tree-header {
@@ -629,6 +739,12 @@ body {
   color: var(--notion-blue);
 }
 
+.tree-card-kr-icon {
+  color: var(--notion-blue);
+  font-size: 12px;
+  cursor: default;
+}
+
 .tree-card-krs {
   list-style: none;
   margin: 0;
@@ -637,9 +753,8 @@ body {
 
 .tree-card-krs li {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   padding: 5px 8px;
   background: var(--notion-bg-gray);
   border-radius: 4px;
@@ -654,6 +769,7 @@ body {
 
 .tree-card-metric {
   font-weight: 500;
+  flex: 1;
 }
 
 .tree-card-range {
@@ -715,6 +831,7 @@ body {
   gap: 8px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .tree-tab {

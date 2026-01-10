@@ -3,7 +3,6 @@ import { OKR } from '../types';
 
 interface OKRTreeViewProps {
   okrs: OKR[];
-  onBack: () => void;
 }
 
 interface TreeCardProps {
@@ -28,6 +27,7 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
         <ul className="tree-card-krs">
           {okr.keyResults.map((kr) => (
             <li key={kr.id}>
+              <span className="tree-card-kr-icon" title="Key Result">◉</span>
               <span className="tree-card-metric">{kr.metricName}</span>
               <span className="tree-card-range">{kr.from}% → {kr.to}%</span>
             </li>
@@ -45,7 +45,7 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
   );
 }
 
-export function OKRTreeView({ okrs, onBack }: OKRTreeViewProps) {
+export function OKRTreeView({ okrs }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
 
@@ -60,15 +60,9 @@ export function OKRTreeView({ okrs, onBack }: OKRTreeViewProps) {
 
   return (
     <div className="tree-view">
-      <div className="tree-header">
-        <h2>OKR Tree View</h2>
-        <button className="back-btn" onClick={onBack}>
-          ← Back to Management
-        </button>
-      </div>
       {okrs.length === 0 ? (
         <div className="empty-state">
-          <p>No OKRs yet. Go back to create your first one!</p>
+          <p>No OKRs yet. Use the sidebar to go to OKR Manager and create your first one!</p>
         </div>
       ) : (
         <>
