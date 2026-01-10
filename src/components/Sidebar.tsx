@@ -9,7 +9,11 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
   return (
     <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
-        {!isCollapsed && <span className="sidebar-title">Vector ↗</span>}
+        {!isCollapsed && (
+          <button className="sidebar-title" onClick={() => onViewChange('management')}>
+            Vector ↗
+          </button>
+        )}
         <button className="sidebar-toggle" onClick={onToggle} title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
           {isCollapsed ? '»' : '«'}
         </button>
