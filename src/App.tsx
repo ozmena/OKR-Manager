@@ -22,6 +22,15 @@ function App() {
   }, []);
 
   const handleCreateOKR = (okr: OKR) => {
+    // For global OKRs (no parentId), auto-assign displayId
+    if (!okr.parentId) {
+      const globalOkrs = okrs.filter(o => !o.parentId && o.displayId);
+      const maxNumber = globalOkrs.reduce((max, o) => {
+        const match = o.displayId?.match(/OKR-(\d+)/);
+        return match ? Math.max(max, parseInt(match[1], 10)) : max;
+      }, 0);
+      okr.displayId = `OKR-${maxNumber + 1}`;
+    }
     addOKR(okr);
     setOkrs(getOKRs());
     setShowForm(false);

@@ -73,6 +73,7 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
                 className={`tree-tab ${selectedOkrId === okr.id ? 'active' : ''}`}
                 onClick={() => setSelectedOkrId(okr.id)}
               >
+                {okr.displayId && <strong>{okr.displayId}: </strong>}
                 {okr.objective}
               </button>
             ))}

@@ -7,6 +7,7 @@ export interface KeyResult {
 
 export interface OKR {
   id: string;
+  displayId?: string;  // e.g., "OKR-1" - only for global OKRs
   objective: string;
   keyResults: KeyResult[];
   createdAt: string;

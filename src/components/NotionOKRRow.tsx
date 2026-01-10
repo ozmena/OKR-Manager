@@ -166,6 +166,7 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
             />
           ) : (
             <span className="notion-title notion-title-editable" onClick={handleObjectiveClick}>
+              {okr.displayId && <strong>{okr.displayId}: </strong>}
               {okr.objective}
             </span>
           )}
