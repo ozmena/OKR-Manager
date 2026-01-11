@@ -103,6 +103,17 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
     }
   };
 
+  const handleKrBlur = (e: React.FocusEvent) => {
+    // Check if focus is moving to another input within the edit row
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    if (relatedTarget?.closest('.notion-kr-edit-row')) {
+      // Focus is moving within the edit row, don't save yet
+      return;
+    }
+    // Focus is leaving the edit row, save now
+    handleKrSave();
+  };
+
   const handleKrDelete = (krId: string) => {
     const updatedKeyResults = okr.keyResults.filter(kr => kr.id !== krId);
     onUpdate({ ...okr, keyResults: updatedKeyResults });
@@ -209,7 +220,7 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
                       className="notion-inline-input notion-kr-metric-input"
                       value={editedKr.metricName}
                       onChange={(e) => handleKrChange('metricName', e.target.value)}
-                      onBlur={handleKrSave}
+                      onBlur={handleKrBlur}
                       onKeyDown={handleKrKeyDown}
                       placeholder="Metric name"
                       autoFocus
@@ -220,7 +231,7 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
                       className="notion-inline-input notion-kr-number-input"
                       value={editedKr.from}
                       onChange={(e) => handleKrChange('from', Number(e.target.value))}
-                      onBlur={handleKrSave}
+                      onBlur={handleKrBlur}
                       onKeyDown={handleKrKeyDown}
                       min="0"
                       max="100"
@@ -231,7 +242,7 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
                       className="notion-inline-input notion-kr-number-input"
                       value={editedKr.to}
                       onChange={(e) => handleKrChange('to', Number(e.target.value))}
-                      onBlur={handleKrSave}
+                      onBlur={handleKrBlur}
                       onKeyDown={handleKrKeyDown}
                       min="0"
                       max="100"
