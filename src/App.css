@@ -745,6 +745,19 @@ body {
   margin-bottom: 8px;
 }
 
+.tree-card-header-global {
+  justify-content: space-between;
+}
+
+.tree-card-org-badge {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: #374151;
+}
+
 .tree-card-identifier {
   font-size: 14px;
   font-weight: 500;
@@ -859,6 +872,59 @@ body {
   min-width: 36px;
   text-align: right;
   flex-shrink: 0;
+}
+
+/* Global OKR Key Result Metrics */
+.tree-card-krs-global li {
+  align-items: flex-start;
+}
+
+.tree-card-kr-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.tree-card-current {
+  display: flex;
+  align-items: center;
+}
+
+.tree-card-current-label {
+  color: #6B7280;
+}
+
+.tree-card-current-value {
+  color: #3B82F6;
+  font-weight: 500;
+}
+
+.tree-card-metric-separator {
+  width: 1px;
+  height: 20px;
+  background-color: #E5E5E5;
+  margin: 0 4px;
+}
+
+.tree-card-target {
+  display: flex;
+  align-items: center;
+}
+
+.tree-card-from {
+  color: #374151;
+}
+
+.tree-card-arrow {
+  color: #374151;
+  margin: 0 4px;
+}
+
+.tree-card-to {
+  color: #111827;
+  font-weight: 700;
 }
 
 .tree-children {

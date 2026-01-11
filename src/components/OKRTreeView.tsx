@@ -135,17 +135,20 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
     );
   }
 
-  // Global OKR: Keep existing design with inline key results
+  // Global OKR: New design with org badge and no progress bars
   return (
     <div className="tree-node">
       <div className="tree-card">
-        {/* Header: Identifier line */}
-        <div className="tree-card-header">
-          <span
-            className="tree-card-icon tree-card-icon-parent"
-            title="Global OKR"
-          >◎</span>
-          <span className="tree-card-identifier">{getIdentifier()}</span>
+        {/* Header with org badge */}
+        <div className="tree-card-header tree-card-header-global">
+          <div className="tree-card-header-left">
+            <span
+              className="tree-card-icon tree-card-icon-parent"
+              title="Global OKR"
+            >◎</span>
+            <span className="tree-card-identifier">{getIdentifier()}</span>
+          </div>
+          <span className="tree-card-org-badge">GBS</span>
         </div>
 
         {/* Objective title */}
@@ -157,19 +160,23 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
         {/* Key results section */}
         <div className="tree-card-krs-section">
           <span className="tree-card-krs-label">Key results</span>
-          <ul className="tree-card-krs">
+          <ul className="tree-card-krs tree-card-krs-global">
             {okr.keyResults.map((kr) => (
               <li key={kr.id}>
                 <span className="tree-card-kr-icon" title="Key Result">◉</span>
                 <span className="tree-card-metric">{kr.metricName}</span>
-                <span className="tree-card-range">{kr.from}% → {kr.to}%</span>
-                <div className="tree-card-progress-track">
-                  <div
-                    className="tree-card-progress-fill"
-                    style={{ width: `${progressMap[kr.id] || 0}%` }}
-                  />
+                <div className="tree-card-kr-metrics">
+                  <span className="tree-card-current">
+                    <span className="tree-card-current-label">Current : </span>
+                    <span className="tree-card-current-value">{progressMap[kr.id] || 0}%</span>
+                  </span>
+                  <span className="tree-card-metric-separator"></span>
+                  <span className="tree-card-target">
+                    {kr.from > 0 && <span className="tree-card-from">{kr.from}%</span>}
+                    <span className="tree-card-arrow">→</span>
+                    <span className="tree-card-to">{kr.to}%</span>
+                  </span>
                 </div>
-                <span className="tree-card-progress-value">{progressMap[kr.id] || 0}%</span>
               </li>
             ))}
           </ul>
