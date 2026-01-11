@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { OKR } from '../types';
 
 interface OKRTreeViewProps {
@@ -8,9 +8,10 @@ interface OKRTreeViewProps {
 interface TreeCardProps {
   okr: OKR;
   allOkrs: OKR[];
+  progressMap: Record<string, number>;
 }
 
-function TreeCard({ okr, allOkrs }: TreeCardProps) {
+function TreeCard({ okr, allOkrs, progressMap }: TreeCardProps) {
   const children = allOkrs.filter(o => o.parentId === okr.id);
   const isGlobal = !okr.parentId;
 
@@ -60,6 +61,13 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
                 <span className="tree-card-kr-icon" title="Key Result">◉</span>
                 <span className="tree-card-metric">{kr.metricName}</span>
                 <span className="tree-card-range">{kr.from}% → {kr.to}%</span>
+                <div className="tree-card-progress-track">
+                  <div
+                    className="tree-card-progress-fill"
+                    style={{ width: `${progressMap[kr.id] || 0}%` }}
+                  />
+                </div>
+                <span className="tree-card-progress-value">{progressMap[kr.id] || 0}%</span>
               </li>
             ))}
           </ul>
@@ -68,7 +76,7 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
       {children.length > 0 && (
         <div className="tree-children">
           {children.map(child => (
-            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} />
+            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} />
           ))}
         </div>
       )}
@@ -79,6 +87,17 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
 export function OKRTreeView({ okrs }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
+
+  // Generate stable random progress values for each key result (20-80%)
+  const progressMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    okrs.forEach(okr => {
+      okr.keyResults.forEach(kr => {
+        map[kr.id] = Math.floor(Math.random() * 61) + 20; // 20-80%
+      });
+    });
+    return map;
+  }, [okrs]);
 
   // Pre-select the first global OKR on load or when OKRs change
   useEffect(() => {
@@ -112,7 +131,7 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
           <div className="tree-container">
             <div className="tree-root">
               {selectedOkr && (
-                <TreeCard okr={selectedOkr} allOkrs={okrs} />
+                <TreeCard okr={selectedOkr} allOkrs={okrs} progressMap={progressMap} />
               )}
             </div>
           </div>

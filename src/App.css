@@ -808,7 +808,7 @@ body {
 
 .tree-card-krs li {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   padding: 10px 12px;
   background: var(--notion-bg-gray);
@@ -824,13 +824,41 @@ body {
 .tree-card-metric {
   font-weight: 400;
   color: var(--notion-text);
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .tree-card-range {
   font-size: 14px;
   color: var(--notion-text-light);
   white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: auto;
+}
+
+/* Progress bar track */
+.tree-card-progress-track {
+  width: 120px;
+  height: 8px;
+  background-color: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Progress bar fill */
+.tree-card-progress-fill {
+  height: 100%;
+  background-color: #2DD4BF;
+  border-radius: 9999px;
+}
+
+/* Current percentage value */
+.tree-card-progress-value {
+  font-size: 14px;
+  color: #6B7280;
+  min-width: 36px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .tree-children {
