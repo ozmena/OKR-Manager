@@ -705,28 +705,37 @@ body {
 }
 
 .tree-card {
-  background: var(--notion-bg);
-  border: 1px solid var(--notion-border);
-  border-radius: 8px;
-  padding: 16px 20px;
-  min-width: 220px;
-  max-width: 280px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border: none;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 280px;
+  max-width: 400px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 1;
 }
 
-.tree-card-objective {
+.tree-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tree-card-identifier {
   font-size: 14px;
+  font-weight: 500;
+  color: var(--notion-text-light);
+}
+
+.tree-card-objective {
+  font-size: 16px;
   font-weight: 600;
   color: var(--notion-text);
-  margin-bottom: 10px;
+  margin: 0 0 16px 0;
   line-height: 1.4;
-  text-align: center;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 6px;
+  text-align: left;
 }
 
 .tree-card-icon {
@@ -743,10 +752,30 @@ body {
   color: var(--notion-blue);
 }
 
+.tree-card-separator {
+  border: none;
+  border-top: 1px solid #E5E5E5;
+  margin: 0 0 16px 0;
+}
+
+.tree-card-krs-section {
+  /* Container for label + list */
+}
+
+.tree-card-krs-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--notion-text-light);
+  margin-bottom: 12px;
+}
+
 .tree-card-kr-icon {
   color: var(--notion-blue);
   font-size: 12px;
   cursor: default;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .tree-card-krs {
@@ -757,14 +786,13 @@ body {
 
 .tree-card-krs li {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 8px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
   background: var(--notion-bg-gray);
-  border-radius: 4px;
-  margin-bottom: 5px;
-  font-size: 12px;
-  color: var(--notion-text-light);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
 .tree-card-krs li:last-child {
@@ -772,12 +800,14 @@ body {
 }
 
 .tree-card-metric {
-  font-weight: 500;
+  font-weight: 400;
+  color: var(--notion-text);
   flex: 1;
 }
 
 .tree-card-range {
-  font-size: 11px;
+  font-size: 14px;
+  color: var(--notion-text-light);
   white-space: nowrap;
 }
 

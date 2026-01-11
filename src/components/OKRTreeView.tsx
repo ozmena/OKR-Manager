@@ -14,25 +14,56 @@ function TreeCard({ okr, allOkrs }: TreeCardProps) {
   const children = allOkrs.filter(o => o.parentId === okr.id);
   const isGlobal = !okr.parentId;
 
+  // For child OKRs, split "Area / Objective" format
+  const getIdentifier = () => {
+    if (isGlobal) {
+      return `OKR - ${okr.displayId?.replace('OKR-', '') || ''}`;
+    }
+    // For child OKRs like "GCC India / Deliver savings", extract the area name
+    const parts = okr.objective.split('/');
+    return parts.length > 1 ? parts[0].trim() : okr.objective;
+  };
+
+  const getObjectiveTitle = () => {
+    if (isGlobal) {
+      return okr.objective;
+    }
+    // For child OKRs, extract the objective part after "/"
+    const parts = okr.objective.split('/');
+    return parts.length > 1 ? parts[1].trim() : okr.objective;
+  };
+
   return (
     <div className="tree-node">
       <div className="tree-card">
-        <h4 className="tree-card-objective">
+        {/* Header: Identifier line */}
+        <div className="tree-card-header">
           <span
             className={`tree-card-icon ${isGlobal ? 'tree-card-icon-parent' : 'tree-card-icon-child'}`}
             title={isGlobal ? 'Global OKR' : 'Area OKR'}
           >◎</span>
-          {okr.objective}
-        </h4>
-        <ul className="tree-card-krs">
-          {okr.keyResults.map((kr) => (
-            <li key={kr.id}>
-              <span className="tree-card-kr-icon" title="Key Result">◉</span>
-              <span className="tree-card-metric">{kr.metricName}</span>
-              <span className="tree-card-range">{kr.from}% → {kr.to}%</span>
-            </li>
-          ))}
-        </ul>
+          <span className="tree-card-identifier">{getIdentifier()}</span>
+        </div>
+
+        {/* Objective title */}
+        <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
+
+        {/* Separator */}
+        <hr className="tree-card-separator" />
+
+        {/* Key results section */}
+        <div className="tree-card-krs-section">
+          <span className="tree-card-krs-label">Key results</span>
+          <ul className="tree-card-krs">
+            {okr.keyResults.map((kr) => (
+              <li key={kr.id}>
+                <span className="tree-card-kr-icon" title="Key Result">◉</span>
+                <span className="tree-card-metric">{kr.metricName}</span>
+                <span className="tree-card-range">{kr.from}% → {kr.to}%</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       {children.length > 0 && (
         <div className="tree-children">
