@@ -33,7 +33,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           onClick={() => onViewChange('tree')}
           title="OKR Tracking"
         >
-          <span className="sidebar-icon">🌲</span>
+          <span className="sidebar-icon">△</span>
           {!isCollapsed && <span className="sidebar-label">OKR Tracking</span>}
         </button>
       </nav>
