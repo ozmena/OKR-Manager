@@ -37,6 +37,19 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           {!isCollapsed && <span className="sidebar-label">OKR Tracking</span>}
         </button>
       </nav>
+
+      {/* Company logo footer */}
+      <div className="sidebar-footer">
+        {!isCollapsed && (
+          <div className="sidebar-logo-container">
+            <img
+              src="/kraft-heinz-logo.png"
+              alt="Kraft Heinz"
+              className="sidebar-logo"
+            />
+          </div>
+        )}
+      </div>
     </aside>
   );
 }
