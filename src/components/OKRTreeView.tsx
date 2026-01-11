@@ -102,6 +102,9 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
             )}
           </div>
 
+          {/* Separator */}
+          <hr className="tree-card-separator" />
+
           {/* Objective title */}
           <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
         </div>
