@@ -944,3 +944,140 @@ body {
   border-color: var(--notion-orange);
   color: white;
 }
+
+/* Child OKR Card Styles */
+.tree-card-child {
+  padding-bottom: 20px;
+}
+
+.tree-card-header-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.tree-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tree-card-department-badge {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: #374151;
+}
+
+/* Key Result Cards Container */
+.kr-cards-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Individual Key Result Card */
+.kr-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 280px;
+  max-width: 320px;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.kr-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kr-card-icon {
+  color: var(--notion-blue);
+  font-size: 14px;
+}
+
+.kr-card-label {
+  color: var(--notion-text-light);
+  font-size: 14px;
+  flex: 1;
+}
+
+.kr-card-function-badge {
+  background: transparent;
+  border: 1px solid #D1D5DB;
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #374151;
+}
+
+.kr-card-separator {
+  border: none;
+  border-top: 1px solid #E5E5E5;
+  margin: 0 0 16px 0;
+}
+
+.kr-card-content {
+  margin-bottom: 16px;
+}
+
+.kr-card-range {
+  font-size: 14px;
+  color: var(--notion-text-light);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.kr-card-description {
+  font-size: 14px;
+  color: var(--notion-text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.kr-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kr-card-progress-track {
+  flex: 1;
+  height: 8px;
+  background-color: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.kr-card-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+}
+
+/* Status colors for progress bar */
+.kr-card-progress-green .kr-card-progress-fill { background-color: #10B981; }
+.kr-card-progress-yellow .kr-card-progress-fill { background-color: #F59E0B; }
+.kr-card-progress-red .kr-card-progress-fill { background-color: #EF4444; }
+
+.kr-card-progress-value {
+  font-size: 14px;
+  color: #6B7280;
+  min-width: 36px;
+}
+
+.kr-card-status {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.kr-card-status-green { color: #10B981; }
+.kr-card-status-yellow { color: #F59E0B; }
+.kr-card-status-red { color: #EF4444; }
