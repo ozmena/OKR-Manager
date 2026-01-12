@@ -1103,6 +1103,7 @@ body {
   margin-top: 24px;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-start;
 }
 
 /* Individual Key Result Card */
