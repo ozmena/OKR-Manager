@@ -136,7 +136,7 @@ function App() {
         currentView={currentView}
         onViewChange={setCurrentView}
       />
-      <div className="app-content">
+      <div className={`app-content ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
         <div className="notion-app">
           {renderContent()}
         </div>
