@@ -5,14 +5,16 @@ interface NotionOKRRowProps {
   okr: OKR;
   allOkrs: OKR[];
   level: number;
+  expandedIds: Set<string>;
+  onToggleExpand: (id: string) => void;
   onEdit: (okr: OKR) => void;
   onUpdate: (okr: OKR) => void;
   onDelete: (id: string) => void;
   onAddChild: (parentId: string) => void;
 }
 
-export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, onAddChild }: NotionOKRRowProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand, onEdit, onUpdate, onDelete, onAddChild }: NotionOKRRowProps) {
+  const isExpanded = expandedIds.has(okr.id);
   const [showActions, setShowActions] = useState(false);
 
   // Inline editing state for objective
@@ -128,7 +130,9 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
     };
 
     // Expand to show key results
-    setIsExpanded(true);
+    if (!isExpanded) {
+      onToggleExpand(okr.id);
+    }
 
     // Add the new KR to the OKR
     const updatedOkr = { ...okr, keyResults: [...okr.keyResults, newKr] };
@@ -159,7 +163,7 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
         <div className="notion-row-content" style={{ paddingLeft: `${level * 24 + 8}px` }}>
           <button
             className={`notion-expand-btn ${hasChildren ? '' : 'notion-expand-btn-hidden'}`}
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => onToggleExpand(okr.id)}
           >
             {isExpanded ? '▼' : '▶'}
           </button>
@@ -178,14 +182,20 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
           ) : (
             <span className="notion-title notion-title-editable" onClick={handleObjectiveClick}>
               {okr.displayId && <strong>{okr.displayId}: </strong>}
+              {!okr.displayId && okr.area && <strong>{okr.area} - OKR: </strong>}
               {okr.objective}
             </span>
+          )}
+        </div>
+        <div className="notion-row-area">
+          {okr.parentId && okr.area && (
+            <span className="notion-area-badge">{okr.area}</span>
           )}
         </div>
         <div className="notion-row-actions">
           {showActions && !isEditingObjective && (
             <>
-              <button className="notion-action-btn" onClick={() => onAddChild(okr.id)} title="Add child">
+              <button className="notion-action-btn" onClick={() => onAddChild(okr.id)} title="Add Area OKR">
                 +
               </button>
               <button className="notion-action-btn" onClick={() => onEdit(okr)} title="Edit all">
@@ -251,9 +261,12 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
                   </div>
                 ) : (
                   <span className="notion-title notion-title-kr notion-title-editable" onClick={() => handleKrClick(kr)}>
-                    {kr.metricName}: {kr.from}% → {kr.to}%
+                    <strong>KR:</strong> {kr.metricName}: {kr.from}% → {kr.to}%
                   </span>
                 )}
+              </div>
+              <div className="notion-row-area">
+                {/* Empty for key results */}
               </div>
               <div className="notion-row-actions">
                 {hoveringKrId === kr.id && editingKrId !== kr.id && (
@@ -277,6 +290,8 @@ export function NotionOKRRow({ okr, allOkrs, level, onEdit, onUpdate, onDelete, 
               okr={child}
               allOkrs={allOkrs}
               level={level + 1}
+              expandedIds={expandedIds}
+              onToggleExpand={onToggleExpand}
               onEdit={onEdit}
               onUpdate={onUpdate}
               onDelete={onDelete}

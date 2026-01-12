@@ -17,7 +17,7 @@ export function OKRCard({ okr, allOkrs, onDelete, onEdit, onAddChild }: OKRCardP
         <h3 className="okr-objective">{okr.objective}</h3>
         <div className="okr-actions">
           <button className="add-child-btn" onClick={() => onAddChild(okr.id)}>
-            + Child
+            + Area OKR
           </button>
           <button className="edit-btn" onClick={() => onEdit(okr)}>
             Edit

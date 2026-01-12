@@ -3,13 +3,15 @@ import { NotionOKRRow } from './NotionOKRRow';
 
 interface NotionOKRListProps {
   okrs: OKR[];
+  expandedIds: Set<string>;
+  onToggleExpand: (id: string) => void;
   onEdit: (okr: OKR) => void;
   onUpdate: (okr: OKR) => void;
   onDelete: (id: string) => void;
   onAddChild: (parentId: string) => void;
 }
 
-export function NotionOKRList({ okrs, onEdit, onUpdate, onDelete, onAddChild }: NotionOKRListProps) {
+export function NotionOKRList({ okrs, expandedIds, onToggleExpand, onEdit, onUpdate, onDelete, onAddChild }: NotionOKRListProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
 
   if (okrs.length === 0) {
@@ -26,8 +28,10 @@ export function NotionOKRList({ okrs, onEdit, onUpdate, onDelete, onAddChild }: 
     <div className="notion-table">
       <div className="notion-header">
         <div className="notion-header-cell notion-header-name">
-          <span className="notion-header-icon">≡</span>
-          Name
+          OKR
+        </div>
+        <div className="notion-header-cell notion-header-area">
+          Area
         </div>
         <div className="notion-header-cell notion-header-actions">
           Actions
@@ -40,6 +44,8 @@ export function NotionOKRList({ okrs, onEdit, onUpdate, onDelete, onAddChild }: 
             okr={okr}
             allOkrs={okrs}
             level={0}
+            expandedIds={expandedIds}
+            onToggleExpand={onToggleExpand}
             onEdit={onEdit}
             onUpdate={onUpdate}
             onDelete={onDelete}

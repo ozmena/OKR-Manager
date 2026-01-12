@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OKR, KeyResult } from '../types';
+import { OKR, KeyResult, AREAS } from '../types';
 import { KeyResultInput } from './KeyResultInput';
 
 interface OKRFormProps {
@@ -21,7 +21,9 @@ function createEmptyKeyResult(): KeyResult {
 export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormProps) {
   const isEditing = !!initialOKR;
   const isAddingChild = !!parentId;
+  const isChildOKR = isAddingChild || !!initialOKR?.parentId;
   const [objective, setObjective] = useState(initialOKR?.objective ?? '');
+  const [area, setArea] = useState(initialOKR?.area ?? '');
   const [keyResults, setKeyResults] = useState<KeyResult[]>(
     initialOKR?.keyResults ?? [createEmptyKeyResult()]
   );
@@ -52,6 +54,11 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
       return;
     }
 
+    if (isChildOKR && !area) {
+      setError('Please select an area for this Area OKR.');
+      return;
+    }
+
     const validKeyResults = keyResults.filter(kr => kr.metricName.trim());
     if (validKeyResults.length === 0) {
       setError('Please add at least one key result with a metric name.');
@@ -60,10 +67,12 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
 
     const okr: OKR = {
       id: initialOKR?.id ?? crypto.randomUUID(),
+      displayId: initialOKR?.displayId,
       objective: objective.trim(),
       keyResults: validKeyResults,
       createdAt: initialOKR?.createdAt ?? new Date().toISOString(),
       parentId: initialOKR?.parentId ?? parentId,
+      ...(isChildOKR && { area }),
     };
 
     onSubmit(okr);
@@ -71,7 +80,7 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
 
   return (
     <form className="okr-form" onSubmit={handleSubmit}>
-      <h2>{isEditing ? 'Edit OKR' : isAddingChild ? 'Add Child OKR' : 'Create New OKR'}</h2>
+      <h2>{isEditing ? (isChildOKR ? 'Edit Area OKR' : 'Edit OKR') : isAddingChild ? 'Add Area OKR' : 'Create New OKR'}</h2>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -84,6 +93,24 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
           rows={3}
         />
       </div>
+
+      {isChildOKR && (
+        <div className="field">
+          <label>Area</label>
+          <select
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            className="area-select"
+          >
+            <option value="">Select an area...</option>
+            {AREAS.map((areaOption) => (
+              <option key={areaOption} value={areaOption}>
+                {areaOption}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="key-results-section">
         <h3>Key Results (up to 3)</h3>
@@ -109,7 +136,7 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
           Cancel
         </button>
         <button type="submit" className="submit-btn">
-          {isEditing ? 'Update OKR' : 'Create OKR'}
+          {isEditing ? (isChildOKR ? 'Update Area OKR' : 'Update OKR') : (isAddingChild ? 'Create Area OKR' : 'Create OKR')}
         </button>
       </div>
     </form>

@@ -11,7 +11,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
       <div className="sidebar-header">
         {!isCollapsed && (
           <button className="sidebar-title" onClick={() => onViewChange('management')}>
-            Vector ↗
+Vector<span className="sidebar-arrow">↗</span>
           </button>
         )}
         <button className="sidebar-toggle" onClick={onToggle} title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>

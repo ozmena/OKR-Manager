@@ -5,6 +5,8 @@ import { Sidebar } from './components/Sidebar';
 import { NotionOKRList } from './components/NotionOKRList';
 import { OKRForm } from './components/OKRForm';
 import { OKRTreeView } from './components/OKRTreeView';
+import { HelpButton } from './components/HelpButton';
+import { HelpModal } from './components/HelpModal';
 import './App.css';
 
 type View = 'management' | 'tree';
@@ -16,6 +18,8 @@ function App() {
   const [parentIdForNewOKR, setParentIdForNewOKR] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<View>('management');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [showChangelog, setShowChangelog] = useState(false);
 
   useEffect(() => {
     setOkrs(getOKRs());
@@ -62,6 +66,18 @@ function App() {
     setShowForm(true);
   };
 
+  const handleToggleExpand = (id: string) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
   const handleCancel = () => {
     setShowForm(false);
     setEditingOKR(null);
@@ -99,6 +115,8 @@ function App() {
           ) : (
             <NotionOKRList
               okrs={okrs}
+              expandedIds={expandedIds}
+              onToggleExpand={handleToggleExpand}
               onEdit={handleEditOKR}
               onUpdate={handleInlineUpdateOKR}
               onDelete={handleDeleteOKR}
@@ -123,6 +141,8 @@ function App() {
           {renderContent()}
         </div>
       </div>
+      <HelpButton onClick={() => setShowChangelog(true)} />
+      <HelpModal isOpen={showChangelog} onClose={() => setShowChangelog(false)} />
     </div>
   );
 }

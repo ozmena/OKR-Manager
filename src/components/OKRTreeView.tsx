@@ -20,6 +20,7 @@ interface TreeCardProps {
   allOkrs: OKR[];
   progressMap: Record<string, number>;
   functionMap: Record<string, string>;
+  selectedArea: string;
 }
 
 // Key Result Card component for child OKRs
@@ -59,16 +60,14 @@ function KeyResultCard({ kr, progress, functionName }: KeyResultCardProps) {
   );
 }
 
-function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
-  const children = allOkrs.filter(o => o.parentId === okr.id);
+function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: TreeCardProps) {
+  const allChildren = allOkrs.filter(o => o.parentId === okr.id);
+  // Filter children by selected area (only applies to Area OKRs which have the area field)
+  const children = selectedArea === 'all'
+    ? allChildren
+    : allChildren.filter(child => child.area === selectedArea);
   const isGlobal = !okr.parentId;
 
-  // For child OKRs, split "Area / Objective" format
-  const getDepartment = () => {
-    // For child OKRs like "GCC India / Deliver savings", extract the area name
-    const parts = okr.objective.split('/');
-    return parts.length > 1 ? parts[0].trim() : '';
-  };
 
   const getIdentifier = () => {
     if (isGlobal) {
@@ -78,12 +77,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
   };
 
   const getObjectiveTitle = () => {
-    if (isGlobal) {
-      return okr.objective;
-    }
-    // For child OKRs, extract the objective part after "/"
-    const parts = okr.objective.split('/');
-    return parts.length > 1 ? parts[1].trim() : okr.objective;
+    return okr.objective;
   };
 
   // Child OKR: Show simplified card + key result cards
@@ -97,8 +91,8 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
               <span className="tree-card-icon tree-card-icon-child">◎</span>
               <span className="tree-card-identifier">{getIdentifier()}</span>
             </div>
-            {getDepartment() && (
-              <span className="tree-card-department-badge">{getDepartment()}</span>
+            {okr.area && (
+              <span className="tree-card-department-badge">{okr.area}</span>
             )}
           </div>
 
@@ -107,6 +101,13 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
 
           {/* Objective title */}
           <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
+
+          {/* Check-in button */}
+          <div className="tree-card-footer">
+            <button className="tree-card-checkin-btn">
+              Check-in <span>›</span>
+            </button>
+          </div>
         </div>
 
         {/* Key Result Cards */}
@@ -127,7 +128,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
         {children.length > 0 && (
           <div className="tree-children">
             {children.map(child => (
-              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} />
+              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
             ))}
           </div>
         )}
@@ -164,19 +165,10 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
             {okr.keyResults.map((kr) => (
               <li key={kr.id}>
                 <span className="tree-card-kr-icon" title="Key Result">◉</span>
-                <span className="tree-card-metric">{kr.metricName}</span>
-                <div className="tree-card-kr-metrics">
-                  <span className="tree-card-current">
-                    <span className="tree-card-current-label">Current : </span>
-                    <span className="tree-card-current-value">{progressMap[kr.id] || 0}%</span>
-                  </span>
-                  <span className="tree-card-metric-separator"></span>
-                  <span className="tree-card-target">
-                    {kr.from > 0 && <span className="tree-card-from">{kr.from}%</span>}
-                    <span className="tree-card-arrow">→</span>
-                    <span className="tree-card-to">{kr.to}%</span>
-                  </span>
-                </div>
+                <span className="tree-card-metric" title={kr.metricName}>{kr.metricName}</span>
+                <span className="tree-card-target">
+                  {kr.from}% → <strong>{kr.to}%</strong>
+                </span>
               </li>
             ))}
           </ul>
@@ -185,7 +177,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
       {children.length > 0 && (
         <div className="tree-children">
           {children.map(child => (
-            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} />
+            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
           ))}
         </div>
       )}
@@ -196,6 +188,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap }: TreeCardProps) {
 export function OKRTreeView({ okrs }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string>('all');
 
   // Generate stable random progress values for each key result (20-80%)
   const progressMap = useMemo(() => {
@@ -228,6 +221,20 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
 
   const selectedOkr = okrs.find(okr => okr.id === selectedOkrId);
 
+  // Compute available areas from the selected OKR's children
+  const availableAreas = useMemo(() => {
+    if (!selectedOkr) return [];
+    const childOkrs = okrs.filter(o => o.parentId === selectedOkr.id);
+    const areas = [...new Set(childOkrs.map(o => o.area).filter(Boolean))] as string[];
+    return areas.sort();
+  }, [selectedOkr, okrs]);
+
+  // Handle tab change - reset area filter
+  const handleTabChange = (okrId: string) => {
+    setSelectedOkrId(okrId);
+    setSelectedArea('all');
+  };
+
   return (
     <div className="tree-view">
       {okrs.length === 0 ? (
@@ -241,7 +248,8 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
               <button
                 key={okr.id}
                 className={`tree-tab ${selectedOkrId === okr.id ? 'active' : ''}`}
-                onClick={() => setSelectedOkrId(okr.id)}
+                onClick={() => handleTabChange(okr.id)}
+                title={`${okr.displayId}: ${okr.objective}`}
               >
                 {okr.displayId && <strong>{okr.displayId}: </strong>}
                 {okr.objective}
@@ -249,9 +257,24 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
             ))}
           </div>
           <div className="tree-container">
+            {availableAreas.length > 0 && (
+              <div className="tree-filter">
+                <select
+                  id="area-filter"
+                  value={selectedArea}
+                  onChange={(e) => setSelectedArea(e.target.value)}
+                  className="tree-filter-select"
+                >
+                  <option value="all">All Areas</option>
+                  {availableAreas.map(area => (
+                    <option key={area} value={area}>{area}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="tree-root">
               {selectedOkr && (
-                <TreeCard okr={selectedOkr} allOkrs={okrs} progressMap={progressMap} functionMap={functionMap} />
+                <TreeCard okr={selectedOkr} allOkrs={okrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
               )}
             </div>
           </div>
