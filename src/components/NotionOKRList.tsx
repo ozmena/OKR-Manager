@@ -33,6 +33,9 @@ export function NotionOKRList({ okrs, expandedIds, onToggleExpand, onEdit, onUpd
         <div className="notion-header-cell notion-header-area">
           Area
         </div>
+        <div className="notion-header-cell notion-header-owner">
+          Owner
+        </div>
         <div className="notion-header-cell notion-header-actions">
           Actions
         </div>

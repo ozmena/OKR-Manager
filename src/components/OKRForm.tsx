@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OKR, KeyResult, AREAS } from '../types';
+import { OKR, KeyResult, AREAS, PEOPLE } from '../types';
 import { KeyResultInput } from './KeyResultInput';
 
 interface OKRFormProps {
@@ -24,6 +24,7 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
   const isChildOKR = isAddingChild || !!initialOKR?.parentId;
   const [objective, setObjective] = useState(initialOKR?.objective ?? '');
   const [area, setArea] = useState(initialOKR?.area ?? '');
+  const [owner, setOwner] = useState(initialOKR?.owner ?? '');
   const [keyResults, setKeyResults] = useState<KeyResult[]>(
     initialOKR?.keyResults ?? [createEmptyKeyResult()]
   );
@@ -73,6 +74,7 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
       createdAt: initialOKR?.createdAt ?? new Date().toISOString(),
       parentId: initialOKR?.parentId ?? parentId,
       ...(isChildOKR && { area }),
+      ...(owner && { owner }),
     };
 
     onSubmit(okr);
@@ -111,6 +113,22 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
           </select>
         </div>
       )}
+
+      <div className="field">
+        <label>Owner</label>
+        <select
+          value={owner}
+          onChange={(e) => setOwner(e.target.value)}
+          className="owner-select"
+        >
+          <option value="">No owner</option>
+          {PEOPLE.map((person) => (
+            <option key={person} value={person}>
+              {person}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="key-results-section">
         <h3>Key Results (up to 3)</h3>

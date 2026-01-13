@@ -18,6 +18,7 @@ export interface OKR {
   parentId?: string;
   area?: string;  // Only for child OKRs - department/area of the organization
   comments?: string;  // Check-in comments for child OKRs
+  owner?: string;  // Person responsible for this OKR
 }
 
 // Available areas for child OKRs
@@ -28,4 +29,26 @@ export const AREAS = [
   'GPL',
   'GBS Onshore',
   'Capabilities/Tech'
+] as const;
+
+// Available people for OKR ownership
+export const PEOPLE = [
+  'Hardik Bhatt',
+  'Mariana Avila',
+  'Jack Shu',
+  'Thiago Pinheiro',
+  'Morne Fouche',
+  'Thiago Marchi',
+  'Evan Sams',
+  'Sanjay Dora',
+  'Deepa Abi',
+  'Alex Komrakov',
+  'Juan Ramon Triana',
+  'Serge De Vos',
+  'Eric Ruys',
+  'Elena Schoeman',
+  'Preeti Naval Kumar',
+  'Dylan Jetha',
+  'Juan Montoya',
+  'Amanda Jones'
 ] as const;

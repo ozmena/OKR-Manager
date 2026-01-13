@@ -5,6 +5,16 @@ import { CheckInModal } from './CheckInModal';
 // Random function names for MVP demo
 const FUNCTIONS = ['Supply Chain', 'Finance', 'Ringmaster', 'HR', 'Operations', 'IT'];
 
+// Helper to get initials from a full name
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 // Get status display from KeyResult status field
 const getStatusDisplay = (status: KeyResultStatus | undefined): { label: string; color: 'green' | 'yellow' | 'red' } => {
   switch (status) {
@@ -127,8 +137,13 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
           {/* Objective title */}
           <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
 
-          {/* Check-in button */}
+          {/* Footer with owner and check-in button */}
           <div className="tree-card-footer">
+            {okr.owner && (
+              <span className="tree-card-owner-initials" title={okr.owner}>
+                {getInitials(okr.owner)}
+              </span>
+            )}
             <button className="tree-card-checkin-btn" onClick={() => onCheckIn(okr)}>
               Check-in <span>›</span>
             </button>
@@ -173,7 +188,14 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
             >◎</span>
             <span className="tree-card-identifier">{getIdentifier()}</span>
           </div>
-          <span className="tree-card-org-badge">GBS</span>
+          <div className="tree-card-header-right">
+            {okr.owner && (
+              <span className="tree-card-owner-initials" title={okr.owner}>
+                {getInitials(okr.owner)}
+              </span>
+            )}
+            <span className="tree-card-org-badge">GBS</span>
+          </div>
         </div>
 
         {/* Objective title */}

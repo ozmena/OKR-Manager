@@ -1,6 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { OKR, KeyResult } from '../types';
 
+// Helper to get initials from a full name
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 interface NotionOKRRowProps {
   okr: OKR;
   allOkrs: OKR[];
@@ -192,6 +202,13 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
             <span className="notion-area-badge">{okr.area}</span>
           )}
         </div>
+        <div className="notion-row-owner">
+          {okr.owner && (
+            <span className="owner-initials" title={okr.owner}>
+              {getInitials(okr.owner)}
+            </span>
+          )}
+        </div>
         <div className="notion-row-actions">
           {showActions && !isEditingObjective && (
             <>
@@ -266,6 +283,9 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
                 )}
               </div>
               <div className="notion-row-area">
+                {/* Empty for key results */}
+              </div>
+              <div className="notion-row-owner">
                 {/* Empty for key results */}
               </div>
               <div className="notion-row-actions">
