@@ -267,6 +267,8 @@ body {
 
 /* Main Content Area */
 .notion-app {
+  display: flex;
+  flex-direction: column;
   padding: var(--space-10) var(--space-16);
   min-height: 100vh;
 }
