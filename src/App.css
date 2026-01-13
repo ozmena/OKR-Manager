@@ -453,7 +453,7 @@ body {
 }
 
 .notion-icon-parent {
-  color: var(--notion-orange);
+  color: #ff8000;
 }
 
 .notion-icon-kr {
@@ -903,7 +903,7 @@ body {
 }
 
 .tree-card-icon-parent {
-  color: var(--notion-orange);
+  color: #ff8000;
 }
 
 .tree-card-icon-child {
