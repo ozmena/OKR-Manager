@@ -271,6 +271,10 @@ body {
   min-height: 100vh;
 }
 
+.notion-content-wrapper {
+  max-width: 1200px;
+}
+
 .notion-app-header {
   display: flex;
   justify-content: space-between;
