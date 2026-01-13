@@ -284,6 +284,10 @@ body {
   color: var(--notion-text);
 }
 
+.notion-app-main {
+  width: 100%;
+}
+
 .notion-header-actions {
   display: flex;
   gap: var(--space-2);
