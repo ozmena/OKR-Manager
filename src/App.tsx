@@ -7,16 +7,17 @@ import { OKRForm } from './components/OKRForm';
 import { OKRTreeView } from './components/OKRTreeView';
 import { HelpButton } from './components/HelpButton';
 import { HelpModal } from './components/HelpModal';
+import { HomePage } from './components/HomePage';
 import './App.css';
 
-type View = 'management' | 'tree';
+type View = 'home' | 'management' | 'tree';
 
 function App() {
   const [okrs, setOkrs] = useState<OKR[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingOKR, setEditingOKR] = useState<OKR | null>(null);
   const [parentIdForNewOKR, setParentIdForNewOKR] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<View>('management');
+  const [currentView, setCurrentView] = useState<View>('home');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
@@ -87,6 +88,11 @@ function App() {
   const isFormVisible = showForm || editingOKR !== null;
 
   const renderContent = () => {
+    // Home page has its own full-page layout
+    if (currentView === 'home') {
+      return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
+    }
+
     const pageTitle = currentView === 'tree' ? 'OKR Tracking' : '2026 OKRs';
     const showNewButton = currentView === 'management' && !isFormVisible;
 
@@ -104,7 +110,7 @@ function App() {
         </header>
         <main className="notion-app-main">
           {currentView === 'tree' ? (
-            <OKRTreeView okrs={okrs} />
+            <OKRTreeView okrs={okrs} onUpdateOKR={handleInlineUpdateOKR} />
           ) : isFormVisible ? (
             <OKRForm
               onSubmit={editingOKR ? handleUpdateOKR : handleCreateOKR}

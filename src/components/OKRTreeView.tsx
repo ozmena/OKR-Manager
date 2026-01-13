@@ -1,37 +1,54 @@
 import { useState, useEffect, useMemo } from 'react';
-import { OKR, KeyResult } from '../types';
+import { OKR, KeyResult, KeyResultStatus } from '../types';
+import { CheckInModal } from './CheckInModal';
 
 // Random function names for MVP demo
 const FUNCTIONS = ['Supply Chain', 'Finance', 'Ringmaster', 'HR', 'Operations', 'IT'];
 
-// Get status based on progress percentage
-const getStatus = (progress: number): { label: string; color: 'green' | 'yellow' | 'red' } => {
-  if (progress >= 70) return { label: 'On track', color: 'green' };
-  if (progress >= 40) return { label: 'Progressing', color: 'yellow' };
-  return { label: 'Off track', color: 'red' };
+// Get status display from KeyResult status field
+const getStatusDisplay = (status: KeyResultStatus | undefined): { label: string; color: 'green' | 'yellow' | 'red' } => {
+  switch (status) {
+    case 'on-track': return { label: 'On track', color: 'green' };
+    case 'progressing': return { label: 'Progressing', color: 'yellow' };
+    case 'off-track': return { label: 'Off track', color: 'red' };
+    default: return { label: 'Not set', color: 'yellow' };
+  }
+};
+
+// Calculate progress percentage from current value
+const calculateProgress = (from: number, to: number, current: number | undefined): number => {
+  if (current === undefined) return 0;
+  const range = to - from;
+  if (range === 0) return 100;
+  const progress = ((current - from) / range) * 100;
+  return Math.max(0, Math.min(100, Math.round(progress)));
 };
 
 interface OKRTreeViewProps {
   okrs: OKR[];
+  onUpdateOKR: (okr: OKR) => void;
 }
 
 interface TreeCardProps {
   okr: OKR;
   allOkrs: OKR[];
-  progressMap: Record<string, number>;
   functionMap: Record<string, string>;
   selectedArea: string;
+  onCheckIn: (okr: OKR) => void;
 }
 
 // Key Result Card component for child OKRs
 interface KeyResultCardProps {
   kr: KeyResult;
-  progress: number;
   functionName: string;
 }
 
-function KeyResultCard({ kr, progress, functionName }: KeyResultCardProps) {
-  const status = getStatus(progress);
+function KeyResultCard({ kr, functionName }: KeyResultCardProps) {
+  const progress = calculateProgress(kr.from, kr.to, kr.current);
+  const status = getStatusDisplay(kr.status);
+  const hasCurrentValue = kr.current !== undefined;
+  const hasStatus = kr.status !== undefined;
+
   return (
     <div className="kr-card">
       <div className="kr-card-header">
@@ -45,22 +62,30 @@ function KeyResultCard({ kr, progress, functionName }: KeyResultCardProps) {
         <p className="kr-card-description">{kr.metricName}</p>
       </div>
       <div className="kr-card-footer">
-        <div className={`kr-card-progress-track kr-card-progress-${status.color}`}>
-          <div
-            className="kr-card-progress-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <span className="kr-card-progress-value">{progress}%</span>
-        <span className={`kr-card-status kr-card-status-${status.color}`}>
-          ○ {status.label}
-        </span>
+        {hasCurrentValue ? (
+          <>
+            <div className={`kr-card-progress-track kr-card-progress-${hasStatus ? status.color : 'gray'}`}>
+              <div
+                className="kr-card-progress-fill"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className="kr-card-progress-value">{progress}%</span>
+            {hasStatus && (
+              <span className={`kr-card-status kr-card-status-${status.color}`}>
+                ○ {status.label}
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="kr-card-no-data">No check-in data</span>
+        )}
       </div>
     </div>
   );
 }
 
-function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: TreeCardProps) {
+function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCardProps) {
   const allChildren = allOkrs.filter(o => o.parentId === okr.id);
   // Filter children by selected area (only applies to Area OKRs which have the area field)
   const children = selectedArea === 'all'
@@ -104,7 +129,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: Tree
 
           {/* Check-in button */}
           <div className="tree-card-footer">
-            <button className="tree-card-checkin-btn">
+            <button className="tree-card-checkin-btn" onClick={() => onCheckIn(okr)}>
               Check-in <span>›</span>
             </button>
           </div>
@@ -117,7 +142,6 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: Tree
               <KeyResultCard
                 key={kr.id}
                 kr={kr}
-                progress={progressMap[kr.id] || 0}
                 functionName={functionMap[kr.id] || 'General'}
               />
             ))}
@@ -128,7 +152,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: Tree
         {children.length > 0 && (
           <div className="tree-children">
             {children.map(child => (
-              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
+              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={onCheckIn} />
             ))}
           </div>
         )}
@@ -177,7 +201,7 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: Tree
       {children.length > 0 && (
         <div className="tree-children">
           {children.map(child => (
-            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
+            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={onCheckIn} />
           ))}
         </div>
       )}
@@ -185,21 +209,23 @@ function TreeCard({ okr, allOkrs, progressMap, functionMap, selectedArea }: Tree
   );
 }
 
-export function OKRTreeView({ okrs }: OKRTreeViewProps) {
+export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>('all');
+  const [checkInOkr, setCheckInOkr] = useState<OKR | null>(null);
 
-  // Generate stable random progress values for each key result (20-80%)
-  const progressMap = useMemo(() => {
-    const map: Record<string, number> = {};
-    okrs.forEach(okr => {
-      okr.keyResults.forEach(kr => {
-        map[kr.id] = Math.floor(Math.random() * 61) + 20; // 20-80%
-      });
-    });
-    return map;
-  }, [okrs]);
+  const handleCheckIn = (okr: OKR) => {
+    setCheckInOkr(okr);
+  };
+
+  const handleCheckInClose = () => {
+    setCheckInOkr(null);
+  };
+
+  const handleCheckInSave = (updatedOKR: OKR) => {
+    onUpdateOKR(updatedOKR);
+  };
 
   // Generate stable random function names for each key result
   const functionMap = useMemo(() => {
@@ -274,12 +300,20 @@ export function OKRTreeView({ okrs }: OKRTreeViewProps) {
             )}
             <div className="tree-root">
               {selectedOkr && (
-                <TreeCard okr={selectedOkr} allOkrs={okrs} progressMap={progressMap} functionMap={functionMap} selectedArea={selectedArea} />
+                <TreeCard okr={selectedOkr} allOkrs={okrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={handleCheckIn} />
               )}
             </div>
           </div>
         </>
       )}
+
+      {/* Check-in Modal */}
+      <CheckInModal
+        isOpen={checkInOkr !== null}
+        okr={checkInOkr}
+        onClose={handleCheckInClose}
+        onSave={handleCheckInSave}
+      />
     </div>
   );
 }

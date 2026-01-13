@@ -1,8 +1,12 @@
+export type KeyResultStatus = 'on-track' | 'progressing' | 'off-track';
+
 export interface KeyResult {
   id: string;
   metricName: string;
   from: number;
   to: number;
+  current?: number;  // Actual value from check-in
+  status?: KeyResultStatus;  // Manual status selection
 }
 
 export interface OKR {
@@ -13,6 +17,7 @@ export interface OKR {
   createdAt: string;
   parentId?: string;
   area?: string;  // Only for child OKRs - department/area of the organization
+  comments?: string;  // Check-in comments for child OKRs
 }
 
 // Available areas for child OKRs

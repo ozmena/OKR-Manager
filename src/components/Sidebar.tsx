@@ -1,8 +1,8 @@
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
-  currentView: 'management' | 'tree';
-  onViewChange: (view: 'management' | 'tree') => void;
+  currentView: 'home' | 'management' | 'tree';
+  onViewChange: (view: 'home' | 'management' | 'tree') => void;
 }
 
 export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: SidebarProps) {
@@ -10,7 +10,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
     <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
         {!isCollapsed && (
-          <button className="sidebar-title" onClick={() => onViewChange('management')}>
+          <button className="sidebar-title" onClick={() => onViewChange('home')}>
 Vector<span className="sidebar-arrow">↗</span>
           </button>
         )}
@@ -20,6 +20,14 @@ Vector<span className="sidebar-arrow">↗</span>
       </div>
 
       <nav className="sidebar-nav">
+        <button
+          className={`sidebar-item ${currentView === 'home' ? 'active' : ''}`}
+          onClick={() => onViewChange('home')}
+          title="Home"
+        >
+          <span className="sidebar-icon" style={{ fontSize: '22px' }}>⌂</span>
+          {!isCollapsed && <span className="sidebar-label">Home</span>}
+        </button>
         <button
           className={`sidebar-item ${currentView === 'management' ? 'active' : ''}`}
           onClick={() => onViewChange('management')}
