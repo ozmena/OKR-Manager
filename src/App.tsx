@@ -97,7 +97,7 @@ function App() {
     const showNewButton = currentView === 'management' && !isFormVisible;
 
     return (
-      <div className="notion-content-wrapper">
+      <>
         <header className="notion-app-header">
           <h1>{pageTitle}</h1>
           {showNewButton && (
@@ -130,7 +130,7 @@ function App() {
             />
           )}
         </main>
-      </div>
+      </>
     );
   };
 
