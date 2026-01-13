@@ -100,8 +100,9 @@ function App() {
       <>
         <header className="notion-app-header">
           <h1>{pageTitle}</h1>
+          <div className="notion-header-spacer"></div>
           {showNewButton && (
-            <div className="notion-header-actions">
+            <div className="notion-page-header-actions">
               <button className="notion-btn notion-btn-primary" onClick={() => setShowForm(true)}>
                 + New
               </button>
