@@ -321,6 +321,7 @@ body {
 
 /* Notion Table */
 .notion-table {
+  width: 100%;
   border: 1px solid var(--notion-border);
   border-radius: var(--radius-sm);
   overflow: visible;
