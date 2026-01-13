@@ -60,12 +60,12 @@ export function HomePage({ okrs, onNavigate }: HomePageProps) {
             Track Progress
           </button>
         </div>
-
-        {/* Footer */}
-        <footer className="home-footer">
-          Powered by Vector v1.0
-        </footer>
       </div>
+
+      {/* Footer */}
+      <footer className="home-footer">
+        Powered by Vector v1.0
+      </footer>
     </div>
   );
 }

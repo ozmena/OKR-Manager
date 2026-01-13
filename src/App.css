@@ -1781,16 +1781,21 @@ body {
 
 .home-page {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   height: 100%;
   background: var(--notion-bg);
   padding: var(--space-6);
 }
 
 .home-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   max-width: 720px;
   width: 100%;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -1905,4 +1910,6 @@ body {
 .home-footer {
   font-size: var(--text-sm);
   color: var(--notion-text-light);
+  text-align: center;
+  padding-top: var(--space-6);
 }
