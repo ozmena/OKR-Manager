@@ -1242,6 +1242,7 @@ body {
   font-size: var(--text-base);
   font-weight: var(--font-medium);
   cursor: pointer;
+  margin-left: auto;  /* Always stay on right, even without owner */
   transition: background-color 0.1s;
 }
 
