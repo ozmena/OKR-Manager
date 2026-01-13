@@ -1906,7 +1906,7 @@ body {
 /* Footer */
 .home-footer {
   position: absolute;
-  bottom: var(--space-6);
+  bottom: 0;
   left: 0;
   right: 0;
   font-size: var(--text-sm);
