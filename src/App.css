@@ -448,6 +448,7 @@ body {
 .notion-icon {
   color: var(--notion-blue);
   font-size: var(--text-base);
+  font-weight: var(--font-bold);
   margin-right: var(--space-2);
   cursor: default;
 }
@@ -898,6 +899,7 @@ body {
 
 .tree-card-icon {
   font-size: var(--text-base);
+  font-weight: var(--font-bold);
   flex-shrink: 0;
   cursor: default;
 }
