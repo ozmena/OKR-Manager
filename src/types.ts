@@ -31,24 +31,24 @@ export const AREAS = [
   'Capabilities/Tech'
 ] as const;
 
-// Available people for OKR ownership
+// Available people for OKR ownership (alphabetically sorted)
 export const PEOPLE = [
-  'Hardik Bhatt',
-  'Mariana Avila',
-  'Jack Shu',
-  'Thiago Pinheiro',
-  'Morne Fouche',
-  'Thiago Marchi',
-  'Evan Sams',
-  'Sanjay Dora',
-  'Deepa Abi',
   'Alex Komrakov',
-  'Juan Ramon Triana',
-  'Serge De Vos',
-  'Eric Ruys',
-  'Elena Schoeman',
-  'Preeti Naval Kumar',
+  'Amanda Jones',
+  'Deepa Abi',
   'Dylan Jetha',
+  'Elena Schoeman',
+  'Eric Ruys',
+  'Evan Sams',
+  'Hardik Bhatt',
+  'Jack Shu',
   'Juan Montoya',
-  'Amanda Jones'
+  'Juan Ramon Triana',
+  'Mariana Avila',
+  'Morne Fouche',
+  'Preeti Naval Kumar',
+  'Sanjay Dora',
+  'Serge De Vos',
+  'Thiago Marchi',
+  'Thiago Pinheiro'
 ] as const;
