@@ -1515,7 +1515,7 @@ body {
   gap: var(--space-2);
   margin-bottom: var(--space-2);
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .tree-tab {
