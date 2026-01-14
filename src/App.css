@@ -1496,9 +1496,9 @@ body {
   background: var(--notion-border);
 }
 
-/* Wrapper that shrinks to tabs width for alignment */
+/* Wrapper for tabs and controls */
 .tree-tabs-wrapper {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
 }
 
