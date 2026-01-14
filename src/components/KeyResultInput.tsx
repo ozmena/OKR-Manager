@@ -1,4 +1,4 @@
-import { KeyResult, KeyResultUnit } from '../types';
+import { KeyResult, KeyResultUnit, FUNCTIONS } from '../types';
 
 interface KeyResultInputProps {
   keyResult: KeyResult;
@@ -6,9 +6,10 @@ interface KeyResultInputProps {
   onChange: (index: number, field: keyof KeyResult, value: string | number) => void;
   onRemove: (index: number) => void;
   canRemove: boolean;
+  isAreaOKR?: boolean;
 }
 
-export function KeyResultInput({ keyResult, index, onChange, onRemove, canRemove }: KeyResultInputProps) {
+export function KeyResultInput({ keyResult, index, onChange, onRemove, canRemove, isAreaOKR }: KeyResultInputProps) {
   const unit = keyResult.unit ?? 'percentage';
   const isPercentage = unit === 'percentage';
 
@@ -33,7 +34,23 @@ export function KeyResultInput({ keyResult, index, onChange, onRemove, canRemove
               onChange={(e) => onChange(index, 'metricName', e.target.value)}
             />
           </div>
-          <div className="field" style={{ flex: 1 }}>
+          {isAreaOKR && (
+            <div className="field" style={{ flex: 1 }}>
+              <label>Function</label>
+              <select
+                value={keyResult.function || ''}
+                onChange={(e) => onChange(index, 'function', e.target.value)}
+              >
+                <option value="">None</option>
+                {FUNCTIONS.map((fn) => (
+                  <option key={fn} value={fn}>{fn}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+        <div className="field-row">
+          <div className="field">
             <label>Unit</label>
             <select
               value={unit}
@@ -43,8 +60,6 @@ export function KeyResultInput({ keyResult, index, onChange, onRemove, canRemove
               <option value="number">Number</option>
             </select>
           </div>
-        </div>
-        <div className="field-row">
           <div className="field">
             <label>From{isPercentage ? ' (%)' : ''}</label>
             <input

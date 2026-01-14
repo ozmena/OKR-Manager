@@ -226,6 +226,7 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId, parentOKR }:
             onChange={handleKeyResultChange}
             onRemove={handleRemoveKeyResult}
             canRemove={keyResults.length > 1}
+            isAreaOKR={isChildOKR}
           />
         ))}
         {keyResults.length < 3 && (

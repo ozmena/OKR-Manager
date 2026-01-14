@@ -10,7 +10,7 @@ import { HelpModal } from './components/HelpModal';
 import { HomePage } from './components/HomePage';
 import './App.css';
 
-type View = 'home' | 'management' | 'tree' | 'dashboards';
+type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
 type TreeViewMode = 'tracking' | 'setting';
 
 function App() {
@@ -96,8 +96,8 @@ function App() {
       return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
     }
 
-    // Dashboards coming soon page
-    if (currentView === 'dashboards') {
+    // Dashboards and Users coming soon pages
+    if (currentView === 'dashboards' || currentView === 'users') {
       return (
         <div className="coming-soon-page">
           <p>Coming soon. We are cooking up something great for you.</p>
@@ -105,7 +105,7 @@ function App() {
       );
     }
 
-    const pageTitle = currentView === 'tree' ? 'OKR Tracking' : '2026 OKRs';
+    const pageTitle = currentView === 'tree' ? 'OKR Map' : 'OKR List';
     const showNewButton = currentView === 'management' && !isFormVisible;
 
     return (

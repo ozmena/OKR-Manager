@@ -14,6 +14,7 @@ export interface KeyResult {
   unit?: KeyResultUnit;  // defaults to 'percentage'
   current?: number;  // Actual value from check-in
   status?: KeyResultStatus;  // Manual status selection
+  function?: string;  // Optional function assignment for Area OKRs
 }
 
 // Helper function to format KR values with unit
@@ -65,6 +66,9 @@ export const PEOPLE = [
   'Thiago Marchi',
   'Thiago Pinheiro'
 ] as const;
+
+// Available functions for Key Results (Area OKRs only)
+export const FUNCTIONS = ['Supply Chain', 'PBS', 'Ringmaster'] as const;
 
 // Quality checklist items for Area OKRs
 export const QUALITY_CHECKLIST_ITEMS = [

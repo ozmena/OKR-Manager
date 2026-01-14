@@ -4,8 +4,6 @@ import { CheckInModal } from './CheckInModal';
 import { AIFeedbackModal } from './AIFeedbackModal';
 import { getTreeAIFeedback, TreeOKRData } from '../services/aiService';
 
-// Random function names for MVP demo
-const FUNCTIONS = ['Supply Chain', 'Finance', 'Ringmaster', 'HR', 'Operations', 'IT'];
 
 // Mode type for the view
 type ViewMode = 'tracking' | 'setting';
@@ -72,7 +70,7 @@ interface TreeCardProps {
 interface KeyResultCardProps {
   kr: KeyResult;
   okrId: string;
-  functionName: string;
+  functionName?: string;
   mode: ViewMode;
   editingField: EditingField | null;
   editValue: string;
@@ -102,7 +100,7 @@ function KeyResultCard({ kr, okrId, functionName, mode, editingField, editValue,
       <div className="kr-card-header">
         <span className="kr-card-icon">◉</span>
         <span className="kr-card-label">Key Result</span>
-        <span className="kr-card-function-badge">{functionName}</span>
+        {functionName && <span className="kr-card-function-badge">{functionName}</span>}
       </div>
       <hr className="kr-card-separator" />
       <div className="kr-card-content">
@@ -280,7 +278,7 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
                 key={kr.id}
                 kr={kr}
                 okrId={okr.id}
-                functionName={functionMap[kr.id] || 'General'}
+                functionName={functionMap[kr.id]}
                 mode={mode}
                 editingField={editingField}
                 editValue={editValue}
@@ -661,12 +659,14 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
     }
   };
 
-  // Generate stable random function names for each key result
+  // Map key result IDs to their function names
   const functionMap = useMemo(() => {
     const map: Record<string, string> = {};
     okrs.forEach(okr => {
       okr.keyResults.forEach(kr => {
-        map[kr.id] = FUNCTIONS[Math.floor(Math.random() * FUNCTIONS.length)];
+        if (kr.function) {
+          map[kr.id] = kr.function;
+        }
       });
     });
     return map;

@@ -1,8 +1,8 @@
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
-  currentView: 'home' | 'management' | 'tree' | 'dashboards';
-  onViewChange: (view: 'home' | 'management' | 'tree' | 'dashboards') => void;
+  currentView: 'home' | 'management' | 'tree' | 'dashboards' | 'users';
+  onViewChange: (view: 'home' | 'management' | 'tree' | 'dashboards' | 'users') => void;
 }
 
 export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: SidebarProps) {
@@ -31,18 +31,18 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
         <button
           className={`sidebar-item ${currentView === 'management' ? 'active' : ''}`}
           onClick={() => onViewChange('management')}
-          title="2026 OKRs"
+          title="OKR List"
         >
           <span className="sidebar-icon">◎</span>
-          {!isCollapsed && <span className="sidebar-label">2026 OKRs</span>}
+          {!isCollapsed && <span className="sidebar-label">OKR List</span>}
         </button>
         <button
           className={`sidebar-item ${currentView === 'tree' ? 'active' : ''}`}
           onClick={() => onViewChange('tree')}
-          title="OKR Tracking"
+          title="OKR Map"
         >
           <span className="sidebar-icon">△</span>
-          {!isCollapsed && <span className="sidebar-label">OKR Tracking</span>}
+          {!isCollapsed && <span className="sidebar-label">OKR Map</span>}
         </button>
         <button
           className={`sidebar-item ${currentView === 'dashboards' ? 'active' : ''}`}
@@ -53,6 +53,19 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           {!isCollapsed && (
             <>
               <span className="sidebar-label">Dashboards</span>
+              <span className="sidebar-tag sidebar-tag-soon">Soon</span>
+            </>
+          )}
+        </button>
+        <button
+          className={`sidebar-item ${currentView === 'users' ? 'active' : ''}`}
+          onClick={() => onViewChange('users')}
+          title="Users"
+        >
+          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◇</span>
+          {!isCollapsed && (
+            <>
+              <span className="sidebar-label">Users</span>
               <span className="sidebar-tag sidebar-tag-soon">Soon</span>
             </>
           )}
