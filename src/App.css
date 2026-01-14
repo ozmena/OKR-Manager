@@ -1305,7 +1305,6 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 4.2em;
   cursor: default;
 }
 
@@ -1497,11 +1496,24 @@ body {
   background: var(--notion-border);
 }
 
+/* Wrapper that shrinks to tabs width for alignment */
+.tree-tabs-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* Toggle Row - right aligned within wrapper */
+.tree-toggle-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-4);
+}
+
 /* Tree View Tabs */
 .tree-tabs {
   display: flex;
   gap: var(--space-2);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-2);
   flex-wrap: wrap;
   justify-content: flex-start;
 }
@@ -1533,12 +1545,73 @@ body {
   color: white;
 }
 
+/* Tree Controls - filters left, button right */
+.tree-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+}
+
+/* Mode Switch (slider toggle) */
+.mode-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mode-switch-label {
+  font-size: var(--text-sm);
+  color: var(--notion-text-light);
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.mode-switch-label.active {
+  color: var(--notion-text);
+  font-weight: var(--font-medium);
+}
+
+.mode-switch-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--notion-bg-gray);
+  border: 1px solid var(--notion-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.mode-switch-toggle:hover {
+  border-color: var(--notion-text-light);
+}
+
+.mode-switch-toggle.mode-setting {
+  background: var(--notion-blue);
+  border-color: var(--notion-blue);
+}
+
+.mode-switch-slider {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.mode-switch-toggle.mode-tracking .mode-switch-slider {
+  transform: translateX(20px);
+}
+
 /* Tree Filter */
 .tree-filter {
   display: flex;
   gap: 12px;
   justify-content: flex-start;
-  margin-bottom: var(--space-4);
 }
 
 .tree-filter label {
@@ -1603,6 +1676,22 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: var(--space-4);
+  max-height: 50px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease,
+              max-height 0.5s ease,
+              margin-top 0.5s ease,
+              transform 0.5s ease;
+  overflow: hidden;
+}
+
+.tree-card-footer-hidden {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
 }
 
 .tree-card-footer-global {
@@ -2534,4 +2623,138 @@ body {
   border-top: 1px solid var(--notion-border);
   display: flex;
   justify-content: flex-end;
+}
+
+/* OKR Setting Mode - Editable Fields */
+.editable-field {
+  cursor: pointer;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+  position: relative;
+}
+
+.editable-field:hover {
+  background: var(--notion-bg-hover);
+}
+
+.editable-field::after {
+  content: '✎';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-xs);
+  color: var(--notion-text-light);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.editable-field:hover::after {
+  opacity: 1;
+}
+
+/* Inline Edit Input - General */
+.inline-edit-input {
+  width: 100%;
+  padding: var(--space-2);
+  border: 2px solid var(--notion-blue);
+  border-radius: var(--radius-sm);
+  font-size: inherit;
+  font-family: inherit;
+  background: var(--notion-bg);
+  color: var(--notion-text);
+  outline: none;
+}
+
+.inline-edit-input:focus {
+  box-shadow: 0 0 0 3px rgba(55, 53, 47, 0.08);
+}
+
+/* Inline Edit Input - Small (for numbers) */
+.inline-edit-input-small {
+  width: 60px;
+  padding: var(--space-1) var(--space-2);
+  border: 2px solid var(--notion-blue);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  background: var(--notion-bg);
+  color: var(--notion-text);
+  outline: none;
+  text-align: center;
+}
+
+.inline-edit-input-small:focus {
+  box-shadow: 0 0 0 3px rgba(55, 53, 47, 0.08);
+}
+
+/* Textarea for editing metric names in Global OKR - uses absolute overlay */
+.tree-card-krs-global li {
+  position: relative;
+}
+
+.tree-card-krs-global .inline-edit-textarea-metric {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100%;
+  z-index: 10;
+  resize: none;
+}
+
+/* Inline Edit Textarea - For objectives */
+.inline-edit-textarea {
+  width: 100%;
+  padding: var(--space-2);
+  border: 2px solid var(--notion-blue);
+  border-radius: var(--radius-sm);
+  font-size: inherit;
+  font-family: inherit;
+  background: var(--notion-bg);
+  color: var(--notion-text);
+  outline: none;
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.4;
+}
+
+.inline-edit-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(55, 53, 47, 0.08);
+}
+
+/* Setting Mode Hint in KR Cards */
+.kr-card-setting-hint {
+  font-size: var(--text-xs);
+  color: var(--notion-text-light);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-2);
+}
+
+/* Editable Number Values in KR Cards */
+.kr-value-editable {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.kr-value-editable:hover {
+  background: var(--notion-bg-hover);
+}
+
+/* Tree Card Objective Editable */
+.tree-card-objective.editable-field {
+  display: block;
+  padding: 0;
+  margin: 0 0 var(--space-4) 0;
+}
+
+/* Global OKR Card Objective Editable */
+.global-okr-card-objective.editable-field {
+  display: block;
 }

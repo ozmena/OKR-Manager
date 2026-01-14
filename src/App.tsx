@@ -11,6 +11,7 @@ import { HomePage } from './components/HomePage';
 import './App.css';
 
 type View = 'home' | 'management' | 'tree' | 'dashboards';
+type TreeViewMode = 'tracking' | 'setting';
 
 function App() {
   const [okrs, setOkrs] = useState<OKR[]>([]);
@@ -22,6 +23,7 @@ function App() {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('tracking');
 
   useEffect(() => {
     setOkrs(getOKRs());
@@ -110,7 +112,24 @@ function App() {
       <>
         <header className="notion-app-header">
           <h1>{pageTitle}</h1>
-          <div className="notion-header-spacer"></div>
+          {currentView === 'tree' && (
+            <div className="mode-switch">
+              <span className={`mode-switch-label ${treeViewMode === 'setting' ? 'active' : ''}`}>
+                OKR Setting
+              </span>
+              <button
+                className={`mode-switch-toggle ${treeViewMode === 'tracking' ? 'mode-tracking' : 'mode-setting'}`}
+                onClick={() => setTreeViewMode(prev => prev === 'tracking' ? 'setting' : 'tracking')}
+                aria-label="Toggle mode"
+              >
+                <span className="mode-switch-slider" />
+              </button>
+              <span className={`mode-switch-label ${treeViewMode === 'tracking' ? 'active' : ''}`}>
+                OKR Tracking
+              </span>
+            </div>
+          )}
+          {currentView !== 'tree' && <div className="notion-header-spacer"></div>}
           {showNewButton && (
             <div className="notion-page-header-actions">
               <div className="notion-search-container">
@@ -135,7 +154,7 @@ function App() {
         </header>
         <main className="notion-app-main">
           {currentView === 'tree' ? (
-            <OKRTreeView okrs={okrs} onUpdateOKR={handleInlineUpdateOKR} />
+            <OKRTreeView okrs={okrs} onUpdateOKR={handleInlineUpdateOKR} mode={treeViewMode} />
           ) : isFormVisible ? (
             <OKRForm
               onSubmit={editingOKR ? handleUpdateOKR : handleCreateOKR}
