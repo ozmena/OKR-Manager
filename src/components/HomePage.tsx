@@ -51,15 +51,6 @@ export function HomePage({ okrs, onNavigate }: HomePageProps) {
           </div>
         </section>
 
-        {/* Action buttons */}
-        <div className="home-actions">
-          <button className="home-btn-primary" onClick={() => onNavigate('management')}>
-            Manage OKRs
-          </button>
-          <button className="home-btn-secondary" onClick={() => onNavigate('tree')}>
-            Track Progress
-          </button>
-        </div>
       </div>
 
       {/* Footer */}

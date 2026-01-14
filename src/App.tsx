@@ -23,7 +23,7 @@ function App() {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('tracking');
+  const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('setting');
 
   useEffect(() => {
     setOkrs(getOKRs());

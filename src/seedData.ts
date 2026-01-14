@@ -9,9 +9,9 @@ export const seedOKRs: OKR[] = [
     displayId: 'OKR-1',
     objective: 'Become the market leader, more innovative and automated processes',
     keyResults: [
-      { id: 'kr-1-1', metricName: 'Market Share', from: 10, to: 30 },
-      { id: 'kr-1-2', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', from: 13, to: 24 },
-      { id: 'kr-1-3', metricName: 'Processes automated', from: 24, to: 35 },
+      { id: 'kr-1-1', metricName: 'Market Share', from: 10, to: 30, current: 22, status: 'on-track' },
+      { id: 'kr-1-2', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', from: 13, to: 24, current: 17, status: 'progressing' },
+      { id: 'kr-1-3', metricName: 'Processes automated', from: 24, to: 35, current: 26, status: 'off-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Hardik Bhatt',
@@ -23,8 +23,8 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-1',
     area: 'GCC India',
     keyResults: [
-      { id: 'kr-1-1-1', metricName: 'Cost reduction', from: 10, to: 30 }, // Short
-      { id: 'kr-1-1-2', metricName: 'Automated processes', from: 19, to: 25 }, // Short
+      { id: 'kr-1-1-1', metricName: 'Cost reduction', from: 10, to: 30, current: 28, status: 'on-track' },
+      { id: 'kr-1-1-2', metricName: 'Automated processes', from: 19, to: 25, current: 21, status: 'progressing' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Deepa Abi',
@@ -35,9 +35,9 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-1',
     area: 'GCC Mexico',
     keyResults: [
-      { id: 'kr-1-2-1', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback across all regional teams', from: 10, to: 40 }, // Very long
-      { id: 'kr-1-2-2', metricName: 'Revenue', from: 10, to: 20 }, // Very short
-      { id: 'kr-1-2-3', metricName: 'NPS', from: 40, to: 75 }, // Very short
+      { id: 'kr-1-2-1', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback across all regional teams', from: 10, to: 40, current: 32, status: 'on-track' },
+      { id: 'kr-1-2-2', metricName: 'Revenue', from: 10, to: 20, current: 12, status: 'off-track' },
+      { id: 'kr-1-2-3', metricName: 'NPS', from: 40, to: 75, current: 58, status: 'progressing' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Juan Montoya',
@@ -48,7 +48,7 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-1',
     area: 'GPL',
     keyResults: [
-      { id: 'kr-1-3-1', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all business units', from: 0, to: 100 }, // Very long
+      { id: 'kr-1-3-1', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all business units', from: 0, to: 100, current: 75, status: 'on-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Elena Schoeman',
@@ -62,8 +62,8 @@ export const seedOKRs: OKR[] = [
     displayId: 'OKR-2',
     objective: 'Build a high performing GBS team that becomes a KHC talent pipeline',
     keyResults: [
-      { id: 'kr-2-1', metricName: 'Top talent', from: 10, to: 30 },
-      { id: 'kr-2-2', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', from: 45, to: 65 },
+      { id: 'kr-2-1', metricName: 'Top talent', from: 10, to: 30, current: 24, status: 'on-track' },
+      { id: 'kr-2-2', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', from: 45, to: 65, current: 52, status: 'progressing' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Mariana Avila',
@@ -114,8 +114,8 @@ export const seedOKRs: OKR[] = [
     displayId: 'OKR-3',
     objective: 'Become a trusted Business Partner by delivering strong operational results and top-tier stakeholder NPS',
     keyResults: [
-      { id: 'kr-3-1', metricName: 'Stakeholder NPS', from: 40, to: 70 },
-      { id: 'kr-3-2', metricName: 'All critical payroll controls documented, tested, and signed off', from: 60, to: 85 },
+      { id: 'kr-3-1', metricName: 'Stakeholder NPS', from: 40, to: 70, current: 62, status: 'on-track' },
+      { id: 'kr-3-2', metricName: 'All critical payroll controls documented, tested, and signed off', from: 60, to: 85, current: 68, status: 'off-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Jack Shu',
@@ -138,9 +138,9 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-3',
     area: 'GCC Mexico',
     keyResults: [
-      { id: 'kr-3-2-1', metricName: 'SLA', from: 10, to: 40 }, // Very short
-      { id: 'kr-3-2-2', metricName: 'CSAT', from: 10, to: 20 }, // Very short
-      { id: 'kr-3-2-3', metricName: 'First contact resolution rate', from: 60, to: 90 }, // Medium
+      { id: 'kr-3-2-1', metricName: 'SLA', from: 10, to: 40, current: 35, status: 'on-track' },
+      { id: 'kr-3-2-2', metricName: 'CSAT', from: 10, to: 20, current: 14, status: 'progressing' },
+      { id: 'kr-3-2-3', metricName: 'First contact resolution rate', from: 60, to: 90, current: 72, status: 'progressing' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Elena Schoeman',
@@ -229,8 +229,8 @@ export const seedOKRs: OKR[] = [
     displayId: 'OKR-5',
     objective: 'Deliver a successful GBS Separation',
     keyResults: [
-      { id: 'kr-5-1', metricName: 'Separation milestones', from: 0, to: 100 },
-      { id: 'kr-5-2', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 10, to: 40 },
+      { id: 'kr-5-1', metricName: 'Separation milestones', from: 0, to: 100, current: 45, status: 'progressing' },
+      { id: 'kr-5-2', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 10, to: 40, current: 28, status: 'on-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Morne Fouche',
@@ -241,8 +241,8 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-5',
     area: 'GCC India',
     keyResults: [
-      { id: 'kr-5-1-1', metricName: 'Systems migrated', from: 10, to: 30 }, // Short
-      { id: 'kr-5-1-2', metricName: 'Data integrity validation completion rate across all critical business systems and applications', from: 19, to: 25 }, // Long
+      { id: 'kr-5-1-1', metricName: 'Systems migrated', from: 10, to: 30, current: 22, status: 'on-track' },
+      { id: 'kr-5-1-2', metricName: 'Data integrity validation completion rate across all critical business systems and applications', from: 19, to: 25, current: 20, status: 'off-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Thiago Marchi',
@@ -265,9 +265,9 @@ export const seedOKRs: OKR[] = [
     parentId: 'global-5',
     area: 'GPL',
     keyResults: [
-      { id: 'kr-5-3-1', metricName: 'Contracts reviewed and updated to reflect new organizational structure and legal entity requirements', from: 13, to: 34 }, // Very long
-      { id: 'kr-5-3-2', metricName: 'Compliance score', from: 24, to: 25 }, // Short
-      { id: 'kr-5-3-3', metricName: 'Audit readiness', from: 50, to: 100 }, // Short
+      { id: 'kr-5-3-1', metricName: 'Contracts reviewed and updated to reflect new organizational structure and legal entity requirements', from: 13, to: 34, current: 30, status: 'on-track' },
+      { id: 'kr-5-3-2', metricName: 'Compliance score', from: 24, to: 25, current: 24, status: 'off-track' },
+      { id: 'kr-5-3-3', metricName: 'Audit readiness', from: 50, to: 100, current: 85, status: 'on-track' },
     ],
     createdAt: '2026-01-10T19:20:26.372Z',
     owner: 'Juan Ramon Triana',

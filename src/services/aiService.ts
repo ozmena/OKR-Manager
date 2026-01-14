@@ -1,8 +1,18 @@
 import { OKR, QUALITY_CHECKLIST_ITEMS, formatKRValue, KeyResultUnit } from '../types';
 
+export interface AISuggestion {
+  type: 'objective' | 'keyResult';
+  area?: string;  // Which area OKR (if applicable)
+  krIndex?: number;  // Which key result (0-indexed)
+  original: string;
+  proposed: string;
+  reason: string;
+}
+
 interface AIFeedbackResponse {
   success: boolean;
   feedback?: string;
+  suggestion?: AISuggestion;
   error?: string;
 }
 
@@ -185,11 +195,7 @@ function buildTreePrompt(treeData: TreeOKRData): string {
 - Key Results:
 ${formatKRList(areaOkr.keyResults)}`).join('\n');
 
-  const checklistCriteria = QUALITY_CHECKLIST_ITEMS
-    .map((item, i) => `${i + 1}. ${item.title} - ${item.question}`)
-    .join('\n');
-
-  return `You are an OKR coach helping evaluate an entire OKR tree (Global OKR + Area OKRs) for quality and alignment. Provide constructive, actionable feedback.
+  return `You are an OKR coach. Evaluate this OKR tree and provide CONCISE feedback plus ONE specific improvement suggestion.
 
 GLOBAL OKR:
 - Objective: ${treeData.globalOKR.objective}
@@ -199,30 +205,29 @@ ${globalKRs}
 AREA OKRs (${treeData.areaOKRs.length} total):
 ${areaOKRsSection}
 
-QUALITY CHECKLIST CRITERIA:
-${checklistCriteria}
+Respond with ONLY valid JSON in this exact format (no markdown, no code blocks):
+{
+  "feedback": {
+    "assessment": "1-2 sentence overall assessment",
+    "strengths": ["strength 1", "strength 2"],
+    "improvements": ["improvement 1", "improvement 2"],
+    "alignment": "High/Medium/Low - brief explanation"
+  },
+  "suggestion": {
+    "type": "objective" or "keyResult",
+    "area": "area name if Area OKR, or null if Global OKR",
+    "krIndex": key result index (0-based) if type is keyResult, or null,
+    "original": "the current text that should be changed",
+    "proposed": "the improved version",
+    "reason": "brief reason for this change"
+  }
+}
 
-Please provide feedback in the following format:
-
-**Overall Tree Assessment**
-(2-3 sentences summarizing the overall quality of this OKR tree)
-
-**Global OKR Feedback**
-- Strengths: (What's working well)
-- Areas for Improvement: (Specific suggestions)
-
-**Area OKR Highlights**
-(Brief assessment of each area - focus on notable strengths or issues. If many areas, group similar feedback.)
-
-**Alignment Analysis**
-(High/Medium/Low) - How well do the Area OKRs cascade from and support the Global OKR? Are there gaps or redundancies?
-
-**Top Recommendations**
-1. (Most impactful improvement for this OKR tree)
-2. (Second priority)
-3. (Third priority)
-
-Keep your response concise but comprehensive. Focus on actionable insights that will help improve OKR quality and alignment across the organization.`;
+IMPORTANT:
+- Pick ONE specific, impactful change for the suggestion
+- The suggestion should improve measurability, clarity, or alignment
+- Keep feedback brief - max 2 items per array
+- Return ONLY the JSON, nothing else`;
 }
 
 export async function getTreeAIFeedback(
@@ -269,23 +274,71 @@ export async function getTreeAIFeedback(
     }
 
     const data = await response.json();
-    const feedback = data.content?.[0]?.text;
+    const rawText = data.content?.[0]?.text;
 
-    if (!feedback) {
+    if (!rawText) {
       return {
         success: false,
         error: 'No feedback received from AI'
       };
     }
 
-    return {
-      success: true,
-      feedback
-    };
+    // Parse the JSON response
+    try {
+      const parsed = JSON.parse(rawText);
+
+      // Format feedback as readable text
+      const feedbackText = formatParsedFeedback(parsed.feedback);
+
+      // Extract suggestion
+      const suggestion: AISuggestion | undefined = parsed.suggestion ? {
+        type: parsed.suggestion.type,
+        area: parsed.suggestion.area || undefined,
+        krIndex: parsed.suggestion.krIndex ?? undefined,
+        original: parsed.suggestion.original,
+        proposed: parsed.suggestion.proposed,
+        reason: parsed.suggestion.reason
+      } : undefined;
+
+      return {
+        success: true,
+        feedback: feedbackText,
+        suggestion
+      };
+    } catch {
+      // If JSON parsing fails, return raw text as feedback
+      return {
+        success: true,
+        feedback: rawText
+      };
+    }
   } catch (error) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
+}
+
+function formatParsedFeedback(feedback: {
+  assessment: string;
+  strengths: string[];
+  improvements: string[];
+  alignment: string;
+}): string {
+  let text = `**Overall Assessment**\n${feedback.assessment}\n\n`;
+
+  if (feedback.strengths?.length > 0) {
+    text += `**Strengths**\n${feedback.strengths.map(s => `- ${s}`).join('\n')}\n\n`;
+  }
+
+  if (feedback.improvements?.length > 0) {
+    text += `**Areas for Improvement**\n${feedback.improvements.map(i => `- ${i}`).join('\n')}\n\n`;
+  }
+
+  if (feedback.alignment) {
+    text += `**Alignment**\n${feedback.alignment}`;
+  }
+
+  return text;
 }

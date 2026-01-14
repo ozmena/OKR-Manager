@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { OKR, KeyResult, KeyResultStatus, formatKRValue } from '../types';
 import { CheckInModal } from './CheckInModal';
 import { AIFeedbackModal } from './AIFeedbackModal';
-import { getTreeAIFeedback, TreeOKRData } from '../services/aiService';
+import { getTreeAIFeedback, TreeOKRData, AISuggestion } from '../services/aiService';
 
 
 // Mode type for the view
@@ -505,6 +505,7 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
   // Tree AI Feedback state
   const [showTreeAIFeedback, setShowTreeAIFeedback] = useState(false);
   const [treeAIFeedback, setTreeAIFeedback] = useState<string | null>(null);
+  const [treeAISuggestion, setTreeAISuggestion] = useState<AISuggestion | null>(null);
   const [treeAILoading, setTreeAILoading] = useState(false);
   const [treeAIError, setTreeAIError] = useState<string | null>(null);
 
@@ -618,6 +619,7 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
     setTreeAILoading(true);
     setTreeAIError(null);
     setTreeAIFeedback(null);
+    setTreeAISuggestion(null);
 
     // Get filtered children (respecting area/owner filters)
     const children = okrs.filter(o => {
@@ -654,8 +656,51 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
     setTreeAILoading(false);
     if (result.success) {
       setTreeAIFeedback(result.feedback || null);
+      setTreeAISuggestion(result.suggestion || null);
     } else {
       setTreeAIError(result.error || 'Unknown error');
+    }
+  };
+
+  // Handle applying AI suggestion
+  const handleApplySuggestion = (suggestion: AISuggestion) => {
+    if (!selectedOkr) return;
+
+    if (!suggestion.area) {
+      // Global OKR suggestion
+      if (suggestion.type === 'objective') {
+        const updatedOkr = { ...selectedOkr, objective: suggestion.proposed };
+        onUpdateOKR(updatedOkr);
+      } else if (suggestion.type === 'keyResult' && suggestion.krIndex !== undefined) {
+        const updatedKeyResults = [...selectedOkr.keyResults];
+        if (updatedKeyResults[suggestion.krIndex]) {
+          updatedKeyResults[suggestion.krIndex] = {
+            ...updatedKeyResults[suggestion.krIndex],
+            metricName: suggestion.proposed
+          };
+          const updatedOkr = { ...selectedOkr, keyResults: updatedKeyResults };
+          onUpdateOKR(updatedOkr);
+        }
+      }
+    } else {
+      // Area OKR suggestion
+      const areaOkr = okrs.find(o => o.parentId === selectedOkr.id && o.area === suggestion.area);
+      if (areaOkr) {
+        if (suggestion.type === 'objective') {
+          const updatedOkr = { ...areaOkr, objective: suggestion.proposed };
+          onUpdateOKR(updatedOkr);
+        } else if (suggestion.type === 'keyResult' && suggestion.krIndex !== undefined) {
+          const updatedKeyResults = [...areaOkr.keyResults];
+          if (updatedKeyResults[suggestion.krIndex]) {
+            updatedKeyResults[suggestion.krIndex] = {
+              ...updatedKeyResults[suggestion.krIndex],
+              metricName: suggestion.proposed
+            };
+            const updatedOkr = { ...areaOkr, keyResults: updatedKeyResults };
+            onUpdateOKR(updatedOkr);
+          }
+        }
+      }
     }
   };
 
@@ -818,6 +863,8 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
         feedback={treeAIFeedback}
         isLoading={treeAILoading}
         error={treeAIError}
+        suggestion={treeAISuggestion}
+        onApplySuggestion={handleApplySuggestion}
       />
     </div>
   );
