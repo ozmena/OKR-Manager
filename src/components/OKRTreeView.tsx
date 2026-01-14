@@ -184,9 +184,7 @@ function KeyResultCard({ kr, okrId, functionName, mode, editingField, editValue,
           ) : (
             <span className="kr-card-no-data">No check-in data</span>
           )
-        ) : (
-          <span className="kr-card-setting-hint">Click values to edit</span>
-        )}
+        ) : null}
       </div>
     </div>
   );
