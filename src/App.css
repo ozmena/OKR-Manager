@@ -1190,16 +1190,62 @@ body {
 }
 
 /* Tree Container */
+.tree-container-wrapper {
+  position: relative;
+}
+
+.tree-scroll-btn {
+  position: absolute;
+  top: 560px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--notion-border);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
+  font-size: 24px;
+  color: var(--notion-text);
+  transition: all 0.2s ease;
+}
+
+.tree-scroll-btn:hover {
+  background: var(--notion-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.tree-scroll-btn-left {
+  left: 8px;
+}
+
+.tree-scroll-btn-right {
+  right: 8px;
+}
+
 .tree-container {
   overflow-x: auto;
-  padding: var(--space-5) 0;
+  padding: var(--space-5) var(--space-6);
   position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tree-container::-webkit-scrollbar {
+  display: none;
 }
 
 .tree-root {
   display: flex;
   justify-content: center;
   gap: var(--space-10);
+  width: max-content;
+  min-width: 100%;
+  margin: 0 auto;
 }
 
 .tree-node {
@@ -1254,6 +1300,13 @@ body {
   margin: 0 0 var(--space-4) 0;
   line-height: 1.4;
   text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 4.2em;
+  cursor: default;
 }
 
 .tree-card-icon {
@@ -1392,6 +1445,16 @@ body {
   gap: var(--space-6);
   margin-top: var(--space-10);
   position: relative;
+  flex-wrap: wrap;
+}
+
+/* Only apply max-content to first-level children (Area OKRs under Global OKR) */
+.tree-root > .tree-node > .tree-children {
+  width: max-content;
+  min-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  flex-wrap: nowrap;
 }
 
 .tree-children::before {
@@ -1440,7 +1503,7 @@ body {
   gap: var(--space-2);
   margin-bottom: var(--space-6);
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .tree-tab {
@@ -1472,12 +1535,10 @@ body {
 
 /* Tree Filter */
 .tree-filter {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  z-index: 10;
   display: flex;
   gap: 12px;
+  justify-content: flex-start;
+  margin-bottom: var(--space-4);
 }
 
 .tree-filter label {
@@ -1509,6 +1570,9 @@ body {
 /* Child OKR Card Styles */
 .tree-card-child {
   padding-bottom: 20px;
+  min-width: 280px;
+  max-width: 280px;
+  width: 280px;
 }
 
 .tree-card-header-child {
@@ -1611,6 +1675,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
+  max-width: 220px;
 }
 
 /* Individual Key Result Card */
@@ -1619,7 +1684,7 @@ body {
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   min-width: 280px;
-  max-width: 320px;
+  max-width: 280px;
   flex: 1;
   box-shadow: var(--shadow-card);
 }

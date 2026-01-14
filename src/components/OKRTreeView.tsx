@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { OKR, KeyResult, KeyResultStatus, formatKRValue } from '../types';
 import { CheckInModal } from './CheckInModal';
 
@@ -138,7 +138,7 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
           <hr className="tree-card-separator" />
 
           {/* Objective title */}
-          <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
+          <h4 className="tree-card-objective" title={getObjectiveTitle()}>{getObjectiveTitle()}</h4>
 
           {/* Footer with owner and check-in button */}
           <div className="tree-card-footer">
@@ -197,7 +197,7 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
         </div>
 
         {/* Objective title */}
-        <h4 className="tree-card-objective">{getObjectiveTitle()}</h4>
+        <h4 className="tree-card-objective" title={getObjectiveTitle()}>{getObjectiveTitle()}</h4>
 
         {/* Separator */}
         <hr className="tree-card-separator" />
@@ -260,6 +260,41 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
   const [selectedArea, setSelectedArea] = useState<string>('all');
   const [selectedOwner, setSelectedOwner] = useState<string>('all');
   const [checkInOkr, setCheckInOkr] = useState<OKR | null>(null);
+
+  // Scroll state and ref
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollButtons = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (el) {
+      setCanScrollLeft(el.scrollLeft > 0);
+      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+    }
+  }, []);
+
+  const scrollLeft = () => {
+    scrollContainerRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    scrollContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
+  };
+
+  // Update scroll buttons on mount and resize
+  useEffect(() => {
+    updateScrollButtons();
+    window.addEventListener('resize', updateScrollButtons);
+    return () => window.removeEventListener('resize', updateScrollButtons);
+  }, [updateScrollButtons]);
+
+  // Update scroll buttons when selected OKR changes (content changes)
+  useEffect(() => {
+    // Small delay to let content render
+    const timer = setTimeout(updateScrollButtons, 100);
+    return () => clearTimeout(timer);
+  }, [selectedOkrId, selectedArea, selectedOwner, updateScrollButtons]);
 
   const handleCheckIn = (okr: OKR) => {
     setCheckInOkr(okr);
@@ -337,37 +372,49 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
               </button>
             ))}
           </div>
-          <div className="tree-container">
-            {(availableAreas.length > 0 || availableOwners.length > 0) && (
-              <div className="tree-filter">
-                <select
-                  id="area-filter"
-                  value={selectedArea}
-                  onChange={(e) => setSelectedArea(e.target.value)}
-                  className="tree-filter-select"
-                >
-                  <option value="all">All Areas</option>
-                  {availableAreas.map(area => (
-                    <option key={area} value={area}>{area}</option>
-                  ))}
-                </select>
-                <select
-                  id="owner-filter"
-                  value={selectedOwner}
-                  onChange={(e) => setSelectedOwner(e.target.value)}
-                  className="tree-filter-select"
-                >
-                  <option value="all">All Owners</option>
-                  {availableOwners.map(owner => (
-                    <option key={owner} value={owner}>{owner}</option>
-                  ))}
-                </select>
-              </div>
+          {(availableAreas.length > 0 || availableOwners.length > 0) && (
+            <div className="tree-filter">
+              <select
+                id="area-filter"
+                value={selectedArea}
+                onChange={(e) => setSelectedArea(e.target.value)}
+                className="tree-filter-select"
+              >
+                <option value="all">All Areas</option>
+                {availableAreas.map(area => (
+                  <option key={area} value={area}>{area}</option>
+                ))}
+              </select>
+              <select
+                id="owner-filter"
+                value={selectedOwner}
+                onChange={(e) => setSelectedOwner(e.target.value)}
+                className="tree-filter-select"
+              >
+                <option value="all">All Owners</option>
+                {availableOwners.map(owner => (
+                  <option key={owner} value={owner}>{owner}</option>
+                ))}
+              </select>
+            </div>
+          )}
+          <div className="tree-container-wrapper">
+            {canScrollLeft && (
+              <button className="tree-scroll-btn tree-scroll-btn-left" onClick={scrollLeft} aria-label="Scroll left">
+                ‹
+              </button>
             )}
-            <div className="tree-root">
-              {selectedOkr && (
-                <TreeCard okr={selectedOkr} allOkrs={okrs} functionMap={functionMap} selectedArea={selectedArea} selectedOwner={selectedOwner} onCheckIn={handleCheckIn} />
-              )}
+            {canScrollRight && (
+              <button className="tree-scroll-btn tree-scroll-btn-right" onClick={scrollRight} aria-label="Scroll right">
+                ›
+              </button>
+            )}
+            <div className="tree-container" ref={scrollContainerRef} onScroll={updateScrollButtons}>
+              <div className="tree-root">
+                {selectedOkr && (
+                  <TreeCard okr={selectedOkr} allOkrs={okrs} functionMap={functionMap} selectedArea={selectedArea} selectedOwner={selectedOwner} onCheckIn={handleCheckIn} />
+                )}
+              </div>
             </div>
           </div>
         </>
