@@ -1,4 +1,4 @@
-import { OKR } from '../types';
+import { OKR, formatKRValue } from '../types';
 
 interface OKRCardProps {
   okr: OKR;
@@ -32,7 +32,7 @@ export function OKRCard({ okr, allOkrs, onDelete, onEdit, onAddChild }: OKRCardP
           <li key={kr.id} className="key-result-item">
             <span className="metric-name">{kr.metricName}</span>
             <span className="metric-range">
-              from <strong>{kr.from}%</strong> to <strong>{kr.to}%</strong>
+              from <strong>{formatKRValue(kr.from, kr.unit)}</strong> to <strong>{formatKRValue(kr.to, kr.unit)}</strong>
             </span>
           </li>
         ))}

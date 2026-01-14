@@ -22,7 +22,7 @@ export function HomePage({ okrs, onNavigate }: HomePageProps) {
       <div className="home-container">
         {/* Logo */}
         <div className="home-logo">
-          <span className="home-logo-text">Vektor</span>
+          <span className="home-logo-text">Vector</span>
           <span className="home-logo-arrow">↗</span>
         </div>
 

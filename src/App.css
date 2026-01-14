@@ -167,7 +167,7 @@ body {
 }
 
 .sidebar-arrow {
-  font-size: 0.8em;
+  font-size: 14px;
 }
 
 .sidebar-toggle {
@@ -265,6 +265,30 @@ body {
   text-overflow: ellipsis;
 }
 
+/* Disabled sidebar item */
+.sidebar-item-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sidebar-item-disabled:hover {
+  background-color: transparent;
+}
+
+/* Sidebar tags (Soon, Beta, etc.) */
+.sidebar-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: auto;
+  font-weight: 500;
+}
+
+.sidebar-tag-soon {
+  background-color: #374151;
+  color: #9CA3AF;
+}
+
 /* Main Content Area */
 .notion-app {
   display: flex;
@@ -291,13 +315,67 @@ body {
 }
 
 .notion-page-header-actions {
-  width: 100px;
   display: flex;
+  align-items: center;
+  gap: 12px;
   justify-content: flex-end;
+}
+
+/* Search input */
+.notion-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notion-search-input {
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  width: 260px;
+  background: var(--notion-bg);
+  color: var(--notion-text);
+}
+
+.notion-search-input::placeholder {
+  color: var(--notion-text-secondary);
+}
+
+.notion-search-input:focus {
+  outline: none;
+  border-color: var(--notion-orange);
+}
+
+.notion-search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--notion-icon);
+  padding: 0;
+  line-height: 1;
+}
+
+.notion-search-clear:hover {
+  color: var(--notion-text);
 }
 
 .notion-app-main {
   width: 100%;
+}
+
+/* Coming Soon Page */
+.coming-soon-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  color: var(--notion-text-light);
+  font-size: var(--text-base);
 }
 
 /* Buttons */
@@ -372,6 +450,11 @@ body {
 
 .notion-header-owner {
   width: 80px;
+  text-align: center;
+}
+
+.notion-header-quality {
+  width: 70px;
   text-align: center;
 }
 
@@ -530,7 +613,7 @@ body {
 }
 
 .notion-kr-number-input {
-  width: 50px;
+  width: 70px;
   text-align: center;
   flex: none;
 }
@@ -538,6 +621,17 @@ body {
 .notion-kr-separator {
   color: var(--notion-text-light);
   font-size: var(--text-sm);
+}
+
+.notion-kr-unit-select {
+  padding: 2px 4px;
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  background: var(--notion-bg);
+  color: var(--notion-text-light);
+  cursor: pointer;
+  margin-left: 8px;
 }
 
 .notion-row-area {
@@ -567,6 +661,81 @@ body {
   align-items: center;
   justify-content: center;
   cursor: default;
+}
+
+.notion-row-quality {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2);
+}
+
+.quality-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: var(--text-xs);
+  color: var(--notion-text-light);
+  background: var(--notion-bg-gray);
+  border-radius: var(--radius-sm);
+}
+
+.quality-badge-high {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+/* Quality Tooltip */
+.quality-tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+
+.quality-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  min-width: 220px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 100;
+  margin-top: 8px;
+}
+
+.quality-tooltip-container:hover .quality-tooltip {
+  display: block;
+}
+
+.quality-tooltip-title {
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--notion-border);
+}
+
+.quality-tooltip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-xs);
+  color: var(--notion-text-light);
+  padding: 4px 0;
+}
+
+.quality-tooltip-item.checked {
+  color: #166534;
+}
+
+.quality-tooltip-check {
+  width: 16px;
+  text-align: center;
 }
 
 .notion-area-badge {
@@ -686,13 +855,56 @@ body {
 }
 
 .field label {
-  display: block;
+  display: flex;
+  align-items: center;
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
   color: var(--notion-text-light);
   margin-bottom: var(--space-2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* Help tooltip */
+.help-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  text-transform: none;
+}
+
+.help-tooltip-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--notion-border);
+  color: var(--notion-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+
+.help-tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  background-color: #1F2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.help-tooltip:hover .help-tooltip-text {
+  visibility: visible;
 }
 
 .field input,
@@ -705,6 +917,17 @@ body {
   color: var(--notion-text);
   background: var(--notion-bg);
   transition: border-color 0.1s;
+}
+
+.field select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--notion-text);
+  background: var(--notion-bg);
+  cursor: pointer;
 }
 
 .field input:focus,
@@ -781,6 +1004,103 @@ body {
 .add-kr-btn:hover {
   background-color: var(--notion-bg-gray);
   border-color: var(--notion-icon);
+}
+
+/* Quality Checklist */
+.quality-checklist {
+  margin-bottom: 20px;
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.quality-checklist-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--notion-bg-gray);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: var(--text-sm);
+  transition: background-color 0.1s;
+}
+
+.quality-checklist-header:hover {
+  background: var(--notion-hover);
+}
+
+.quality-checklist-toggle {
+  font-size: 10px;
+  color: var(--notion-text-light);
+}
+
+.quality-checklist-title {
+  font-weight: var(--font-medium);
+  color: var(--notion-text);
+  flex: 1;
+}
+
+.quality-checklist-progress {
+  font-size: var(--text-xs);
+  color: var(--notion-text-light);
+  background: var(--notion-bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.quality-checklist-progress.quality-badge-high {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.quality-checklist-items {
+  padding: 8px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quality-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.1s;
+}
+
+.quality-checklist-item:hover {
+  background: var(--notion-bg-gray);
+}
+
+.quality-checklist-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--notion-blue);
+}
+
+.quality-checklist-item-content {
+  display: inline;
+}
+
+.quality-checklist-item-title {
+  font-weight: var(--font-medium);
+}
+
+.quality-checklist-item-title::after {
+  content: " - ";
+  font-weight: normal;
+}
+
+.quality-checklist-item-question {
+  font-weight: normal;
+  color: var(--notion-text-light);
 }
 
 /* Form Actions */
@@ -894,8 +1214,8 @@ body {
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--space-6);
-  min-width: 280px;
-  max-width: 520px;
+  min-width: 420px;
+  max-width: 600px;
   box-shadow: var(--shadow-card);
   position: relative;
   z-index: 1;
@@ -1046,9 +1366,17 @@ body {
 
 /* Global OKR Key Result Metrics */
 .tree-card-krs-global li {
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+}
+
+.tree-card-krs-global .tree-card-metric {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  -webkit-line-clamp: unset;
 }
 
 .tree-card-target {
@@ -1148,6 +1476,8 @@ body {
   left: 20px;
   top: 20px;
   z-index: 10;
+  display: flex;
+  gap: 12px;
 }
 
 .tree-filter label {
@@ -1210,6 +1540,29 @@ body {
   align-items: center;
   margin-top: var(--space-4);
 }
+
+.tree-card-footer-global {
+  justify-content: space-between;
+}
+
+/* Progress bar for Global OKR Key Results */
+.tree-card-kr-progress {
+  flex: 1;
+  height: 6px;
+  background-color: var(--progress-track);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0 12px;
+}
+
+.tree-card-kr-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.tree-card-kr-progress-green .tree-card-kr-progress-fill { background-color: var(--status-green); }
+.tree-card-kr-progress-yellow .tree-card-kr-progress-fill { background-color: var(--status-yellow); }
+.tree-card-kr-progress-red .tree-card-kr-progress-fill { background-color: var(--status-red); }
 
 .tree-card-header-right {
   display: flex;
@@ -1530,6 +1883,11 @@ body {
   color: var(--notion-text-secondary);
   line-height: 1.6;
   margin: 0;
+}
+
+.help-arrow {
+  font-size: 0.8em;
+  margin-left: 2px;
 }
 
 .help-guides h3 {
@@ -1976,4 +2334,139 @@ body {
   font-size: var(--text-sm);
   color: var(--notion-text-light);
   text-align: center;
+}
+
+/* ================================== */
+/* AI Feedback Button & Modal Styles  */
+/* ================================== */
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.field-label-row label {
+  margin-bottom: 0;
+}
+
+.ai-feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-feedback-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.ai-feedback-btn:active {
+  transform: translateY(0);
+}
+
+.ai-feedback-btn-icon {
+  font-size: var(--text-sm);
+}
+
+/* AI Feedback Modal */
+.ai-feedback-modal {
+  background: var(--notion-bg);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-modal);
+}
+
+.ai-feedback-header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ai-feedback-icon {
+  font-size: var(--text-xl);
+}
+
+.ai-feedback-content {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.ai-feedback-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10);
+  gap: var(--space-4);
+}
+
+.ai-feedback-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--notion-border);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: ai-spin 0.8s linear infinite;
+}
+
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-feedback-loading p {
+  color: var(--notion-text-light);
+  font-size: var(--text-base);
+}
+
+.ai-feedback-error {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.ai-feedback-error p {
+  color: var(--status-red-text);
+  margin-bottom: var(--space-2);
+}
+
+.ai-feedback-error-hint {
+  font-size: var(--text-sm);
+  color: var(--notion-text-light);
+}
+
+.ai-feedback-text {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--notion-text);
+}
+
+.ai-feedback-text strong {
+  font-weight: var(--font-semibold);
+}
+
+.ai-feedback-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--notion-border);
+  display: flex;
+  justify-content: flex-end;
 }

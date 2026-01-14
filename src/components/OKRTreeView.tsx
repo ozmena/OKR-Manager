@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { OKR, KeyResult, KeyResultStatus } from '../types';
+import { OKR, KeyResult, KeyResultStatus, formatKRValue } from '../types';
 import { CheckInModal } from './CheckInModal';
 
 // Random function names for MVP demo
@@ -44,6 +44,7 @@ interface TreeCardProps {
   allOkrs: OKR[];
   functionMap: Record<string, string>;
   selectedArea: string;
+  selectedOwner: string;
   onCheckIn: (okr: OKR) => void;
 }
 
@@ -68,7 +69,7 @@ function KeyResultCard({ kr, functionName }: KeyResultCardProps) {
       </div>
       <hr className="kr-card-separator" />
       <div className="kr-card-content">
-        <span className="kr-card-range">{kr.from}% → {kr.to}%</span>
+        <span className="kr-card-range">{formatKRValue(kr.from, kr.unit)} → {formatKRValue(kr.to, kr.unit)}</span>
         <p className="kr-card-description">{kr.metricName}</p>
       </div>
       <div className="kr-card-footer">
@@ -95,12 +96,14 @@ function KeyResultCard({ kr, functionName }: KeyResultCardProps) {
   );
 }
 
-function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCardProps) {
+function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCheckIn }: TreeCardProps) {
   const allChildren = allOkrs.filter(o => o.parentId === okr.id);
-  // Filter children by selected area (only applies to Area OKRs which have the area field)
-  const children = selectedArea === 'all'
-    ? allChildren
-    : allChildren.filter(child => child.area === selectedArea);
+  // Filter children by selected area and owner
+  const children = allChildren.filter(child => {
+    const areaMatch = selectedArea === 'all' || child.area === selectedArea;
+    const ownerMatch = selectedOwner === 'all' || child.owner === selectedOwner;
+    return areaMatch && ownerMatch;
+  });
   const isGlobal = !okr.parentId;
 
 
@@ -167,7 +170,7 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
         {children.length > 0 && (
           <div className="tree-children">
             {children.map(child => (
-              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={onCheckIn} />
+              <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} selectedOwner={selectedOwner} onCheckIn={onCheckIn} />
             ))}
           </div>
         )}
@@ -175,7 +178,7 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
     );
   }
 
-  // Global OKR: New design with org badge and no progress bars
+  // Global OKR: New design with org badge
   return (
     <div className="tree-node">
       <div className="tree-card">
@@ -189,11 +192,6 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
             <span className="tree-card-identifier">{getIdentifier()}</span>
           </div>
           <div className="tree-card-header-right">
-            {okr.owner && (
-              <span className="tree-card-owner-initials" title={okr.owner}>
-                {getInitials(okr.owner)}
-              </span>
-            )}
             <span className="tree-card-org-badge">GBS</span>
           </div>
         </div>
@@ -208,22 +206,47 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, onCheckIn }: TreeCa
         <div className="tree-card-krs-section">
           <span className="tree-card-krs-label">Key results</span>
           <ul className="tree-card-krs tree-card-krs-global">
-            {okr.keyResults.map((kr) => (
-              <li key={kr.id}>
-                <span className="tree-card-kr-icon" title="Key Result">◉</span>
-                <span className="tree-card-metric" title={kr.metricName}>{kr.metricName}</span>
-                <span className="tree-card-target">
-                  {kr.from}% → <strong>{kr.to}%</strong>
-                </span>
-              </li>
-            ))}
+            {okr.keyResults.map((kr) => {
+              const hasCurrentValue = kr.current !== undefined;
+              const progress = calculateProgress(kr.from, kr.to, kr.current);
+              const statusColor = getStatusDisplay(kr.status).color;
+              return (
+                <li key={kr.id}>
+                  <span className="tree-card-kr-icon" title="Key Result">◉</span>
+                  <span className="tree-card-metric" title={kr.metricName}>{kr.metricName}</span>
+                  {hasCurrentValue && (
+                    <div className={`tree-card-kr-progress tree-card-kr-progress-${statusColor}`}>
+                      <div
+                        className="tree-card-kr-progress-fill"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                  )}
+                  <span className="tree-card-target">
+                    {formatKRValue(kr.from, kr.unit)} → <strong>{formatKRValue(kr.to, kr.unit)}</strong>
+                  </span>
+                </li>
+              );
+            })}
           </ul>
+        </div>
+
+        {/* Footer with owner and check-in button */}
+        <div className="tree-card-footer tree-card-footer-global">
+          {okr.owner && (
+            <span className="tree-card-owner-initials" title={okr.owner}>
+              {getInitials(okr.owner)}
+            </span>
+          )}
+          <button className="tree-card-checkin-btn" onClick={() => onCheckIn(okr)}>
+            Check-in <span>›</span>
+          </button>
         </div>
       </div>
       {children.length > 0 && (
         <div className="tree-children">
           {children.map(child => (
-            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={onCheckIn} />
+            <TreeCard key={child.id} okr={child} allOkrs={allOkrs} functionMap={functionMap} selectedArea={selectedArea} selectedOwner={selectedOwner} onCheckIn={onCheckIn} />
           ))}
         </div>
       )}
@@ -235,6 +258,7 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>('all');
+  const [selectedOwner, setSelectedOwner] = useState<string>('all');
   const [checkInOkr, setCheckInOkr] = useState<OKR | null>(null);
 
   const handleCheckIn = (okr: OKR) => {
@@ -277,10 +301,19 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
     return areas.sort();
   }, [selectedOkr, okrs]);
 
-  // Handle tab change - reset area filter
+  // Compute available owners from the selected OKR's children (not including global OKR)
+  const availableOwners = useMemo(() => {
+    if (!selectedOkr) return [];
+    const childOkrs = okrs.filter(o => o.parentId === selectedOkr.id);
+    const owners = childOkrs.map(o => o.owner).filter(Boolean) as string[];
+    return [...new Set(owners)].sort();
+  }, [selectedOkr, okrs]);
+
+  // Handle tab change - reset area and owner filters
   const handleTabChange = (okrId: string) => {
     setSelectedOkrId(okrId);
     setSelectedArea('all');
+    setSelectedOwner('all');
   };
 
   return (
@@ -305,7 +338,7 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
             ))}
           </div>
           <div className="tree-container">
-            {availableAreas.length > 0 && (
+            {(availableAreas.length > 0 || availableOwners.length > 0) && (
               <div className="tree-filter">
                 <select
                   id="area-filter"
@@ -318,11 +351,22 @@ export function OKRTreeView({ okrs, onUpdateOKR }: OKRTreeViewProps) {
                     <option key={area} value={area}>{area}</option>
                   ))}
                 </select>
+                <select
+                  id="owner-filter"
+                  value={selectedOwner}
+                  onChange={(e) => setSelectedOwner(e.target.value)}
+                  className="tree-filter-select"
+                >
+                  <option value="all">All Owners</option>
+                  {availableOwners.map(owner => (
+                    <option key={owner} value={owner}>{owner}</option>
+                  ))}
+                </select>
               </div>
             )}
             <div className="tree-root">
               {selectedOkr && (
-                <TreeCard okr={selectedOkr} allOkrs={okrs} functionMap={functionMap} selectedArea={selectedArea} onCheckIn={handleCheckIn} />
+                <TreeCard okr={selectedOkr} allOkrs={okrs} functionMap={functionMap} selectedArea={selectedArea} selectedOwner={selectedOwner} onCheckIn={handleCheckIn} />
               )}
             </div>
           </div>

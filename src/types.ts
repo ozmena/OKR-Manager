@@ -1,12 +1,24 @@
 export type KeyResultStatus = 'on-track' | 'progressing' | 'off-track';
+export type KeyResultUnit = 'percentage' | 'number';
+
+export interface QualityChecklistItem {
+  id: string;
+  checked: boolean;
+}
 
 export interface KeyResult {
   id: string;
   metricName: string;
   from: number;
   to: number;
+  unit?: KeyResultUnit;  // defaults to 'percentage'
   current?: number;  // Actual value from check-in
   status?: KeyResultStatus;  // Manual status selection
+}
+
+// Helper function to format KR values with unit
+export function formatKRValue(value: number, unit?: KeyResultUnit): string {
+  return unit === 'number' ? String(value) : `${value}%`;
 }
 
 export interface OKR {
@@ -19,6 +31,7 @@ export interface OKR {
   area?: string;  // Only for child OKRs - department/area of the organization
   comments?: string;  // Check-in comments for child OKRs
   owner?: string;  // Person responsible for this OKR
+  qualityChecklist?: QualityChecklistItem[];  // Quality checklist for child OKRs
 }
 
 // Available areas for child OKRs
@@ -51,4 +64,16 @@ export const PEOPLE = [
   'Serge De Vos',
   'Thiago Marchi',
   'Thiago Pinheiro'
+] as const;
+
+// Quality checklist items for Area OKRs
+export const QUALITY_CHECKLIST_ITEMS = [
+  { id: 'direction', title: 'Direction', question: 'Does the Objective set a clear direction and articulate the change that needs to be driven?' },
+  { id: 'stakeholder-alignment', title: 'Stakeholder Alignment', question: 'Have the OKRs been aligned with Business Stakeholders?' },
+  { id: 'cascading', title: 'Cascading', question: 'Has the cascading of this OKR been decided and aligned across teams?' },
+  { id: 'understanding', title: 'Understanding', question: 'Are the OKRs aligned and understood by all involved GBS leads?' },
+  { id: 'measurability', title: 'Measurability', question: 'Do the Key Results clearly measure the Objective, and have KPIs been defined to monitor them?' },
+  { id: 'prioritization', title: 'Prioritization (Focus)', question: 'Does this OKR help us make better choices about where to spend our time, energy, and resources?' },
+  { id: 'ownership', title: 'Ownership', question: 'Has ownership for the Key Results been aligned across GBS?' },
+  { id: 'strategic-thinking', title: 'Strategic Thinking', question: 'Does this OKR address existing problems and articulate a clear transformation to a new reality?' },
 ] as const;

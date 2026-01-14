@@ -10,7 +10,7 @@ import { HelpModal } from './components/HelpModal';
 import { HomePage } from './components/HomePage';
 import './App.css';
 
-type View = 'home' | 'management' | 'tree';
+type View = 'home' | 'management' | 'tree' | 'dashboards';
 
 function App() {
   const [okrs, setOkrs] = useState<OKR[]>([]);
@@ -21,6 +21,7 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     setOkrs(getOKRs());
@@ -93,6 +94,15 @@ function App() {
       return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
     }
 
+    // Dashboards coming soon page
+    if (currentView === 'dashboards') {
+      return (
+        <div className="coming-soon-page">
+          <p>Coming soon. We are cooking up something great for you.</p>
+        </div>
+      );
+    }
+
     const pageTitle = currentView === 'tree' ? 'OKR Tracking' : '2026 OKRs';
     const showNewButton = currentView === 'management' && !isFormVisible;
 
@@ -103,8 +113,22 @@ function App() {
           <div className="notion-header-spacer"></div>
           {showNewButton && (
             <div className="notion-page-header-actions">
+              <div className="notion-search-container">
+                <input
+                  type="text"
+                  className="notion-search-input"
+                  placeholder="Search OKRs, Areas, Owners.."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button className="notion-search-clear" onClick={() => setSearchQuery('')}>
+                    ×
+                  </button>
+                )}
+              </div>
               <button className="notion-btn notion-btn-primary" onClick={() => setShowForm(true)}>
-                + New
+                + New OKR
               </button>
             </div>
           )}
@@ -118,6 +142,13 @@ function App() {
               onCancel={handleCancel}
               initialOKR={editingOKR ?? undefined}
               parentId={parentIdForNewOKR ?? undefined}
+              parentOKR={
+                parentIdForNewOKR
+                  ? okrs.find(o => o.id === parentIdForNewOKR)
+                  : editingOKR?.parentId
+                    ? okrs.find(o => o.id === editingOKR.parentId)
+                    : undefined
+              }
             />
           ) : (
             <NotionOKRList
@@ -128,6 +159,7 @@ function App() {
               onUpdate={handleInlineUpdateOKR}
               onDelete={handleDeleteOKR}
               onAddChild={handleAddChildOKR}
+              searchQuery={searchQuery}
             />
           )}
         </main>

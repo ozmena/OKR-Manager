@@ -1,12 +1,23 @@
 import { useState } from 'react';
-import { OKR, KeyResult, AREAS, PEOPLE } from '../types';
+import { OKR, KeyResult, AREAS, PEOPLE, QUALITY_CHECKLIST_ITEMS } from '../types';
 import { KeyResultInput } from './KeyResultInput';
+import { AIFeedbackModal } from './AIFeedbackModal';
+import { getAIFeedback } from '../services/aiService';
+
+// Helper component for tooltip
+const HelpTooltip = ({ text }: { text: string }) => (
+  <span className="help-tooltip">
+    <span className="help-tooltip-icon">?</span>
+    <span className="help-tooltip-text">{text}</span>
+  </span>
+);
 
 interface OKRFormProps {
   onSubmit: (okr: OKR) => void;
   onCancel: () => void;
   initialOKR?: OKR;
   parentId?: string;
+  parentOKR?: OKR;
 }
 
 function createEmptyKeyResult(): KeyResult {
@@ -15,10 +26,11 @@ function createEmptyKeyResult(): KeyResult {
     metricName: '',
     from: 0,
     to: 0,
+    unit: 'percentage',
   };
 }
 
-export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormProps) {
+export function OKRForm({ onSubmit, onCancel, initialOKR, parentId, parentOKR }: OKRFormProps) {
   const isEditing = !!initialOKR;
   const isAddingChild = !!parentId;
   const isChildOKR = isAddingChild || !!initialOKR?.parentId;
@@ -29,6 +41,54 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
     initialOKR?.keyResults ?? [createEmptyKeyResult()]
   );
   const [error, setError] = useState('');
+
+  // AI Feedback state
+  const [showAIFeedback, setShowAIFeedback] = useState(false);
+  const [aiFeedback, setAIFeedback] = useState<string | null>(null);
+  const [aiLoading, setAILoading] = useState(false);
+  const [aiError, setAIError] = useState<string | null>(null);
+
+  // Quality checklist state (only for Area OKRs)
+  const [checklistState, setChecklistState] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    QUALITY_CHECKLIST_ITEMS.forEach(item => {
+      const existing = initialOKR?.qualityChecklist?.find(c => c.id === item.id);
+      initial[item.id] = existing?.checked ?? false;
+    });
+    return initial;
+  });
+  const [checklistExpanded, setChecklistExpanded] = useState(false);
+
+  const checkedCount = Object.values(checklistState).filter(Boolean).length;
+
+  const handleGetAIFeedback = async () => {
+    setShowAIFeedback(true);
+    setAILoading(true);
+    setAIError(null);
+    setAIFeedback(null);
+
+    const okrData = {
+      objective: objective.trim(),
+      area: area || undefined,
+      keyResults: keyResults
+        .filter(kr => kr.metricName.trim())
+        .map(kr => ({
+          metricName: kr.metricName,
+          from: kr.from,
+          to: kr.to,
+          unit: kr.unit
+        }))
+    };
+
+    const result = await getAIFeedback(okrData, parentOKR);
+
+    setAILoading(false);
+    if (result.success) {
+      setAIFeedback(result.feedback || null);
+    } else {
+      setAIError(result.error || 'Unknown error');
+    }
+  };
 
   const handleKeyResultChange = (index: number, field: keyof KeyResult, value: string | number) => {
     const updated = [...keyResults];
@@ -75,6 +135,12 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
       parentId: initialOKR?.parentId ?? parentId,
       ...(isChildOKR && { area }),
       ...(owner && { owner }),
+      ...(isChildOKR && {
+        qualityChecklist: QUALITY_CHECKLIST_ITEMS.map(item => ({
+          id: item.id,
+          checked: checklistState[item.id]
+        }))
+      }),
     };
 
     onSubmit(okr);
@@ -87,7 +153,22 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
       {error && <div className="error-message">{error}</div>}
 
       <div className="field">
-        <label>Objective Statement</label>
+        <div className="field-label-row">
+          <label>
+            Objective Statement
+            {isChildOKR && (
+              <HelpTooltip text="What meaningful change can your area create that helps move the global OKR forward?" />
+            )}
+          </label>
+          <button
+            type="button"
+            className="ai-feedback-btn"
+            onClick={handleGetAIFeedback}
+          >
+            <span className="ai-feedback-btn-icon">✨</span>
+            Get Feedback
+          </button>
+        </div>
         <textarea
           placeholder="Enter your objective..."
           value={objective}
@@ -131,7 +212,12 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
       </div>
 
       <div className="key-results-section">
-        <h3>Key Results (up to 3)</h3>
+        <h3>
+          Key Results (up to 3)
+          {isChildOKR && (
+            <HelpTooltip text="How will we know we're making progress toward that objective?" />
+          )}
+        </h3>
         {keyResults.map((kr, index) => (
           <KeyResultInput
             key={kr.id}
@@ -148,6 +234,48 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId }: OKRFormPro
           </button>
         )}
       </div>
+
+      {isChildOKR && (
+        <div className="quality-checklist">
+          <button
+            type="button"
+            className="quality-checklist-header"
+            onClick={() => setChecklistExpanded(!checklistExpanded)}
+          >
+            <span className="quality-checklist-toggle">{checklistExpanded ? '▼' : '▶'}</span>
+            <span className="quality-checklist-title">OKR Quality Checklist</span>
+            <span className={`quality-checklist-progress ${checkedCount >= 7 ? 'quality-badge-high' : ''}`}>{checkedCount}/{QUALITY_CHECKLIST_ITEMS.length}</span>
+          </button>
+          {checklistExpanded && (
+            <div className="quality-checklist-items">
+              {QUALITY_CHECKLIST_ITEMS.map((item) => (
+                <label key={item.id} className="quality-checklist-item">
+                  <input
+                    type="checkbox"
+                    checked={checklistState[item.id]}
+                    onChange={(e) => setChecklistState(prev => ({
+                      ...prev,
+                      [item.id]: e.target.checked
+                    }))}
+                  />
+                  <span className="quality-checklist-item-content">
+                    <span className="quality-checklist-item-title">{item.title}</span>
+                    <span className="quality-checklist-item-question">{item.question}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <AIFeedbackModal
+        isOpen={showAIFeedback}
+        onClose={() => setShowAIFeedback(false)}
+        feedback={aiFeedback}
+        isLoading={aiLoading}
+        error={aiError}
+      />
 
       <div className="form-actions">
         <button type="button" className="cancel-btn" onClick={onCancel}>

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { OKR, KeyResult } from '../types';
+import { OKR, KeyResult, QUALITY_CHECKLIST_ITEMS, formatKRValue } from '../types';
 
 // Helper to get initials from a full name
 function getInitials(name: string): string {
@@ -136,7 +136,8 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
       id: crypto.randomUUID(),
       metricName: '',
       from: 0,
-      to: 100
+      to: 100,
+      unit: 'percentage'
     };
 
     // Expand to show key results
@@ -209,16 +210,43 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
             </span>
           )}
         </div>
+        <div className="notion-row-quality">
+          {okr.parentId && (() => {
+            const checkedCount = okr.qualityChecklist?.filter(item => item.checked).length ?? 0;
+            const isHighQuality = checkedCount >= 7;
+            return (
+              <div className="quality-tooltip-container">
+                <span className={`quality-badge ${isHighQuality ? 'quality-badge-high' : ''}`}>
+                  {checkedCount}/{QUALITY_CHECKLIST_ITEMS.length}
+                </span>
+                <div className="quality-tooltip">
+                  <div className="quality-tooltip-title">OKR Quality Checklist</div>
+                  {QUALITY_CHECKLIST_ITEMS.map(item => {
+                    const isChecked = okr.qualityChecklist?.find(c => c.id === item.id)?.checked ?? false;
+                    return (
+                      <div key={item.id} className={`quality-tooltip-item ${isChecked ? 'checked' : ''}`}>
+                        <span className="quality-tooltip-check">{isChecked ? '✓' : '○'}</span>
+                        <span>{item.title}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
         <div className="notion-row-actions">
           {showActions && !isEditingObjective && (
             <>
-              <button className="notion-action-btn" onClick={() => onAddChild(okr.id)} title="Add Area OKR">
-                +
-              </button>
-              <button className="notion-action-btn" onClick={() => onEdit(okr)} title="Edit all">
+              {!okr.parentId && (
+                <button className="notion-action-btn" onClick={() => onAddChild(okr.id)} title="Add Area OKR">
+                  +
+                </button>
+              )}
+              <button className="notion-action-btn" onClick={() => onEdit(okr)} title={okr.parentId ? "Edit Area OKR" : "Edit OKR"}>
                 ✎
               </button>
-              <button className="notion-action-btn notion-action-btn-danger" onClick={() => onDelete(okr.id)} title="Delete">
+              <button className="notion-action-btn notion-action-btn-danger" onClick={() => onDelete(okr.id)} title={okr.parentId ? "Delete Area OKR" : "Delete OKR"}>
                 ✕
               </button>
             </>
@@ -261,9 +289,9 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
                       onBlur={handleKrBlur}
                       onKeyDown={handleKrKeyDown}
                       min="0"
-                      max="100"
+                      max={(editedKr.unit ?? 'percentage') === 'percentage' ? 100 : undefined}
                     />
-                    <span className="notion-kr-separator">% →</span>
+                    <span className="notion-kr-separator">{(editedKr.unit ?? 'percentage') === 'percentage' ? '% →' : ' →'}</span>
                     <input
                       type="number"
                       className="notion-inline-input notion-kr-number-input"
@@ -272,13 +300,13 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
                       onBlur={handleKrBlur}
                       onKeyDown={handleKrKeyDown}
                       min="0"
-                      max="100"
+                      max={(editedKr.unit ?? 'percentage') === 'percentage' ? 100 : undefined}
                     />
-                    <span className="notion-kr-separator">%</span>
+                    <span className="notion-kr-separator">{(editedKr.unit ?? 'percentage') === 'percentage' ? '%' : ''}</span>
                   </div>
                 ) : (
                   <span className="notion-title notion-title-kr notion-title-editable" onClick={() => handleKrClick(kr)}>
-                    <strong>KR:</strong> {kr.metricName}: {kr.from}% → {kr.to}%
+                    <strong>KR:</strong> {kr.metricName}: {formatKRValue(kr.from, kr.unit)} → {formatKRValue(kr.to, kr.unit)}
                   </span>
                 )}
               </div>
@@ -286,6 +314,9 @@ export function NotionOKRRow({ okr, allOkrs, level, expandedIds, onToggleExpand,
                 {/* Empty for key results */}
               </div>
               <div className="notion-row-owner">
+                {/* Empty for key results */}
+              </div>
+              <div className="notion-row-quality">
                 {/* Empty for key results */}
               </div>
               <div className="notion-row-actions">

@@ -1,8 +1,8 @@
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
-  currentView: 'home' | 'management' | 'tree';
-  onViewChange: (view: 'home' | 'management' | 'tree') => void;
+  currentView: 'home' | 'management' | 'tree' | 'dashboards';
+  onViewChange: (view: 'home' | 'management' | 'tree' | 'dashboards') => void;
 }
 
 export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: SidebarProps) {
@@ -11,7 +11,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
       <div className="sidebar-header">
         {!isCollapsed && (
           <button className="sidebar-title" onClick={() => onViewChange('home')}>
-Vector<span className="sidebar-arrow">↗</span>
+            Vector<span className="sidebar-arrow">↗</span>
           </button>
         )}
         <button className="sidebar-toggle" onClick={onToggle} title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
@@ -43,6 +43,19 @@ Vector<span className="sidebar-arrow">↗</span>
         >
           <span className="sidebar-icon">△</span>
           {!isCollapsed && <span className="sidebar-label">OKR Tracking</span>}
+        </button>
+        <button
+          className={`sidebar-item ${currentView === 'dashboards' ? 'active' : ''}`}
+          onClick={() => onViewChange('dashboards')}
+          title="Dashboards"
+        >
+          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◫</span>
+          {!isCollapsed && (
+            <>
+              <span className="sidebar-label">Dashboards</span>
+              <span className="sidebar-tag sidebar-tag-soon">Soon</span>
+            </>
+          )}
         </button>
       </nav>
 

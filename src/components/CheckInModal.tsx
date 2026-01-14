@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { OKR, KeyResult, KeyResultStatus } from '../types';
+import { OKR, KeyResult, KeyResultStatus, formatKRValue } from '../types';
 
 interface CheckInModalProps {
   isOpen: boolean;
@@ -114,23 +114,24 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
               const progress = calculateProgress(kr.from, kr.to, data.current);
               const statusColor = getStatusColor(data.status);
 
+              const isPercentage = (kr.unit ?? 'percentage') === 'percentage';
               return (
                 <div key={kr.id} className="checkin-kr-card">
                   <div className="checkin-kr-header">
                     <span className="checkin-kr-metric">{kr.metricName}</span>
-                    <span className="checkin-kr-target">{kr.from}% → {kr.to}%</span>
+                    <span className="checkin-kr-target">{formatKRValue(kr.from, kr.unit)} → {formatKRValue(kr.to, kr.unit)}</span>
                   </div>
 
                   <div className="checkin-kr-inputs">
                     <div className="checkin-input-group">
-                      <label>Current Value (%)</label>
+                      <label>Current Value{isPercentage ? ' (%)' : ''}</label>
                       <input
                         type="number"
                         min={0}
-                        max={100}
+                        max={isPercentage ? 100 : undefined}
                         value={data.current ?? ''}
                         onChange={(e) => handleCurrentChange(kr.id, e.target.value)}
-                        placeholder="Enter current %"
+                        placeholder={isPercentage ? 'Enter current %' : 'Enter current value'}
                       />
                     </div>
 

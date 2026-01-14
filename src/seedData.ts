@@ -12,6 +12,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-1-3', metricName: 'Processes automated', from: 24, to: 35 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Hardik Bhatt',
   },
   {
     id: 'child-1-1',
@@ -23,6 +24,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-1-1-2', metricName: 'Automated', from: 19, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Deepa Abi',
   },
   {
     id: 'child-1-2',
@@ -34,6 +36,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-1-2-2', metricName: 'Revenue', from: 10, to: 20 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Juan Montoya',
   },
 
   // Global OKR 2
@@ -46,6 +49,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-2-2', metricName: 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback ', from: 45, to: 65 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Mariana Avila',
   },
   {
     id: 'child-2-1',
@@ -57,6 +61,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-2-1-2', metricName: 'Automated', from: 19, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Sanjay Dora',
   },
   {
     id: 'child-2-2',
@@ -68,6 +73,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-2-2-2', metricName: 'Revenue', from: 10, to: 20 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Thiago Pinheiro',
   },
 
   // Global OKR 3
@@ -80,6 +86,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-3-2', metricName: 'All critical payroll controls documented, testd, and signed off', from: 60, to: 85 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Jack Shu',
   },
   {
     id: 'child-3-1',
@@ -91,6 +98,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-3-1-2', metricName: 'All critical payroll controls documented, testd, and signed off', from: 19, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Alex Komrakov',
   },
   {
     id: 'child-3-2',
@@ -102,6 +110,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-3-2-2', metricName: 'All critical payroll controls documented, testd, and signed off', from: 10, to: 20 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Elena Schoeman',
   },
 
   // Global OKR 4
@@ -114,6 +123,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-4-2', metricName: 'Media coverage', from: 8, to: 28 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Evan Sams',
   },
   {
     id: 'child-4-1',
@@ -125,6 +135,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-4-1-2', metricName: 'Automated', from: 14, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Preeti Naval Kumar',
   },
   {
     id: 'child-4-2',
@@ -136,6 +147,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-4-2-2', metricName: 'Revenue', from: 10, to: 20 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Serge De Vos',
   },
 
   // Global OKR 5
@@ -148,6 +160,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-5-2', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 10, to: 40 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Morne Fouche',
   },
   {
     id: 'child-5-1',
@@ -159,6 +172,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-5-1-2', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 19, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Thiago Marchi',
   },
   {
     id: 'child-5-2',
@@ -170,6 +184,7 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-5-2-2', metricName: 'Revenue', from: 10, to: 20 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
+    owner: 'Eric Ruys',
   },
   {
     id: 'f80256e1-dc8d-4c07-a0dd-3283a2f2fd79',
@@ -181,6 +196,7 @@ export const seedOKRs: OKR[] = [
       { id: '654acde8-0135-470b-ae5b-e00cb0824cb7', metricName: 'Revenue', from: 24, to: 25 },
     ],
     createdAt: '2026-01-10T19:20:26.372Z',
+    owner: 'Juan Ramon Triana',
   },
   {
     id: '7fdd4d98-b077-4f92-b134-dca0caa0935b',
@@ -193,6 +209,7 @@ export const seedOKRs: OKR[] = [
       { id: '71ca0cae-83e2-4b06-85f7-f44b574c55c1', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 11, to: 100 },
     ],
     createdAt: '2026-01-11T18:38:15.684Z',
+    owner: 'Amanda Jones',
   },
   {
     id: 'ba10e094-b8c9-42ab-a26f-85cf05293123',
@@ -203,5 +220,6 @@ export const seedOKRs: OKR[] = [
     createdAt: '2026-01-12T13:18:49.497Z',
     parentId: 'global-5',
     area: 'Capabilities/Tech',
+    owner: 'Dylan Jetha',
   },
 ];
