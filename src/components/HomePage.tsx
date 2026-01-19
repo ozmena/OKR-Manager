@@ -5,7 +5,8 @@ interface HomePageProps {
   onNavigate: (view: 'management' | 'tree') => void;
 }
 
-export function HomePage({ okrs, onNavigate }: HomePageProps) {
+export function HomePage({ okrs, onNavigate: _onNavigate }: HomePageProps) {
+  // _onNavigate is available for future use (e.g., navigation buttons)
   // Calculate stats
   const globalOkrCount = okrs.filter(o => !o.parentId).length;
   const totalKeyResults = okrs.reduce((sum, o) => sum + o.keyResults.length, 0);

@@ -56,10 +56,8 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <section className="help-intro">
             <h3>What is Vector<span className="help-arrow">↗</span>?</h3>
             <p>
-              Vector is an OKR (Objectives and Key Results) management platform designed to
-              align your organization around strategic objectives. It helps leadership set
-              direction, enables teams to create supporting goals, and provides visibility
-              into progress across the entire organization.
+              Vector is an AI-powered OKR platform that helps leadership create high-quality OKRs faster,
+              in one place, with clear structure - and keeps governance alive throughout the year in an easy way.
             </p>
           </section>
 
@@ -71,41 +69,19 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               <ul className="help-list">
                 <li>
                   <strong>Global OKRs</strong>
-                  <p>Company-wide strategic objectives that define the organization's top priorities. These are your north star goals that everyone works toward.</p>
+                  <p>Organization-wide strategic objectives that define top priorities. These are your north star goals.</p>
                 </li>
                 <li>
                   <strong>Area OKRs</strong>
-                  <p>Department or team-level objectives that support and cascade from Global OKRs. Each area creates objectives that contribute to the bigger picture.</p>
+                  <p>Department or team-level objectives that cascade from Global OKRs. Each area contributes to the bigger picture.</p>
                 </li>
                 <li>
                   <strong>Key Results</strong>
-                  <p>Measurable outcomes that indicate progress toward an objective. Each OKR can have up to 3 key results with specific targets (e.g., "Increase from 50% to 80%").</p>
+                  <p>Measurable outcomes with specific targets (e.g., "10% → 30%"). Track progress with status indicators.</p>
                 </li>
                 <li>
                   <strong>Quality Checklist</strong>
-                  <p>An 8-item checklist for Area OKRs covering Direction, Stakeholder Alignment, Cascading, Understanding, Measurability, Prioritization, Ownership, and Strategic Thinking.</p>
-                </li>
-              </ul>
-            </Accordion>
-          </section>
-
-          {/* Use Cases */}
-          <section className="help-guides">
-            <h3>Who Benefits from Vector?</h3>
-
-            <Accordion title="Use Cases by Role">
-              <ul className="help-list">
-                <li>
-                  <strong>For Leadership</strong>
-                  <p>Set company direction with Global OKRs, monitor organizational alignment, and quickly assess OKR quality across all areas using the Quality column and hover tooltips.</p>
-                </li>
-                <li>
-                  <strong>For Area Leads</strong>
-                  <p>Create team objectives that align with company goals, use the quality checklist to ensure well-defined OKRs, and track your team's key results in the visual tree view.</p>
-                </li>
-                <li>
-                  <strong>For Team Members</strong>
-                  <p>Understand organizational priorities, see how your work connects to company objectives, and track progress on key results that matter.</p>
+                  <p>8-item checklist covering Direction, Stakeholder Alignment, Cascading, Understanding, Measurability, Prioritization, Ownership, and Strategic Thinking.</p>
                 </li>
               </ul>
             </Accordion>
@@ -117,94 +93,108 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
             <Accordion title="Home">
               <p className="help-description">
-                Your dashboard showing an overview of all OKRs with quick statistics and navigation to other pages.
+                Your dashboard with quick statistics: Global OKRs count, total Key Results, and On Track percentage.
               </p>
             </Accordion>
 
-            <Accordion title="2026 OKRs - Management View">
+            <Accordion title="OKR List">
               <p className="help-description">
-                The primary workspace for creating and organizing your OKRs in a list format.
+                The primary workspace for creating and managing OKRs in a list format.
               </p>
               <ul className="help-list">
                 <li>
                   <strong>Create Global OKRs</strong>
-                  <p>Click "+ New OKR" to create company-level objectives.</p>
-                </li>
-                <li>
-                  <strong>Add Key Results</strong>
-                  <p>Click the "+" on the left side of any OKR row to add measurable key results.</p>
+                  <p>Click "+ New OKR" to create organization-level objectives.</p>
                 </li>
                 <li>
                   <strong>Create Area OKRs</strong>
-                  <p>Click the "+" action button on a Global OKR to create department-level objectives.</p>
-                </li>
-                <li>
-                  <strong>Edit Inline</strong>
-                  <p>Click any objective or key result text to edit directly. Press Enter to save, Escape to cancel.</p>
-                </li>
-                <li>
-                  <strong>Search</strong>
-                  <p>Use the search bar to find OKRs by objective text, area, or owner name.</p>
+                  <p>Click the "+" action button on a Global OKR to add department-level objectives.</p>
                 </li>
                 <li>
                   <strong>Quality Column</strong>
-                  <p>View the quality checklist completion (e.g., "3/8") for each Area OKR. Hover to see which items are checked.</p>
+                  <p>View checklist completion (e.g., "3/8") for each Area OKR. Hover to see details.</p>
+                </li>
+                <li>
+                  <strong>Search</strong>
+                  <p>Find OKRs by objective text, area, or owner name.</p>
                 </li>
               </ul>
             </Accordion>
 
-            <Accordion title="OKR Tracking - Visual View">
+            <Accordion title="OKR Map">
               <p className="help-description">
-                A visual tree hierarchy for monitoring OKR progress across the organization.
+                Visual tree hierarchy with two modes for different workflows.
               </p>
               <ul className="help-list">
                 <li>
-                  <strong>Switch Between OKRs</strong>
-                  <p>Use the tabs at the top to view different Global OKRs.</p>
+                  <strong>OKR Setting Mode</strong>
+                  <p>Edit objectives and key results inline. Click any text to modify directly.</p>
                 </li>
                 <li>
-                  <strong>Filter by Area</strong>
-                  <p>Use the dropdown filters to show only specific areas or owners.</p>
+                  <strong>OKR Tracking Mode</strong>
+                  <p>Check in on progress. Update current values, set status, and record governance notes.</p>
                 </li>
                 <li>
-                  <strong>View Progress</strong>
-                  <p>Each key result card shows current progress with color-coded status indicators.</p>
+                  <strong>Filter by Area/Owner</strong>
+                  <p>Use dropdowns to focus on specific areas or owners.</p>
+                </li>
+                <li>
+                  <strong>AI Feedback</strong>
+                  <p>Click "Get Feedback" to receive AI-powered suggestions on OKR quality with one-click apply.</p>
                 </li>
               </ul>
             </Accordion>
 
-            <Accordion title="Dashboards">
+            <Accordion title="Dashboards & Users">
               <p className="help-description">
                 Coming soon! We are cooking up something great for you.
               </p>
             </Accordion>
           </section>
 
-          {/* Features */}
+          {/* Check-in Feature */}
           <section className="help-guides">
-            <h3>Key Features</h3>
+            <h3>Check-in & Governance</h3>
 
-            <Accordion title="Features Overview">
+            <Accordion title="How Check-ins Work">
               <ul className="help-list">
                 <li>
-                  <strong>Quality Checklist</strong>
-                  <p>8-item checklist for Area OKRs ensures well-defined objectives. Items with 7-8 checks show a green badge.</p>
+                  <strong>Update Key Results</strong>
+                  <p>Enter current values and select status (On Track, Progressing, Off Track).</p>
                 </li>
                 <li>
-                  <strong>Search & Filter</strong>
-                  <p>Search across objectives, key results, areas, and owners. Filter by area or owner in tracking view.</p>
+                  <strong>What challenges are you facing?</strong>
+                  <p>Document blockers, risks, or obstacles preventing progress.</p>
                 </li>
                 <li>
-                  <strong>Inline Editing</strong>
-                  <p>Click any text to edit in place without opening forms.</p>
+                  <strong>What do you need to achieve your OKRs?</strong>
+                  <p>Record decisions, support, or resources needed from leadership.</p>
                 </li>
                 <li>
-                  <strong>Auto-Save</strong>
-                  <p>All changes are automatically saved to your browser's local storage.</p>
+                  <strong>Comments</strong>
+                  <p>Add any additional context or notes.</p>
+                </li>
+              </ul>
+            </Accordion>
+          </section>
+
+          {/* AI Features */}
+          <section className="help-guides">
+            <h3>AI-Powered Features</h3>
+
+            <Accordion title="AI Feedback">
+              <ul className="help-list">
+                <li>
+                  <strong>Get Feedback</strong>
+                  <p>Click "Get Feedback" on the OKR Map to analyze your OKR tree against best practices.</p>
                 </li>
                 <li>
-                  <strong>Expand/Collapse</strong>
-                  <p>Use arrows to show or hide key results and child OKRs for focused viewing.</p>
+                  <strong>Assessment</strong>
+                  <p>Receive strengths, areas for improvement, and alignment analysis.</p>
+                </li>
+                <li>
+                  <strong>Suggestions</strong>
+                  <p>Get specific improvement suggestions with one-click Apply to update your OKRs instantly.</p>
                 </li>
               </ul>
             </Accordion>
@@ -212,29 +202,25 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
           {/* Tips */}
           <section className="help-guides">
-            <h3>Tips & Best Practices</h3>
+            <h3>Best Practices</h3>
 
-            <Accordion title="OKR Best Practices">
+            <Accordion title="OKR Tips">
               <ul className="help-list">
                 <li>
                   <strong>Keep Objectives Ambitious</strong>
-                  <p>Objectives should be inspiring and challenging, pushing the organization forward.</p>
+                  <p>Objectives should inspire and challenge, pushing the organization forward.</p>
                 </li>
                 <li>
                   <strong>Limit Key Results</strong>
                   <p>Stick to 2-3 key results per objective to maintain focus.</p>
                 </li>
                 <li>
-                  <strong>Make Results Measurable</strong>
-                  <p>Key results should have clear metrics so progress is objective, not subjective.</p>
-                </li>
-                <li>
                   <strong>Use the Quality Checklist</strong>
-                  <p>Complete the quality checklist to ensure your OKRs are well-defined and aligned.</p>
+                  <p>Complete all 8 items to ensure well-defined and aligned OKRs.</p>
                 </li>
                 <li>
-                  <strong>Review Regularly</strong>
-                  <p>Check in on OKRs weekly or bi-weekly to update progress and adjust as needed.</p>
+                  <strong>Check in Regularly</strong>
+                  <p>Update progress weekly or bi-weekly to keep governance alive.</p>
                 </li>
               </ul>
             </Accordion>

@@ -30,7 +30,9 @@ export interface OKR {
   createdAt: string;
   parentId?: string;
   area?: string;  // Only for child OKRs - department/area of the organization
-  comments?: string;  // Check-in comments for child OKRs
+  challenges?: string;  // Check-in: What challenges are you facing?
+  needs?: string;  // Check-in: What do you need to achieve your OKRs?
+  comments?: string;  // Check-in comments
   owner?: string;  // Person responsible for this OKR
   qualityChecklist?: QualityChecklistItem[];  // Quality checklist for child OKRs
 }

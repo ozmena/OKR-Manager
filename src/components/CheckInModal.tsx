@@ -34,6 +34,8 @@ function getStatusColor(status: KeyResultStatus | undefined): 'green' | 'yellow'
 
 export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps) {
   const [keyResultsData, setKeyResultsData] = useState<Record<string, KeyResultFormData>>({});
+  const [challenges, setChallenges] = useState('');
+  const [needs, setNeeds] = useState('');
   const [comments, setComments] = useState('');
 
   // Initialize form data when modal opens
@@ -47,6 +49,8 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
         };
       });
       setKeyResultsData(initialData);
+      setChallenges(okr.challenges || '');
+      setNeeds(okr.needs || '');
       setComments(okr.comments || '');
     }
   }, [okr]);
@@ -84,6 +88,8 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
     const updatedOKR: OKR = {
       ...okr,
       keyResults: updatedKeyResults,
+      challenges: challenges || undefined,
+      needs: needs || undefined,
       comments: comments || undefined,
     };
 
@@ -165,15 +171,37 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
             })}
           </div>
 
-          {/* Comments Section */}
+          {/* Governance Fields */}
+          <div className="checkin-section">
+            <h3>What challenges are you facing?</h3>
+            <textarea
+              className="checkin-comments"
+              value={challenges}
+              onChange={(e) => setChallenges(e.target.value)}
+              placeholder="Blockers, risks, or obstacles..."
+              rows={3}
+            />
+          </div>
+
+          <div className="checkin-section">
+            <h3>What do you need to achieve your OKRs?</h3>
+            <textarea
+              className="checkin-comments"
+              value={needs}
+              onChange={(e) => setNeeds(e.target.value)}
+              placeholder="Decisions, support, or resources needed..."
+              rows={3}
+            />
+          </div>
+
           <div className="checkin-section">
             <h3>Comments</h3>
             <textarea
               className="checkin-comments"
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              placeholder="Add notes about this check-in..."
-              rows={4}
+              placeholder="Additional notes..."
+              rows={3}
             />
           </div>
         </div>

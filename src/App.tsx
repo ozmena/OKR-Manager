@@ -1,6 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { OKR } from './types';
-import { getOKRs, addOKR, deleteOKR, updateOKR } from './storage';
+import { getOKRs as getLocalOKRs, addOKR as addLocalOKR, deleteOKR as deleteLocalOKR, updateOKR as updateLocalOKR } from './storage';
+import {
+  getOKRsFromSupabase,
+  addOKRToSupabase,
+  updateOKRInSupabase,
+  deleteOKRFromSupabase,
+  subscribeToOKRChanges,
+  unsubscribeFromOKRChanges,
+  isSupabaseConfigured,
+} from './services/supabaseStorage';
 import { Sidebar } from './components/Sidebar';
 import { NotionOKRList } from './components/NotionOKRList';
 import { OKRForm } from './components/OKRForm';
@@ -24,12 +33,43 @@ function App() {
   const [showChangelog, setShowChangelog] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('setting');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [useSupabase] = useState(isSupabaseConfigured());
 
+  // Load OKRs from Supabase or localStorage
+  const loadOKRs = useCallback(async () => {
+    if (useSupabase) {
+      try {
+        const data = await getOKRsFromSupabase();
+        setOkrs(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading from Supabase:', err);
+        setError('Failed to load OKRs from database. Using local data.');
+        setOkrs(getLocalOKRs());
+      }
+    } else {
+      setOkrs(getLocalOKRs());
+    }
+    setIsLoading(false);
+  }, [useSupabase]);
+
+  // Initial load and real-time subscription
   useEffect(() => {
-    setOkrs(getOKRs());
-  }, []);
+    loadOKRs();
 
-  const handleCreateOKR = (okr: OKR) => {
+    // Set up real-time subscription if using Supabase
+    const channel = useSupabase ? subscribeToOKRChanges(loadOKRs) : null;
+
+    return () => {
+      if (channel) {
+        unsubscribeFromOKRChanges(channel);
+      }
+    };
+  }, [loadOKRs, useSupabase]);
+
+  const handleCreateOKR = async (okr: OKR) => {
     // For global OKRs (no parentId), auto-assign displayId
     if (!okr.parentId) {
       const globalOkrs = okrs.filter(o => !o.parentId && o.displayId);
@@ -39,26 +79,74 @@ function App() {
       }, 0);
       okr.displayId = `OKR-${maxNumber + 1}`;
     }
-    addOKR(okr);
-    setOkrs(getOKRs());
+
+    if (useSupabase) {
+      try {
+        await addOKRToSupabase(okr);
+        await loadOKRs(); // Refresh data from Supabase
+      } catch (err) {
+        console.error('Error creating OKR in Supabase:', err);
+        setError('Failed to save. Saving locally instead.');
+        addLocalOKR(okr);
+        setOkrs(getLocalOKRs());
+      }
+    } else {
+      addLocalOKR(okr);
+      setOkrs(getLocalOKRs());
+    }
     setShowForm(false);
     setParentIdForNewOKR(null);
   };
 
-  const handleUpdateOKR = (okr: OKR) => {
-    updateOKR(okr);
-    setOkrs(getOKRs());
+  const handleUpdateOKR = async (okr: OKR) => {
+    if (useSupabase) {
+      try {
+        await updateOKRInSupabase(okr);
+        await loadOKRs(); // Refresh data from Supabase
+      } catch (err) {
+        console.error('Error updating OKR in Supabase:', err);
+        setError('Failed to save. Saving locally instead.');
+        updateLocalOKR(okr);
+        setOkrs(getLocalOKRs());
+      }
+    } else {
+      updateLocalOKR(okr);
+      setOkrs(getLocalOKRs());
+    }
     setEditingOKR(null);
   };
 
-  const handleInlineUpdateOKR = (okr: OKR) => {
-    updateOKR(okr);
-    setOkrs(getOKRs());
+  const handleInlineUpdateOKR = async (okr: OKR) => {
+    if (useSupabase) {
+      try {
+        await updateOKRInSupabase(okr);
+        await loadOKRs(); // Refresh data from Supabase
+      } catch (err) {
+        console.error('Error updating OKR in Supabase:', err);
+        updateLocalOKR(okr);
+        setOkrs(getLocalOKRs());
+      }
+    } else {
+      updateLocalOKR(okr);
+      setOkrs(getLocalOKRs());
+    }
   };
 
-  const handleDeleteOKR = (id: string) => {
-    deleteOKR(id);
-    setOkrs(getOKRs());
+  const handleDeleteOKR = async (id: string) => {
+    if (useSupabase) {
+      try {
+        await deleteOKRFromSupabase(id);
+        await loadOKRs(); // Refresh data from Supabase
+      } catch (err) {
+        console.error('Error deleting OKR in Supabase:', err);
+        setError('Failed to delete. Deleting locally instead.');
+        deleteLocalOKR(id);
+        setOkrs(getLocalOKRs());
+      }
+    } else {
+      deleteLocalOKR(id);
+      setOkrs(getLocalOKRs());
+    }
   };
 
   const handleEditOKR = (okr: OKR) => {
@@ -91,6 +179,15 @@ function App() {
   const isFormVisible = showForm || editingOKR !== null;
 
   const renderContent = () => {
+    // Loading state
+    if (isLoading) {
+      return (
+        <div className="loading-state">
+          <p>Loading OKRs...</p>
+        </div>
+      );
+    }
+
     // Home page has its own full-page layout
     if (currentView === 'home') {
       return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
@@ -195,6 +292,12 @@ function App() {
         onViewChange={setCurrentView}
       />
       <div className={`app-content ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
+        {error && (
+          <div className="error-banner">
+            <span>{error}</span>
+            <button onClick={() => setError(null)}>×</button>
+          </div>
+        )}
         <div className="notion-app">
           {renderContent()}
         </div>
