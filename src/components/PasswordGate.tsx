@@ -63,7 +63,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
             <path d="M12 6v6l4 2" />
           </svg>
         </div>
-        <h1>OKR Manager</h1>
+        <h1>Vector</h1>
         <p className="password-gate-subtitle">Enter password to continue</p>
 
         <form onSubmit={handleSubmit}>
