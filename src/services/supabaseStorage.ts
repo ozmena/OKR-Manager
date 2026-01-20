@@ -44,13 +44,21 @@ export async function getOKRsFromSupabase(): Promise<OKR[]> {
   });
 
   // Transform to OKR objects
-  return okrRows.map(okrRow =>
+  const okrs = okrRows.map(okrRow =>
     dbToOKR(
       okrRow,
       keyResultsByOkr.get(okrRow.id) || [],
       checklistByOkr.get(okrRow.id) || []
     )
   );
+
+  // Sort by display_id number (OKR-1, OKR-2, etc.) for global OKRs
+  return okrs.sort((a, b) => {
+    // Global OKRs (with displayId) should be sorted by their number
+    const aNum = a.displayId ? parseInt(a.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
+    const bNum = b.displayId ? parseInt(b.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
+    return aNum - bNum;
+  });
 }
 
 // Add a new OKR

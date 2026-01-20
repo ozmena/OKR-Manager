@@ -3,14 +3,23 @@ import { seedOKRs } from './seedData';
 
 const STORAGE_KEY = 'okrs';
 
+// Sort OKRs by display_id number (OKR-1, OKR-2, etc.)
+function sortByDisplayId(okrs: OKR[]): OKR[] {
+  return okrs.sort((a, b) => {
+    const aNum = a.displayId ? parseInt(a.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
+    const bNum = b.displayId ? parseInt(b.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
+    return aNum - bNum;
+  });
+}
+
 export function getOKRs(): OKR[] {
   const data = localStorage.getItem(STORAGE_KEY);
   if (!data) {
     // Load seed data when localStorage is empty
     saveOKRs(seedOKRs);
-    return seedOKRs;
+    return sortByDisplayId([...seedOKRs]);
   }
-  return JSON.parse(data);
+  return sortByDisplayId(JSON.parse(data));
 }
 
 export function saveOKRs(okrs: OKR[]): void {
