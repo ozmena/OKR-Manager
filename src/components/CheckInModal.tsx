@@ -292,6 +292,7 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
                     type="date"
                     value={newActionDueDate}
                     onChange={(e) => setNewActionDueDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
                     className="checkin-action-date"
                   />
                 </div>
