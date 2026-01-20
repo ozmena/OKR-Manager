@@ -100,6 +100,38 @@ export interface Database {
           checked?: boolean;
         };
       };
+      actions: {
+        Row: {
+          id: string;
+          okr_id: string;
+          text: string;
+          owner: string;
+          due_date: string;
+          completed: boolean;
+          completed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          okr_id: string;
+          text: string;
+          owner: string;
+          due_date: string;
+          completed?: boolean;
+          completed_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          okr_id?: string;
+          text?: string;
+          owner?: string;
+          due_date?: string;
+          completed?: boolean;
+          completed_at?: string | null;
+          created_at?: string;
+        };
+      };
     };
   };
 }
@@ -110,3 +142,5 @@ export type OKRInsert = Database['public']['Tables']['okrs']['Insert'];
 export type KeyResultRow = Database['public']['Tables']['key_results']['Row'];
 export type KeyResultInsert = Database['public']['Tables']['key_results']['Insert'];
 export type QualityChecklistRow = Database['public']['Tables']['quality_checklist']['Row'];
+export type ActionRow = Database['public']['Tables']['actions']['Row'];
+export type ActionInsert = Database['public']['Tables']['actions']['Insert'];

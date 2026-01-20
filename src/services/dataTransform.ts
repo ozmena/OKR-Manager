@@ -1,13 +1,14 @@
 // Data transformation utilities between Supabase database format and app OKR types
 
-import { OKR, KeyResult, KeyResultStatus, KeyResultUnit, QualityChecklistItem } from '../types';
-import type { OKRRow, KeyResultRow, QualityChecklistRow } from '../lib/database.types';
+import { OKR, KeyResult, KeyResultStatus, KeyResultUnit, QualityChecklistItem, Action } from '../types';
+import type { OKRRow, KeyResultRow, QualityChecklistRow, ActionRow } from '../lib/database.types';
 
 // Convert database rows to app OKR type
 export function dbToOKR(
   okrRow: OKRRow,
   keyResultRows: KeyResultRow[],
-  checklistRows: QualityChecklistRow[]
+  checklistRows: QualityChecklistRow[],
+  actionRows: ActionRow[] = []
 ): OKR {
   const keyResults: KeyResult[] = keyResultRows
     .sort((a, b) => a.sort_order - b.sort_order)
@@ -30,6 +31,19 @@ export function dbToOKR(
         }))
       : undefined;
 
+  const actions: Action[] | undefined =
+    actionRows.length > 0
+      ? actionRows.map(action => ({
+          id: action.id,
+          text: action.text,
+          owner: action.owner,
+          dueDate: action.due_date,
+          completed: action.completed,
+          completedAt: action.completed_at || undefined,
+          createdAt: action.created_at,
+        }))
+      : undefined;
+
   return {
     id: okrRow.id,
     displayId: okrRow.display_id || undefined,
@@ -43,6 +57,7 @@ export function dbToOKR(
     needs: okrRow.needs || undefined,
     comments: okrRow.comments || undefined,
     qualityChecklist,
+    actions,
   };
 }
 
@@ -77,6 +92,16 @@ export function okrToDBInsert(okr: OKR): {
     item_id: string;
     checked: boolean;
   }[];
+  actionsData: {
+    id: string;
+    okr_id: string;
+    text: string;
+    owner: string;
+    due_date: string;
+    completed: boolean;
+    completed_at: string | null;
+    created_at: string;
+  }[];
 } {
   const okrData = {
     id: okr.id,
@@ -110,7 +135,18 @@ export function okrToDBInsert(okr: OKR): {
     checked: item.checked,
   }));
 
-  return { okrData, keyResultsData, checklistData };
+  const actionsData = (okr.actions || []).map(action => ({
+    id: action.id,
+    okr_id: okr.id,
+    text: action.text,
+    owner: action.owner,
+    due_date: action.dueDate,
+    completed: action.completed,
+    completed_at: action.completedAt || null,
+    created_at: action.createdAt,
+  }));
+
+  return { okrData, keyResultsData, checklistData, actionsData };
 }
 
 // Convert app OKR type to database update format

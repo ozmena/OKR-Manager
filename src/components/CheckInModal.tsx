@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { OKR, KeyResult, KeyResultStatus, formatKRValue } from '../types';
+import { OKR, KeyResult, KeyResultStatus, formatKRValue, Action, PEOPLE } from '../types';
 
 interface CheckInModalProps {
   isOpen: boolean;
@@ -32,11 +32,45 @@ function getStatusColor(status: KeyResultStatus | undefined): 'green' | 'yellow'
   }
 }
 
+// Helper to check if action is overdue
+function isOverdue(dueDate: string, completed: boolean): boolean {
+  if (completed) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate);
+  return due < today;
+}
+
+// Helper to format date for display
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// Helper to calculate days overdue
+function getDaysOverdue(dueDate: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate);
+  const diffTime = today.getTime() - due.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+// Generate a simple unique ID
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
 export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps) {
   const [keyResultsData, setKeyResultsData] = useState<Record<string, KeyResultFormData>>({});
   const [challenges, setChallenges] = useState('');
   const [needs, setNeeds] = useState('');
   const [comments, setComments] = useState('');
+  const [actions, setActions] = useState<Action[]>([]);
+  const [showAddAction, setShowAddAction] = useState(false);
+  const [newActionText, setNewActionText] = useState('');
+  const [newActionOwner, setNewActionOwner] = useState('');
+  const [newActionDueDate, setNewActionDueDate] = useState('');
 
   // Initialize form data when modal opens
   useEffect(() => {
@@ -52,6 +86,11 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
       setChallenges(okr.challenges || '');
       setNeeds(okr.needs || '');
       setComments(okr.comments || '');
+      setActions(okr.actions || []);
+      setShowAddAction(false);
+      setNewActionText('');
+      setNewActionOwner('');
+      setNewActionDueDate('');
     }
   }, [okr]);
 
@@ -78,6 +117,47 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
     }));
   };
 
+  const handleAddAction = () => {
+    if (!newActionText.trim() || !newActionOwner || !newActionDueDate) return;
+
+    const newAction: Action = {
+      id: generateId(),
+      text: newActionText.trim(),
+      owner: newActionOwner,
+      dueDate: newActionDueDate,
+      completed: false,
+      createdAt: new Date().toISOString(),
+    };
+
+    setActions(prev => [...prev, newAction]);
+    setNewActionText('');
+    setNewActionOwner('');
+    setNewActionDueDate('');
+    setShowAddAction(false);
+  };
+
+  const handleToggleAction = (actionId: string) => {
+    setActions(prev => prev.map(action => {
+      if (action.id === actionId) {
+        return {
+          ...action,
+          completed: !action.completed,
+          completedAt: !action.completed ? new Date().toISOString() : undefined,
+        };
+      }
+      return action;
+    }));
+  };
+
+  const handleDeleteAction = (actionId: string) => {
+    setActions(prev => prev.filter(action => action.id !== actionId));
+  };
+
+  // Group actions by status
+  const overdueActions = actions.filter(a => isOverdue(a.dueDate, a.completed));
+  const openActions = actions.filter(a => !a.completed && !isOverdue(a.dueDate, a.completed));
+  const completedActions = actions.filter(a => a.completed);
+
   const handleSave = () => {
     const updatedKeyResults: KeyResult[] = okr.keyResults.map(kr => ({
       ...kr,
@@ -91,6 +171,7 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
       challenges: challenges || undefined,
       needs: needs || undefined,
       comments: comments || undefined,
+      actions: actions.length > 0 ? actions : undefined,
     };
 
     onSave(updatedOKR);
@@ -169,6 +250,175 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
                 </div>
               );
             })}
+          </div>
+
+          {/* Actions Section */}
+          <div className="checkin-section checkin-actions-section">
+            <div className="checkin-actions-header">
+              <h3>Actions</h3>
+              {!showAddAction && (
+                <button
+                  className="checkin-add-action-btn"
+                  onClick={() => setShowAddAction(true)}
+                >
+                  + Add Action
+                </button>
+              )}
+            </div>
+
+            {/* Add Action Form */}
+            {showAddAction && (
+              <div className="checkin-action-form">
+                <input
+                  type="text"
+                  placeholder="Describe the action item..."
+                  value={newActionText}
+                  onChange={(e) => setNewActionText(e.target.value)}
+                  className="checkin-action-input"
+                  autoFocus
+                />
+                <div className="checkin-action-form-row">
+                  <select
+                    value={newActionOwner}
+                    onChange={(e) => setNewActionOwner(e.target.value)}
+                    className="checkin-action-select"
+                  >
+                    <option value="">Select owner</option>
+                    {PEOPLE.map(person => (
+                      <option key={person} value={person}>{person}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="date"
+                    value={newActionDueDate}
+                    onChange={(e) => setNewActionDueDate(e.target.value)}
+                    className="checkin-action-date"
+                  />
+                </div>
+                <div className="checkin-action-form-buttons">
+                  <button
+                    className="cancel-btn"
+                    onClick={() => {
+                      setShowAddAction(false);
+                      setNewActionText('');
+                      setNewActionOwner('');
+                      setNewActionDueDate('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="submit-btn"
+                    onClick={handleAddAction}
+                    disabled={!newActionText.trim() || !newActionOwner || !newActionDueDate}
+                  >
+                    Add Action
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Overdue Actions */}
+            {overdueActions.length > 0 && (
+              <div className="checkin-actions-group">
+                <span className="checkin-actions-group-label overdue">OVERDUE</span>
+                {overdueActions.map(action => (
+                  <div key={action.id} className="checkin-action-card overdue">
+                    <label className="checkin-action-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={action.completed}
+                        onChange={() => handleToggleAction(action.id)}
+                      />
+                      <span className="checkin-action-text">{action.text}</span>
+                    </label>
+                    <div className="checkin-action-meta">
+                      <span className="checkin-action-owner">{action.owner}</span>
+                      <span className="checkin-action-separator">•</span>
+                      <span className="checkin-action-due overdue">
+                        Due: {formatDate(action.dueDate)} ({getDaysOverdue(action.dueDate)} days overdue)
+                      </span>
+                      <button
+                        className="checkin-action-delete"
+                        onClick={() => handleDeleteAction(action.id)}
+                        title="Delete action"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Open Actions */}
+            {openActions.length > 0 && (
+              <div className="checkin-actions-group">
+                <span className="checkin-actions-group-label">OPEN</span>
+                {openActions.map(action => (
+                  <div key={action.id} className="checkin-action-card">
+                    <label className="checkin-action-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={action.completed}
+                        onChange={() => handleToggleAction(action.id)}
+                      />
+                      <span className="checkin-action-text">{action.text}</span>
+                    </label>
+                    <div className="checkin-action-meta">
+                      <span className="checkin-action-owner">{action.owner}</span>
+                      <span className="checkin-action-separator">•</span>
+                      <span className="checkin-action-due">Due: {formatDate(action.dueDate)}</span>
+                      <button
+                        className="checkin-action-delete"
+                        onClick={() => handleDeleteAction(action.id)}
+                        title="Delete action"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Completed Actions */}
+            {completedActions.length > 0 && (
+              <div className="checkin-actions-group">
+                <span className="checkin-actions-group-label completed">COMPLETED</span>
+                {completedActions.map(action => (
+                  <div key={action.id} className="checkin-action-card completed">
+                    <label className="checkin-action-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={action.completed}
+                        onChange={() => handleToggleAction(action.id)}
+                      />
+                      <span className="checkin-action-text">{action.text}</span>
+                    </label>
+                    <div className="checkin-action-meta">
+                      <span className="checkin-action-owner">{action.owner}</span>
+                      <span className="checkin-action-separator">•</span>
+                      <span className="checkin-action-due">
+                        Completed {action.completedAt ? formatDate(action.completedAt) : ''}
+                      </span>
+                      <button
+                        className="checkin-action-delete"
+                        onClick={() => handleDeleteAction(action.id)}
+                        title="Delete action"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Empty state */}
+            {actions.length === 0 && !showAddAction && (
+              <p className="checkin-actions-empty">No actions yet. Click "+ Add Action" to create one.</p>
+            )}
           </div>
 
           {/* Governance Fields */}

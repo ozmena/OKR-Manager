@@ -6,6 +6,16 @@ export interface QualityChecklistItem {
   checked: boolean;
 }
 
+export interface Action {
+  id: string;
+  text: string;           // Action description
+  owner: string;          // Person responsible
+  dueDate: string;        // ISO date string (YYYY-MM-DD)
+  completed: boolean;     // Done/not done
+  completedAt?: string;   // When it was completed (ISO timestamp)
+  createdAt: string;      // When action was created (ISO timestamp)
+}
+
 export interface KeyResult {
   id: string;
   metricName: string;
@@ -35,6 +45,7 @@ export interface OKR {
   comments?: string;  // Check-in comments
   owner?: string;  // Person responsible for this OKR
   qualityChecklist?: QualityChecklistItem[];  // Quality checklist for child OKRs
+  actions?: Action[];  // Action items tracked during check-ins
 }
 
 // Available areas for child OKRs

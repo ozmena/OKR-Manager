@@ -41,6 +41,22 @@ CREATE TABLE quality_checklist (
 ALTER PUBLICATION supabase_realtime ADD TABLE okrs;
 ALTER PUBLICATION supabase_realtime ADD TABLE key_results;
 
+-- Actions table (action items for OKRs)
+CREATE TABLE actions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  okr_id UUID REFERENCES okrs(id) ON DELETE CASCADE NOT NULL,
+  text TEXT NOT NULL,
+  owner TEXT NOT NULL,
+  due_date DATE NOT NULL,
+  completed BOOLEAN DEFAULT FALSE,
+  completed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable real-time for actions
+ALTER PUBLICATION supabase_realtime ADD TABLE actions;
+
 -- Indexes for performance
 CREATE INDEX idx_okrs_parent_id ON okrs(parent_id);
 CREATE INDEX idx_key_results_okr_id ON key_results(okr_id);
+CREATE INDEX idx_actions_okr_id ON actions(okr_id);

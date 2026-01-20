@@ -3,7 +3,7 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { OKR } from '../types';
 import { dbToOKR, okrToDBInsert, okrToDBUpdate } from './dataTransform';
-import type { OKRRow, KeyResultRow, QualityChecklistRow } from '../lib/database.types';
+import type { OKRRow, KeyResultRow, QualityChecklistRow, ActionRow } from '../lib/database.types';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
 // Fetch all OKRs with their key results and checklists
@@ -13,23 +13,27 @@ export async function getOKRsFromSupabase(): Promise<OKR[]> {
   }
 
   // Fetch all tables in parallel
-  const [okrsResult, keyResultsResult, checklistResult] = await Promise.all([
+  const [okrsResult, keyResultsResult, checklistResult, actionsResult] = await Promise.all([
     supabase.from('okrs').select('*').order('created_at', { ascending: true }),
     supabase.from('key_results').select('*'),
     supabase.from('quality_checklist').select('*'),
+    supabase.from('actions').select('*'),
   ]);
 
   if (okrsResult.error) throw okrsResult.error;
   if (keyResultsResult.error) throw keyResultsResult.error;
   if (checklistResult.error) throw checklistResult.error;
+  if (actionsResult.error) throw actionsResult.error;
 
   const okrRows = okrsResult.data as OKRRow[];
   const keyResultRows = keyResultsResult.data as KeyResultRow[];
   const checklistRows = checklistResult.data as QualityChecklistRow[];
+  const actionRows = actionsResult.data as ActionRow[];
 
-  // Group key results and checklist items by OKR ID
+  // Group key results, checklist items, and actions by OKR ID
   const keyResultsByOkr = new Map<string, KeyResultRow[]>();
   const checklistByOkr = new Map<string, QualityChecklistRow[]>();
+  const actionsByOkr = new Map<string, ActionRow[]>();
 
   keyResultRows.forEach(kr => {
     const existing = keyResultsByOkr.get(kr.okr_id) || [];
@@ -43,12 +47,19 @@ export async function getOKRsFromSupabase(): Promise<OKR[]> {
     checklistByOkr.set(item.okr_id, existing);
   });
 
+  actionRows.forEach(action => {
+    const existing = actionsByOkr.get(action.okr_id) || [];
+    existing.push(action);
+    actionsByOkr.set(action.okr_id, existing);
+  });
+
   // Transform to OKR objects
   const okrs = okrRows.map(okrRow =>
     dbToOKR(
       okrRow,
       keyResultsByOkr.get(okrRow.id) || [],
-      checklistByOkr.get(okrRow.id) || []
+      checklistByOkr.get(okrRow.id) || [],
+      actionsByOkr.get(okrRow.id) || []
     )
   );
 
@@ -67,7 +78,7 @@ export async function addOKRToSupabase(okr: OKR): Promise<void> {
     throw new Error('Supabase not configured');
   }
 
-  const { okrData, keyResultsData, checklistData } = okrToDBInsert(okr);
+  const { okrData, keyResultsData, checklistData, actionsData } = okrToDBInsert(okr);
 
   // Insert OKR first
   const { error: okrError } = await supabase.from('okrs').insert(okrData);
@@ -84,6 +95,12 @@ export async function addOKRToSupabase(okr: OKR): Promise<void> {
     const { error: checklistError } = await supabase.from('quality_checklist').insert(checklistData);
     if (checklistError) throw checklistError;
   }
+
+  // Insert actions if any
+  if (actionsData.length > 0) {
+    const { error: actionsError } = await supabase.from('actions').insert(actionsData);
+    if (actionsError) throw actionsError;
+  }
 }
 
 // Update an existing OKR
@@ -93,7 +110,7 @@ export async function updateOKRInSupabase(okr: OKR): Promise<void> {
   }
 
   const { okrData } = okrToDBUpdate(okr);
-  const { keyResultsData, checklistData } = okrToDBInsert(okr);
+  const { keyResultsData, checklistData, actionsData } = okrToDBInsert(okr);
 
   // Update OKR
   const { error: okrError } = await supabase
@@ -124,6 +141,18 @@ export async function updateOKRInSupabase(okr: OKR): Promise<void> {
   if (checklistData.length > 0) {
     const { error: checklistError } = await supabase.from('quality_checklist').insert(checklistData);
     if (checklistError) throw checklistError;
+  }
+
+  // Delete existing actions and insert new ones
+  const { error: deleteActionsError } = await supabase
+    .from('actions')
+    .delete()
+    .eq('okr_id', okr.id);
+  if (deleteActionsError) throw deleteActionsError;
+
+  if (actionsData.length > 0) {
+    const { error: actionsError } = await supabase.from('actions').insert(actionsData);
+    if (actionsError) throw actionsError;
   }
 }
 
@@ -160,6 +189,11 @@ export function subscribeToOKRChanges(
     .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'quality_checklist' },
+      () => onDataChange()
+    )
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'actions' },
       () => onDataChange()
     )
     .subscribe();
