@@ -3478,7 +3478,11 @@ body {
 }
 
 .exec-child-progress .exec-progress-track {
-  height: 6px;
+  height: 3px;
+}
+
+.exec-child-progress .exec-progress-fill {
+  background-color: var(--gray-400) !important;
 }
 
 .exec-child-progress .exec-progress-value {
