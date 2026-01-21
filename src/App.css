@@ -3213,3 +3213,179 @@ body {
 .global-okr-card-objective.editable-field {
   display: block;
 }
+
+/* ===========================================
+   EXECUTIVE DASHBOARD
+   =========================================== */
+
+.exec-dashboard {
+  padding: var(--space-6);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.exec-dashboard-header {
+  margin-bottom: var(--space-6);
+}
+
+.exec-dashboard-header h1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  color: var(--notion-text);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.exec-dashboard-subtitle {
+  font-size: var(--text-base);
+  color: var(--notion-text-light);
+  margin: 0;
+}
+
+/* Summary Stats */
+.exec-summary-stats {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.exec-stat-card {
+  flex: 1;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.exec-stat-green {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.exec-stat-yellow {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.exec-stat-red {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.exec-stat-count {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--notion-text);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.exec-stat-green .exec-stat-count { color: var(--status-green); }
+.exec-stat-yellow .exec-stat-count { color: var(--status-yellow); }
+.exec-stat-red .exec-stat-count { color: var(--status-red); }
+
+.exec-stat-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--notion-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* OKR List */
+.exec-okr-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* OKR Card */
+.exec-okr-card {
+  background: var(--notion-bg);
+  border: 1px solid var(--notion-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  transition: all 0.15s ease;
+}
+
+.exec-okr-card:hover {
+  border-color: var(--gray-300);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.exec-okr-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.exec-status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.exec-okr-id {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--notion-text);
+  flex-shrink: 0;
+}
+
+.exec-okr-title {
+  font-size: var(--text-base);
+  color: var(--notion-text);
+  line-height: 1.4;
+}
+
+/* Progress Bar */
+.exec-progress-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.exec-progress-track {
+  flex: 1;
+  height: 8px;
+  background: var(--progress-track);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.exec-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.exec-progress-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--notion-text);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* OKR Meta */
+.exec-okr-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--notion-text-light);
+}
+
+.exec-okr-separator {
+  color: var(--gray-300);
+}
+
+/* Empty State */
+.exec-empty-state {
+  text-align: center;
+  padding: var(--space-12);
+  color: var(--notion-text-light);
+}

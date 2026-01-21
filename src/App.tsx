@@ -17,6 +17,7 @@ import { OKRTreeView } from './components/OKRTreeView';
 import { HelpButton } from './components/HelpButton';
 import { HelpModal } from './components/HelpModal';
 import { HomePage } from './components/HomePage';
+import { ExecutiveDashboard } from './components/ExecutiveDashboard';
 import './App.css';
 
 type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
@@ -193,8 +194,13 @@ function App() {
       return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
     }
 
-    // Dashboards and Users coming soon pages
-    if (currentView === 'dashboards' || currentView === 'users') {
+    // Executive Dashboard
+    if (currentView === 'dashboards') {
+      return <ExecutiveDashboard okrs={okrs} onNavigate={setCurrentView} />;
+    }
+
+    // Users coming soon page
+    if (currentView === 'users') {
       return (
         <div className="coming-soon-page">
           <p>Coming soon. We are cooking up something great for you.</p>
