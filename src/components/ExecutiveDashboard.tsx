@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { OKR, KeyResult } from '../types';
 
 type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
@@ -43,30 +42,84 @@ function getOKRStatus(okr: OKR): RAGStatus {
   return 'progressing';
 }
 
-// Get status label and color
-function getStatusInfo(status: RAGStatus): { label: string; color: string; bgColor: string } {
+// Get color for RAG status
+function getStatusColor(status: RAGStatus): string {
   switch (status) {
-    case 'on-track':
-      return { label: 'On Track', color: 'var(--status-green)', bgColor: 'rgba(34, 197, 94, 0.1)' };
-    case 'progressing':
-      return { label: 'Progressing', color: 'var(--status-yellow)', bgColor: 'rgba(234, 179, 8, 0.1)' };
-    case 'off-track':
-      return { label: 'Off Track', color: 'var(--status-red)', bgColor: 'rgba(239, 68, 68, 0.1)' };
-    default:
-      return { label: 'No Status', color: 'var(--status-gray)', bgColor: 'rgba(156, 163, 175, 0.1)' };
+    case 'on-track': return '#22c55e';      // green
+    case 'progressing': return '#eab308';   // yellow/amber
+    case 'off-track': return '#ef4444';     // red
+    default: return '#6b7280';              // gray
   }
 }
 
-export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps) {
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+// Circular Progress Component
+interface CircularProgressProps {
+  progress: number;
+  color: string;
+  label: string;
+  size?: number;
+}
 
+function CircularProgress({ progress, color, label, size = 140 }: CircularProgressProps) {
+  const strokeWidth = 10;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const center = size / 2;
+
+  return (
+    <svg width={size} height={size} className="circular-progress">
+      {/* Background ring */}
+      <circle
+        cx={center}
+        cy={center}
+        r={radius}
+        fill="#1f2937"
+        stroke="#374151"
+        strokeWidth={strokeWidth}
+      />
+      {/* Progress arc */}
+      <circle
+        cx={center}
+        cy={center}
+        r={radius}
+        fill="none"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeDasharray={circumference}
+        strokeDashoffset={strokeDashoffset}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${center} ${center})`}
+        style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+      />
+      {/* Center text */}
+      <text
+        x={center}
+        y={center - 10}
+        textAnchor="middle"
+        fill="white"
+        fontSize="16"
+        fontWeight="600"
+      >
+        {label}
+      </text>
+      <text
+        x={center}
+        y={center + 16}
+        textAnchor="middle"
+        fill="white"
+        fontSize="22"
+        fontWeight="700"
+      >
+        {progress}%
+      </text>
+    </svg>
+  );
+}
+
+export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps) {
   // Filter to only Global OKRs (those with displayId, no parentId)
   const globalOKRs = okrs.filter(okr => okr.displayId && !okr.parentId);
-
-  // Get children OKRs for a given parent
-  const getChildrenOKRs = (parentId: string) => {
-    return okrs.filter(okr => okr.parentId === parentId);
-  };
 
   // Calculate status counts
   const statusCounts = globalOKRs.reduce(
@@ -78,20 +131,7 @@ export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps
     { 'on-track': 0, 'progressing': 0, 'off-track': 0, 'no-status': 0 }
   );
 
-  const handleToggleExpand = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setExpandedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const handleCardClick = () => {
+  const handleChartClick = () => {
     onNavigate('tree');
   };
 
@@ -118,119 +158,26 @@ export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps
         </div>
       </div>
 
-      {/* OKR Cards */}
-      <div className="exec-okr-list">
+      {/* Circular Progress Charts */}
+      <div className="exec-charts-grid">
         {globalOKRs.map(okr => {
           const status = getOKRStatus(okr);
-          const statusInfo = getStatusInfo(status);
+          const color = getStatusColor(status);
           const progress = calculateOKRProgress(okr);
-          const children = getChildrenOKRs(okr.id);
-          const isExpanded = expandedIds.has(okr.id);
-          const hasChildren = children.length > 0;
 
           return (
             <div
               key={okr.id}
-              className={`exec-okr-card ${isExpanded ? 'expanded' : ''}`}
+              className="exec-chart-item"
+              onClick={handleChartClick}
             >
-              <div
-                className="exec-okr-card-header"
-                onClick={(e) => hasChildren ? handleToggleExpand(okr.id, e) : handleCardClick()}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="exec-okr-header">
-                  {hasChildren && (
-                    <span className="exec-chevron">
-                      {isExpanded ? '▼' : '▶'}
-                    </span>
-                  )}
-                  <span
-                    className="exec-status-dot"
-                    style={{ backgroundColor: statusInfo.color }}
-                    title={statusInfo.label}
-                  />
-                  <span className="exec-okr-id">{okr.displayId}:</span>
-                  <span className="exec-okr-title">{okr.objective}</span>
-                </div>
-
-                <div className="exec-progress-container">
-                  <div className="exec-progress-track">
-                    <div
-                      className="exec-progress-fill"
-                      style={{
-                        width: `${progress}%`,
-                        backgroundColor: statusInfo.color,
-                      }}
-                    />
-                  </div>
-                  <span className="exec-progress-value">{progress}%</span>
-                </div>
-
-                <div className="exec-okr-meta">
-                  <span className="exec-okr-owner">
-                    {okr.owner || 'No owner'}
-                  </span>
-                  <span className="exec-okr-separator">•</span>
-                  <span className="exec-okr-krs">
-                    {okr.keyResults.length} Key Result{okr.keyResults.length !== 1 ? 's' : ''}
-                  </span>
-                  {hasChildren && (
-                    <>
-                      <span className="exec-okr-separator">•</span>
-                      <span className="exec-okr-children-count">
-                        {children.length} Area OKR{children.length !== 1 ? 's' : ''}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Children OKRs */}
-              {isExpanded && hasChildren && (
-                <div className="exec-children-list">
-                  {children.map(child => {
-                    const childStatus = getOKRStatus(child);
-                    const childStatusInfo = getStatusInfo(childStatus);
-                    const childProgress = calculateOKRProgress(child);
-
-                    return (
-                      <div
-                        key={child.id}
-                        className="exec-child-card"
-                        onClick={handleCardClick}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <div className="exec-child-header">
-                          <span
-                            className="exec-status-dot"
-                            style={{ backgroundColor: childStatusInfo.color }}
-                            title={childStatusInfo.label}
-                          />
-                          {child.area && (
-                            <span className="exec-child-area">{child.area}</span>
-                          )}
-                          <span className="exec-child-title">{child.objective}</span>
-                        </div>
-                        <div className="exec-child-progress">
-                          <div className="exec-progress-track">
-                            <div
-                              className="exec-progress-fill"
-                              style={{
-                                width: `${childProgress}%`,
-                                backgroundColor: childStatusInfo.color,
-                              }}
-                            />
-                          </div>
-                          <span className="exec-progress-value">{childProgress}%</span>
-                        </div>
-                        {child.owner && (
-                          <span className="exec-child-owner">{child.owner}</span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              <CircularProgress
+                progress={progress}
+                color={color}
+                label={okr.displayId || ''}
+              />
+              <p className="exec-chart-objective">{okr.objective}</p>
+              <p className="exec-chart-owner">{okr.owner || 'No owner'}</p>
             </div>
           );
         })}
