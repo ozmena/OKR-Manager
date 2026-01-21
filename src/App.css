@@ -3478,7 +3478,8 @@ body {
 }
 
 .exec-child-progress .exec-progress-track {
-  height: 3px;
+  height: 6px;
+  max-width: 120px;
 }
 
 .exec-child-progress .exec-progress-fill {
