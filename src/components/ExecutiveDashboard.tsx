@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { OKR, KeyResult } from '../types';
 
 type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
@@ -57,8 +58,15 @@ function getStatusInfo(status: RAGStatus): { label: string; color: string; bgCol
 }
 
 export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps) {
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
   // Filter to only Global OKRs (those with displayId, no parentId)
   const globalOKRs = okrs.filter(okr => okr.displayId && !okr.parentId);
+
+  // Get children OKRs for a given parent
+  const getChildrenOKRs = (parentId: string) => {
+    return okrs.filter(okr => okr.parentId === parentId);
+  };
 
   // Calculate status counts
   const statusCounts = globalOKRs.reduce(
@@ -69,6 +77,19 @@ export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps
     },
     { 'on-track': 0, 'progressing': 0, 'off-track': 0, 'no-status': 0 }
   );
+
+  const handleToggleExpand = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   const handleCardClick = () => {
     onNavigate('tree');
@@ -103,46 +124,113 @@ export function ExecutiveDashboard({ okrs, onNavigate }: ExecutiveDashboardProps
           const status = getOKRStatus(okr);
           const statusInfo = getStatusInfo(status);
           const progress = calculateOKRProgress(okr);
+          const children = getChildrenOKRs(okr.id);
+          const isExpanded = expandedIds.has(okr.id);
+          const hasChildren = children.length > 0;
 
           return (
             <div
               key={okr.id}
-              className="exec-okr-card"
-              onClick={handleCardClick}
-              style={{ cursor: 'pointer' }}
+              className={`exec-okr-card ${isExpanded ? 'expanded' : ''}`}
             >
-              <div className="exec-okr-header">
-                <span
-                  className="exec-status-dot"
-                  style={{ backgroundColor: statusInfo.color }}
-                  title={statusInfo.label}
-                />
-                <span className="exec-okr-id">{okr.displayId}:</span>
-                <span className="exec-okr-title">{okr.objective}</span>
-              </div>
-
-              <div className="exec-progress-container">
-                <div className="exec-progress-track">
-                  <div
-                    className="exec-progress-fill"
-                    style={{
-                      width: `${progress}%`,
-                      backgroundColor: statusInfo.color,
-                    }}
+              <div
+                className="exec-okr-card-header"
+                onClick={(e) => hasChildren ? handleToggleExpand(okr.id, e) : handleCardClick()}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="exec-okr-header">
+                  {hasChildren && (
+                    <span className="exec-chevron">
+                      {isExpanded ? '▼' : '▶'}
+                    </span>
+                  )}
+                  <span
+                    className="exec-status-dot"
+                    style={{ backgroundColor: statusInfo.color }}
+                    title={statusInfo.label}
                   />
+                  <span className="exec-okr-id">{okr.displayId}:</span>
+                  <span className="exec-okr-title">{okr.objective}</span>
                 </div>
-                <span className="exec-progress-value">{progress}%</span>
+
+                <div className="exec-progress-container">
+                  <div className="exec-progress-track">
+                    <div
+                      className="exec-progress-fill"
+                      style={{
+                        width: `${progress}%`,
+                        backgroundColor: statusInfo.color,
+                      }}
+                    />
+                  </div>
+                  <span className="exec-progress-value">{progress}%</span>
+                </div>
+
+                <div className="exec-okr-meta">
+                  <span className="exec-okr-owner">
+                    {okr.owner || 'No owner'}
+                  </span>
+                  <span className="exec-okr-separator">•</span>
+                  <span className="exec-okr-krs">
+                    {okr.keyResults.length} Key Result{okr.keyResults.length !== 1 ? 's' : ''}
+                  </span>
+                  {hasChildren && (
+                    <>
+                      <span className="exec-okr-separator">•</span>
+                      <span className="exec-okr-children-count">
+                        {children.length} Area OKR{children.length !== 1 ? 's' : ''}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
 
-              <div className="exec-okr-meta">
-                <span className="exec-okr-owner">
-                  {okr.owner || 'No owner'}
-                </span>
-                <span className="exec-okr-separator">•</span>
-                <span className="exec-okr-krs">
-                  {okr.keyResults.length} Key Result{okr.keyResults.length !== 1 ? 's' : ''}
-                </span>
-              </div>
+              {/* Children OKRs */}
+              {isExpanded && hasChildren && (
+                <div className="exec-children-list">
+                  {children.map(child => {
+                    const childStatus = getOKRStatus(child);
+                    const childStatusInfo = getStatusInfo(childStatus);
+                    const childProgress = calculateOKRProgress(child);
+
+                    return (
+                      <div
+                        key={child.id}
+                        className="exec-child-card"
+                        onClick={handleCardClick}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="exec-child-header">
+                          <span
+                            className="exec-status-dot"
+                            style={{ backgroundColor: childStatusInfo.color }}
+                            title={childStatusInfo.label}
+                          />
+                          {child.area && (
+                            <span className="exec-child-area">{child.area}</span>
+                          )}
+                          <span className="exec-child-title">{child.objective}</span>
+                        </div>
+                        <div className="exec-child-progress">
+                          <div className="exec-progress-track">
+                            <div
+                              className="exec-progress-fill"
+                              style={{
+                                width: `${childProgress}%`,
+                                backgroundColor: childStatusInfo.color,
+                              }}
+                            />
+                          </div>
+                          <span className="exec-progress-value">{childProgress}%</span>
+                        </div>
+                        {child.owner && (
+                          <span className="exec-child-owner">{child.owner}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
