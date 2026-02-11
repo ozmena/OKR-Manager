@@ -56,7 +56,7 @@ export function HomePage({ okrs, onNavigate: _onNavigate }: HomePageProps) {
 
       {/* Footer */}
       <footer className="home-footer">
-        Vector V0.7 by Open Change B.V.
+        Vector V0.8 by Open Change B.V.
       </footer>
     </div>
   );

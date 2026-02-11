@@ -56,29 +56,43 @@ export function PasswordGate({ children }: PasswordGateProps) {
 
   return (
     <div className="password-gate">
-      <div className="password-gate-card">
+      <div className="password-gate-topbar">
         <div className="password-gate-logo">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 6v6l4 2" />
-          </svg>
+          <span className="password-gate-logo-text">Vector</span>
+          <span className="password-gate-logo-arrow">↗</span>
         </div>
-        <h1>Vector↗ Demo</h1>
-        <p className="password-gate-subtitle">Enter password to continue</p>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            autoFocus
-            className={error ? 'error' : ''}
-          />
-          {error && <p className="password-gate-error">{error}</p>}
-          <button type="submit">Enter</button>
-        </form>
       </div>
+
+      <div className="password-gate-hero">
+        <h1 className="password-gate-tagline">
+          Track your OKRs <em>without the friction</em>
+        </h1>
+
+        <p className="password-gate-description">
+          Create, cascade, and track objectives so every team
+          moves in the same direction.
+        </p>
+
+        <div className="password-gate-card">
+          <h2 className="password-gate-card-label">Demo Access</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your access code"
+              autoFocus
+              className={error ? 'error' : ''}
+            />
+            {error && <p className="password-gate-error">{error}</p>}
+            <button type="submit">Continue</button>
+          </form>
+        </div>
+      </div>
+
+      <footer className="password-gate-footer">
+        Vector V0.8 by Open Change B.V.
+      </footer>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { HelpButton } from './components/HelpButton';
 import { HelpModal } from './components/HelpModal';
 import { HomePage } from './components/HomePage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
+import { captureEvent, capturePageView } from './lib/posthog';
 import './App.css';
 
 type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
@@ -39,6 +40,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [useSupabase] = useState(isSupabaseConfigured());
+
+  // Track page view when view changes
+  useEffect(() => {
+    capturePageView(currentView);
+  }, [currentView]);
 
   // Load OKRs from Supabase or localStorage
   const loadOKRs = useCallback(async () => {
@@ -97,6 +103,7 @@ function App() {
       addLocalOKR(okr);
       setOkrs(getLocalOKRs());
     }
+    captureEvent('okr_created', { type: okr.parentId ? 'child' : 'global', okr_id: okr.displayId || okr.id });
     setShowForm(false);
     setParentIdForNewOKR(null);
   };
@@ -116,6 +123,7 @@ function App() {
       updateLocalOKR(okr);
       setOkrs(getLocalOKRs());
     }
+    captureEvent('okr_updated', { okr_id: okr.displayId || okr.id, source: 'form' });
     setEditingOKR(null);
   };
 
@@ -136,6 +144,7 @@ function App() {
   };
 
   const handleDeleteOKR = async (id: string) => {
+    captureEvent('okr_deleted', { okr_id: id });
     if (useSupabase) {
       try {
         await deleteOKRFromSupabase(id);
@@ -234,13 +243,13 @@ function App() {
             <div className={`mode-switch ${treeViewMode === 'tracking' ? 'tracking' : 'setting'}`}>
               <button
                 className={`mode-switch-option ${treeViewMode === 'setting' ? 'active' : ''}`}
-                onClick={() => setTreeViewMode(treeViewMode === 'setting' ? 'tracking' : 'setting')}
+                onClick={() => { const next = treeViewMode === 'setting' ? 'tracking' : 'setting'; setTreeViewMode(next); captureEvent('mode_switched', { mode: next }); }}
               >
                 OKR Setting
               </button>
               <button
                 className={`mode-switch-option ${treeViewMode === 'tracking' ? 'active' : ''}`}
-                onClick={() => setTreeViewMode(treeViewMode === 'tracking' ? 'setting' : 'tracking')}
+                onClick={() => { const next = treeViewMode === 'tracking' ? 'setting' : 'tracking'; setTreeViewMode(next); captureEvent('mode_switched', { mode: next }); }}
               >
                 OKR Tracking
               </button>
