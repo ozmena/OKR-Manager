@@ -1,4 +1,5 @@
 export type KeyResultStatus = 'on-track' | 'progressing' | 'off-track';
+export type OKRStatus = 'on-track' | 'progressing' | 'off-track';
 export type KeyResultUnit = 'percentage' | 'number';
 
 export interface QualityChecklistItem {
@@ -46,6 +47,7 @@ export interface OKR {
   owner?: string;  // Person responsible for this OKR
   qualityChecklist?: QualityChecklistItem[];  // Quality checklist for child OKRs
   actions?: Action[];  // Action items tracked during check-ins
+  status?: OKRStatus;  // Owner-set status (set during check-ins)
 }
 
 // Available areas for child OKRs

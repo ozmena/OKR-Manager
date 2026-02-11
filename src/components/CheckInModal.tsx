@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { OKR, KeyResult, KeyResultStatus, formatKRValue, Action, PEOPLE } from '../types';
+import { OKR, OKRStatus, KeyResult, KeyResultStatus, formatKRValue, Action, PEOPLE } from '../types';
 
 interface CheckInModalProps {
   isOpen: boolean;
   okr: OKR | null;
   onClose: () => void;
   onSave: (updatedOKR: OKR) => void;
+  scrollToActions?: boolean;
 }
 
 interface KeyResultFormData {
@@ -58,10 +59,10 @@ function getDaysOverdue(dueDate: string): number {
 
 // Generate a simple unique ID
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return crypto.randomUUID();
 }
 
-export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps) {
+export function CheckInModal({ isOpen, okr, onClose, onSave, scrollToActions }: CheckInModalProps) {
   const [keyResultsData, setKeyResultsData] = useState<Record<string, KeyResultFormData>>({});
   const [challenges, setChallenges] = useState('');
   const [needs, setNeeds] = useState('');
@@ -71,6 +72,8 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
   const [newActionText, setNewActionText] = useState('');
   const [newActionOwner, setNewActionOwner] = useState('');
   const [newActionDueDate, setNewActionDueDate] = useState('');
+  const [krExpanded, setKrExpanded] = useState(true);
+  const [okrStatus, setOkrStatus] = useState<OKRStatus | undefined>(undefined);
 
   // Initialize form data when modal opens
   useEffect(() => {
@@ -91,8 +94,18 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
       setNewActionText('');
       setNewActionOwner('');
       setNewActionDueDate('');
+      setOkrStatus(okr.status);
     }
   }, [okr]);
+
+  // Scroll to actions section when opened from dashboard action badge
+  useEffect(() => {
+    if (isOpen && scrollToActions) {
+      setTimeout(() => {
+        document.getElementById('checkin-actions')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+  }, [isOpen, scrollToActions]);
 
   if (!isOpen || !okr) return null;
 
@@ -168,6 +181,7 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
     const updatedOKR: OKR = {
       ...okr,
       keyResults: updatedKeyResults,
+      status: okrStatus,
       challenges: challenges || undefined,
       needs: needs || undefined,
       comments: comments || undefined,
@@ -193,10 +207,31 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
         </div>
 
         <div className="checkin-content">
+          {/* OKR Status (Global OKRs only) */}
+          {!okr.parentId && (
+            <div className="checkin-section">
+              <h3>OKR Status</h3>
+              <div className="checkin-input-group">
+                <select
+                  value={okrStatus || ''}
+                  onChange={(e) => setOkrStatus((e.target.value || undefined) as OKRStatus | undefined)}
+                >
+                  <option value="">No Status</option>
+                  <option value="on-track">On Track</option>
+                  <option value="progressing">Progressing</option>
+                  <option value="off-track">Off Track</option>
+                </select>
+              </div>
+            </div>
+          )}
+
           {/* Key Results Section */}
           <div className="checkin-section">
-            <h3>Key Results</h3>
-            {okr.keyResults.map(kr => {
+            <h3 className="checkin-section-toggle" onClick={() => setKrExpanded(!krExpanded)}>
+              Key Results ({okr.keyResults.length})
+              <span className="checkin-toggle-arrow">{krExpanded ? '⌃' : '⌄'}</span>
+            </h3>
+            {krExpanded && okr.keyResults.map(kr => {
               const data = keyResultsData[kr.id] || {};
               const progress = calculateProgress(kr.from, kr.to, data.current);
               const statusColor = getStatusColor(data.status);
@@ -253,7 +288,7 @@ export function CheckInModal({ isOpen, okr, onClose, onSave }: CheckInModalProps
           </div>
 
           {/* Actions Section */}
-          <div className="checkin-section checkin-actions-section">
+          <div className="checkin-section checkin-actions-section" id="checkin-actions">
             <div className="checkin-actions-header">
               <h3>Actions</h3>
               {!showAddAction && (

@@ -239,6 +239,52 @@ The application requires a role-based access control (RBAC) system to manage who
 - [ ] Bulk operations
 - [ ] **Custom roles (enterprise)**
 - [ ] **Permission delegation**
+- [ ] Action status enhancements (Cancelled, In Progress, explicit Overdue tracking)
+- [ ] Deletion confirmation dialogs (OKRs, Key Results, Actions)
+
+#### Infrastructure & Tooling
+- [ ] ESLint + Prettier setup with consistent code formatting
+- [ ] Pre-commit hooks (husky/lint-staged) to enforce quality gates
+- [ ] CI/CD pipeline (GitHub Actions for tests, lint, build)
+- [ ] Bundle size analysis and optimization
+
+#### Testing
+- [ ] Unit tests for core business logic (storage.ts, dataTransform.ts)
+- [ ] Component tests (OKRForm, CheckInModal, ExecutiveDashboard)
+- [ ] E2E tests (Playwright or Cypress for critical flows)
+- [ ] Test coverage reporting and thresholds
+
+#### Code Quality / Technical Debt
+- [ ] Extract shared utilities (progress calculation, date helpers, status display)
+- [ ] Refactor OKRTreeView.tsx into smaller components
+- [ ] Add React Error Boundary for graceful crash recovery
+- [ ] Centralize constants and eliminate magic numbers/strings
+
+#### Data Layer
+- [ ] Schema validation with Zod for data integrity
+- [ ] Data export/import (JSON, CSV)
+- [ ] Seed data reset button for demos/testing
+- [ ] URL-based routing (React Router) for deep linking and browser nav
+
+#### UX Improvements
+- [ ] Responsive design / mobile support (media queries — currently zero)
+- [ ] Dark mode / theme toggle (CSS variable infrastructure already exists)
+- [ ] Toast notifications for success/failure feedback (e.g., react-hot-toast)
+- [ ] Keyboard shortcuts and command palette
+- [ ] Undo/redo support for destructive operations
+
+#### Accessibility
+- [ ] ARIA attributes throughout (only 3 exist today)
+- [ ] Keyboard navigation for all interactive elements
+- [ ] Screen reader support and focus management in modals
+
+#### Documentation
+- [ ] README.md with setup, build, and deployment instructions
+- [ ] Complete .env.example with all optional/required variables
+
+#### Security
+- [ ] Input sanitization (DOMPurify) for user and AI-generated content
+- [ ] Content Security Policy headers
 
 ---
 

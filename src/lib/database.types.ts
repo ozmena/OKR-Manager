@@ -16,6 +16,7 @@ export interface Database {
           challenges: string | null;
           needs: string | null;
           comments: string | null;
+          status: string | null;
         };
         Insert: {
           id?: string;
@@ -28,6 +29,7 @@ export interface Database {
           challenges?: string | null;
           needs?: string | null;
           comments?: string | null;
+          status?: string | null;
         };
         Update: {
           id?: string;
@@ -40,6 +42,7 @@ export interface Database {
           challenges?: string | null;
           needs?: string | null;
           comments?: string | null;
+          status?: string | null;
         };
       };
       key_results: {

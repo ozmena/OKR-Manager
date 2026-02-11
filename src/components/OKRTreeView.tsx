@@ -48,6 +48,10 @@ interface OKRTreeViewProps {
   okrs: OKR[];
   onUpdateOKR: (okr: OKR) => void;
   mode: ViewMode;
+  initialSelectedOkrId?: string | null;
+  onInitialOkrConsumed?: () => void;
+  initialCheckInOkrId?: string | null;
+  onInitialCheckInConsumed?: () => void;
 }
 
 interface TreeCardProps {
@@ -337,7 +341,11 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
                 {getInitials(okr.owner)}
               </span>
             )}
-            <span className="tree-card-org-badge">GBS</span>
+            {mode === 'tracking' && okr.status && (
+              <span className={`kr-card-status kr-card-status-${getStatusDisplay(okr.status as KeyResultStatus).color}`}>
+                ○ {getStatusDisplay(okr.status as KeyResultStatus).label}
+              </span>
+            )}
           </div>
         </div>
 
@@ -491,12 +499,13 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
   );
 }
 
-export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
+export function OKRTreeView({ okrs, onUpdateOKR, mode, initialSelectedOkrId, onInitialOkrConsumed, initialCheckInOkrId, onInitialCheckInConsumed }: OKRTreeViewProps) {
   const topLevelOkrs = okrs.filter(okr => !okr.parentId);
   const [selectedOkrId, setSelectedOkrId] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>('all');
   const [selectedOwner, setSelectedOwner] = useState<string>('all');
   const [checkInOkr, setCheckInOkr] = useState<OKR | null>(null);
+  const [scrollToActionsOnOpen, setScrollToActionsOnOpen] = useState(false);
 
   // Inline editing state
   const [editingField, setEditingField] = useState<EditingField | null>(null);
@@ -550,6 +559,7 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
 
   const handleCheckInClose = () => {
     setCheckInOkr(null);
+    setScrollToActionsOnOpen(false);
   };
 
   const handleCheckInSave = (updatedOKR: OKR) => {
@@ -717,12 +727,27 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
     return map;
   }, [okrs]);
 
-  // Pre-select the first global OKR on load or when OKRs change
+  // Pre-select an OKR: use initialSelectedOkrId if provided, otherwise first global OKR
   useEffect(() => {
-    if (topLevelOkrs.length > 0 && !selectedOkrId) {
+    if (initialSelectedOkrId) {
+      setSelectedOkrId(initialSelectedOkrId);
+      onInitialOkrConsumed?.();
+    } else if (topLevelOkrs.length > 0 && !selectedOkrId) {
       setSelectedOkrId(topLevelOkrs[0].id);
     }
-  }, [topLevelOkrs, selectedOkrId]);
+  }, [initialSelectedOkrId, topLevelOkrs, selectedOkrId]);
+
+  // Auto-open check-in modal when navigating from dashboard action badge
+  useEffect(() => {
+    if (initialCheckInOkrId) {
+      const targetOkr = okrs.find(o => o.id === initialCheckInOkrId);
+      if (targetOkr) {
+        setCheckInOkr(targetOkr);
+        setScrollToActionsOnOpen(true);
+      }
+      onInitialCheckInConsumed?.();
+    }
+  }, [initialCheckInOkrId, okrs]);
 
   const selectedOkr = okrs.find(okr => okr.id === selectedOkrId);
 
@@ -854,6 +879,7 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode }: OKRTreeViewProps) {
         okr={checkInOkr}
         onClose={handleCheckInClose}
         onSave={handleCheckInSave}
+        scrollToActions={scrollToActionsOnOpen}
       />
 
       {/* Tree AI Feedback Modal */}

@@ -53,7 +53,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           {!isCollapsed && (
             <>
               <span className="sidebar-label">Dashboards</span>
-              <span className="sidebar-tag sidebar-tag-soon">Soon</span>
+              <span className="sidebar-tag sidebar-tag-new">New</span>
             </>
           )}
         </button>

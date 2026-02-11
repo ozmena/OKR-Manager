@@ -15,6 +15,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Hardik Bhatt',
+    status: 'progressing',
   },
   // Child OKRs for Global 1 - varied lengths
   {
@@ -28,6 +29,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Deepa Abi',
+    status: 'on-track',
   },
   {
     id: 'child-1-2',
@@ -39,8 +41,14 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-1-2-2', metricName: 'Revenue', from: 10, to: 20, current: 12, status: 'off-track' },
       { id: 'kr-1-2-3', metricName: 'NPS', from: 40, to: 75, current: 58, status: 'progressing' },
     ],
+    actions: [
+      { id: 'act-1-2-1', text: 'Finalize Q1 revenue forecast and present to leadership', owner: 'Juan Montoya', dueDate: '2026-01-25', completed: true, completedAt: '2026-01-24T14:00:00Z', createdAt: '2026-01-10T10:00:00Z' },
+      { id: 'act-1-2-2', text: 'Schedule NPS deep-dive workshop with regional teams', owner: 'Juan Montoya', dueDate: '2026-02-01', completed: false, createdAt: '2026-01-12T09:00:00Z' },
+      { id: 'act-1-2-3', text: 'Launch stakeholder feedback survey for Q1', owner: 'Elena Schoeman', dueDate: '2026-03-01', completed: false, createdAt: '2026-01-15T11:00:00Z' },
+    ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Juan Montoya',
+    status: 'progressing',
   },
   {
     id: 'child-1-3',
@@ -52,6 +60,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Elena Schoeman',
+    status: 'on-track',
   },
 
   // ============================================
@@ -67,6 +76,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Mariana Avila',
+    status: 'on-track',
   },
   {
     id: 'child-2-1',
@@ -79,6 +89,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Sanjay Dora',
+    status: 'off-track',
   },
   {
     id: 'child-2-2',
@@ -91,6 +102,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Thiago Pinheiro',
+    status: 'off-track',
   },
   {
     id: 'child-2-3',
@@ -104,6 +116,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Amanda Jones',
+    status: 'off-track',
   },
 
   // ============================================
@@ -119,6 +132,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Jack Shu',
+    status: 'progressing',
   },
   {
     id: 'child-3-1',
@@ -131,6 +145,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Alex Komrakov',
+    status: 'off-track',
   },
   {
     id: 'child-3-2',
@@ -142,8 +157,15 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-3-2-2', metricName: 'CSAT', from: 10, to: 20, current: 14, status: 'progressing' },
       { id: 'kr-3-2-3', metricName: 'First contact resolution rate', from: 60, to: 90, current: 72, status: 'progressing' },
     ],
+    actions: [
+      { id: 'act-3-2-1', text: 'Audit current SLA compliance across all teams', owner: 'Elena Schoeman', dueDate: '2026-01-20', completed: false, createdAt: '2026-01-05T08:00:00Z' },
+      { id: 'act-3-2-2', text: 'Roll out first-contact resolution training program', owner: 'Elena Schoeman', dueDate: '2026-02-05', completed: false, createdAt: '2026-01-10T10:00:00Z' },
+      { id: 'act-3-2-3', text: 'Set up automated CSAT survey after ticket resolution', owner: 'Dylan Jetha', dueDate: '2026-01-31', completed: true, completedAt: '2026-01-28T16:30:00Z', createdAt: '2026-01-08T09:00:00Z' },
+      { id: 'act-3-2-4', text: 'Publish best practices playbook for service delivery', owner: 'Elena Schoeman', dueDate: '2026-03-15', completed: false, createdAt: '2026-01-15T14:00:00Z' },
+    ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Elena Schoeman',
+    status: 'on-track',
   },
   {
     id: 'child-3-3',
@@ -155,6 +177,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Dylan Jetha',
+    status: 'off-track',
   },
   {
     id: 'child-3-4',
@@ -167,6 +190,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Preeti Naval Kumar',
+    status: 'off-track',
   },
 
   // ============================================
@@ -182,6 +206,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Evan Sams',
+    status: 'off-track',
   },
   {
     id: 'child-4-1',
@@ -194,6 +219,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Preeti Naval Kumar',
+    status: 'off-track',
   },
   {
     id: 'child-4-2',
@@ -207,6 +233,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Serge De Vos',
+    status: 'off-track',
   },
   {
     id: 'child-4-3',
@@ -219,6 +246,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Juan Ramon Triana',
+    status: 'off-track',
   },
 
   // ============================================
@@ -234,6 +262,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Morne Fouche',
+    status: 'on-track',
   },
   {
     id: 'child-5-1',
@@ -244,8 +273,14 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-5-1-1', metricName: 'Systems migrated', from: 10, to: 30, current: 22, status: 'on-track' },
       { id: 'kr-5-1-2', metricName: 'Data integrity validation completion rate across all critical business systems and applications', from: 19, to: 25, current: 20, status: 'off-track' },
     ],
+    actions: [
+      { id: 'act-5-1-1', text: 'Complete data migration dry-run for ERP system', owner: 'Thiago Marchi', dueDate: '2026-01-15', completed: false, createdAt: '2026-01-05T08:00:00Z' },
+      { id: 'act-5-1-2', text: 'Validate data integrity checksums for batch 1', owner: 'Thiago Marchi', dueDate: '2026-01-28', completed: true, completedAt: '2026-01-27T11:00:00Z', createdAt: '2026-01-10T09:00:00Z' },
+      { id: 'act-5-1-3', text: 'Coordinate downtime window with infrastructure team', owner: 'Dylan Jetha', dueDate: '2026-02-20', completed: false, createdAt: '2026-01-12T14:00:00Z' },
+    ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Thiago Marchi',
+    status: 'progressing',
   },
   {
     id: 'child-5-2',
@@ -258,6 +293,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Eric Ruys',
+    status: 'off-track',
   },
   {
     id: 'child-5-3',
@@ -269,8 +305,14 @@ export const seedOKRs: OKR[] = [
       { id: 'kr-5-3-2', metricName: 'Compliance score', from: 24, to: 25, current: 24, status: 'off-track' },
       { id: 'kr-5-3-3', metricName: 'Audit readiness', from: 50, to: 100, current: 85, status: 'on-track' },
     ],
+    actions: [
+      { id: 'act-5-3-1', text: 'Submit regulatory filings for new entity A', owner: 'Juan Ramon Triana', dueDate: '2026-01-30', completed: true, completedAt: '2026-01-29T10:00:00Z', createdAt: '2026-01-10T08:00:00Z' },
+      { id: 'act-5-3-2', text: 'Review vendor contracts for entity reassignment', owner: 'Juan Ramon Triana', dueDate: '2026-02-01', completed: false, createdAt: '2026-01-10T08:30:00Z' },
+      { id: 'act-5-3-3', text: 'Conduct internal audit readiness assessment', owner: 'Amanda Jones', dueDate: '2026-02-28', completed: false, createdAt: '2026-01-15T09:00:00Z' },
+    ],
     createdAt: '2026-01-10T19:20:26.372Z',
     owner: 'Juan Ramon Triana',
+    status: 'on-track',
   },
   {
     id: 'child-5-4',
@@ -284,6 +326,7 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-11T18:38:15.684Z',
     owner: 'Amanda Jones',
+    status: 'off-track',
   },
   {
     id: 'child-5-5',
@@ -295,5 +338,6 @@ export const seedOKRs: OKR[] = [
     ],
     createdAt: '2026-01-12T13:18:49.497Z',
     owner: 'Dylan Jetha',
+    status: 'off-track',
   },
 ];

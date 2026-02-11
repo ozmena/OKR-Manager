@@ -12,7 +12,8 @@ CREATE TABLE okrs (
   owner TEXT,
   challenges TEXT,
   needs TEXT,
-  comments TEXT
+  comments TEXT,
+  status TEXT
 );
 
 -- Key Results table (one-to-many with OKRs)

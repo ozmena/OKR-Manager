@@ -2,6 +2,8 @@ import { OKR } from './types';
 import { seedOKRs } from './seedData';
 
 const STORAGE_KEY = 'okrs';
+const VERSION_KEY = 'okrs_version';
+const DATA_VERSION = 3;
 
 // Sort OKRs by display_id number (OKR-1, OKR-2, etc.)
 function sortByDisplayId(okrs: OKR[]): OKR[] {
@@ -19,7 +21,25 @@ export function getOKRs(): OKR[] {
     saveOKRs(seedOKRs);
     return sortByDisplayId([...seedOKRs]);
   }
-  return sortByDisplayId(JSON.parse(data));
+  const okrs: OKR[] = JSON.parse(data);
+  okrs.forEach(okr => {
+    if (okr.status && !['on-track', 'progressing', 'off-track'].includes(okr.status)) {
+      okr.status = undefined;
+    }
+  });
+  const storedVersion = parseInt(localStorage.getItem(VERSION_KEY) || '0', 10);
+  if (storedVersion < DATA_VERSION) {
+    const seedMap = new Map(seedOKRs.map(s => [s.id, s]));
+    okrs.forEach(okr => {
+      const seed = seedMap.get(okr.id);
+      if (seed && okr.status === undefined && seed.status) {
+        okr.status = seed.status;
+      }
+    });
+    saveOKRs(okrs);
+    localStorage.setItem(VERSION_KEY, String(DATA_VERSION));
+  }
+  return sortByDisplayId(okrs);
 }
 
 export function saveOKRs(okrs: OKR[]): void {

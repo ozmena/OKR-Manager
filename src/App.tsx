@@ -34,6 +34,8 @@ function App() {
   const [showChangelog, setShowChangelog] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('setting');
+  const [pendingOkrId, setPendingOkrId] = useState<string | null>(null);
+  const [pendingCheckInOkrId, setPendingCheckInOkrId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [useSupabase] = useState(isSupabaseConfigured());
@@ -179,6 +181,19 @@ function App() {
 
   const isFormVisible = showForm || editingOKR !== null;
 
+  const handleDashboardOkrClick = (okrId: string) => {
+    setPendingOkrId(okrId);
+    setTreeViewMode('tracking');
+    setCurrentView('tree');
+  };
+
+  const handleDashboardActionClick = (globalOkrId: string, areaOkrId: string) => {
+    setPendingOkrId(globalOkrId);
+    setPendingCheckInOkrId(areaOkrId);
+    setTreeViewMode('tracking');
+    setCurrentView('tree');
+  };
+
   const renderContent = () => {
     // Loading state
     if (isLoading) {
@@ -196,7 +211,7 @@ function App() {
 
     // Executive Dashboard
     if (currentView === 'dashboards') {
-      return <ExecutiveDashboard okrs={okrs} onNavigate={setCurrentView} />;
+      return <ExecutiveDashboard okrs={okrs} onNavigate={setCurrentView} onOkrClick={handleDashboardOkrClick} onActionClick={handleDashboardActionClick} />;
     }
 
     // Users coming soon page
@@ -216,20 +231,19 @@ function App() {
         <header className="notion-app-header">
           <h1>{pageTitle}</h1>
           {currentView === 'tree' && (
-            <div className="mode-switch">
-              <span className={`mode-switch-label ${treeViewMode === 'setting' ? 'active' : ''}`}>
-                OKR Setting
-              </span>
+            <div className={`mode-switch ${treeViewMode === 'tracking' ? 'tracking' : 'setting'}`}>
               <button
-                className={`mode-switch-toggle ${treeViewMode === 'tracking' ? 'mode-tracking' : 'mode-setting'}`}
-                onClick={() => setTreeViewMode(prev => prev === 'tracking' ? 'setting' : 'tracking')}
-                aria-label="Toggle mode"
+                className={`mode-switch-option ${treeViewMode === 'setting' ? 'active' : ''}`}
+                onClick={() => setTreeViewMode(treeViewMode === 'setting' ? 'tracking' : 'setting')}
               >
-                <span className="mode-switch-slider" />
+                OKR Setting
               </button>
-              <span className={`mode-switch-label ${treeViewMode === 'tracking' ? 'active' : ''}`}>
+              <button
+                className={`mode-switch-option ${treeViewMode === 'tracking' ? 'active' : ''}`}
+                onClick={() => setTreeViewMode(treeViewMode === 'tracking' ? 'setting' : 'tracking')}
+              >
                 OKR Tracking
-              </span>
+              </button>
             </div>
           )}
           {currentView !== 'tree' && <div className="notion-header-spacer"></div>}
@@ -257,7 +271,7 @@ function App() {
         </header>
         <main className="notion-app-main">
           {currentView === 'tree' ? (
-            <OKRTreeView okrs={okrs} onUpdateOKR={handleInlineUpdateOKR} mode={treeViewMode} />
+            <OKRTreeView okrs={okrs} onUpdateOKR={handleInlineUpdateOKR} mode={treeViewMode} initialSelectedOkrId={pendingOkrId} onInitialOkrConsumed={() => setPendingOkrId(null)} initialCheckInOkrId={pendingCheckInOkrId} onInitialCheckInConsumed={() => setPendingCheckInOkrId(null)} />
           ) : isFormVisible ? (
             <OKRForm
               onSubmit={editingOKR ? handleUpdateOKR : handleCreateOKR}

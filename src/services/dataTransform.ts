@@ -1,6 +1,6 @@
 // Data transformation utilities between Supabase database format and app OKR types
 
-import { OKR, KeyResult, KeyResultStatus, KeyResultUnit, QualityChecklistItem, Action } from '../types';
+import { OKR, KeyResult, KeyResultStatus, KeyResultUnit, OKRStatus, QualityChecklistItem, Action } from '../types';
 import type { OKRRow, KeyResultRow, QualityChecklistRow, ActionRow } from '../lib/database.types';
 
 // Convert database rows to app OKR type
@@ -56,6 +56,7 @@ export function dbToOKR(
     challenges: okrRow.challenges || undefined,
     needs: okrRow.needs || undefined,
     comments: okrRow.comments || undefined,
+    status: (['on-track', 'progressing', 'off-track'].includes(okrRow.status || '') ? okrRow.status as OKRStatus : undefined),
     qualityChecklist,
     actions,
   };
@@ -74,6 +75,7 @@ export function okrToDBInsert(okr: OKR): {
     challenges: string | null;
     needs: string | null;
     comments: string | null;
+    status: string | null;
   };
   keyResultsData: {
     id: string;
@@ -114,6 +116,7 @@ export function okrToDBInsert(okr: OKR): {
     challenges: okr.challenges || null,
     needs: okr.needs || null,
     comments: okr.comments || null,
+    status: okr.status || null,
   };
 
   const keyResultsData = okr.keyResults.map((kr, index) => ({
@@ -160,6 +163,7 @@ export function okrToDBUpdate(okr: OKR): {
     challenges: string | null;
     needs: string | null;
     comments: string | null;
+    status: string | null;
   };
 } {
   return {
@@ -172,6 +176,7 @@ export function okrToDBUpdate(okr: OKR): {
       challenges: okr.challenges || null,
       needs: okr.needs || null,
       comments: okr.comments || null,
+      status: okr.status || null,
     },
   };
 }
