@@ -12,7 +12,7 @@ DELETE FROM okrs;
 -- ============================================
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
-  ('00000000-0000-4000-a000-000000000001', 'OKR-1', 'Become the market leader, more innovative and automated processes', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Hardik Bhatt', 'at-risk');
+  ('00000000-0000-4000-a000-000000000001', 'OKR-1', 'Become the market leader, more innovative and automated processes', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Hardik Bhatt', 'progressing');
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
@@ -21,11 +21,11 @@ VALUES
   ('00000000-0000-4000-b001-000000000003', '00000000-0000-4000-a000-000000000001', 'Processes automated', 24, 35, 26, 'off-track', 2);
 
 -- Child OKRs for Global 1
-INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
+INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
 VALUES
-  ('00000000-0000-4000-a001-000000000001', NULL, 'Deliver savings', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GCC India', 'Deepa Abi', 'on-track'),
-  ('00000000-0000-4000-a001-000000000002', NULL, 'Become a trusted Business Partner by delivering strong operational results and top tier stakeholder NPS through consistent excellence', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GCC Mexico', 'Juan Montoya', 'at-risk'),
-  ('00000000-0000-4000-a001-000000000003', NULL, 'Improve process efficiency', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GPL', 'Elena Schoeman', 'on-track');
+  ('00000000-0000-4000-a001-000000000001', NULL, 'Deliver savings', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GCC India', 'Deepa Abi', 'on-track', NULL, NULL),
+  ('00000000-0000-4000-a001-000000000002', NULL, 'Become a trusted Business Partner by delivering strong operational results and top tier stakeholder NPS through consistent excellence', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GCC Mexico', 'Juan Montoya', 'progressing', 'Stakeholder alignment across regions is taking longer than expected. Different teams have conflicting priorities which slows down decision-making.', 'Need cross-functional support from Finance and Operations leadership to align on shared KPIs and reporting cadence.'),
+  ('00000000-0000-4000-a001-000000000003', NULL, 'Improve process efficiency', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000001', 'GPL', 'Elena Schoeman', 'on-track', NULL, NULL);
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
@@ -61,29 +61,41 @@ VALUES
 -- Child OKRs for Global 2
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
-  ('00000000-0000-4000-a002-000000000001', NULL, 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all regions and business units', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GCC India', 'Sanjay Dora', 'never-started'),
-  ('00000000-0000-4000-a002-000000000002', NULL, 'Grow talent', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GCC Mexico', 'Thiago Pinheiro', 'never-started'),
-  ('00000000-0000-4000-a002-000000000003', NULL, 'Build leadership capabilities across all levels', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GBS Onshore', 'Amanda Jones', 'never-started');
+  ('00000000-0000-4000-a002-000000000001', NULL, 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all regions and business units', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GCC India', 'Sanjay Dora', 'progressing'),
+  ('00000000-0000-4000-a002-000000000002', NULL, 'Grow talent', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GCC Mexico', 'Thiago Pinheiro', 'off-track'),
+  ('00000000-0000-4000-a002-000000000003', NULL, 'Build leadership capabilities across all levels', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000002', 'GBS Onshore', 'Amanda Jones', 'on-track');
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
   -- Child 2-1 (GCC India)
-  ('00000000-0000-4000-b021-000000000001', '00000000-0000-4000-a002-000000000001', 'Savings', 10, 30, NULL, NULL, 0),
-  ('00000000-0000-4000-b021-000000000002', '00000000-0000-4000-a002-000000000001', 'Team engagement score improvement', 19, 25, NULL, NULL, 1),
+  ('00000000-0000-4000-b021-000000000001', '00000000-0000-4000-a002-000000000001', 'Savings', 10, 30, 15, 'progressing', 0),
+  ('00000000-0000-4000-b021-000000000002', '00000000-0000-4000-a002-000000000001', 'Team engagement score improvement', 19, 25, 22, 'on-track', 1),
   -- Child 2-2 (GCC Mexico)
-  ('00000000-0000-4000-b022-000000000001', '00000000-0000-4000-a002-000000000002', 'Employees promoted to senior roles within organization demonstrating clear career progression pathways', 10, 40, NULL, NULL, 0),
-  ('00000000-0000-4000-b022-000000000002', '00000000-0000-4000-a002-000000000002', 'Revenue', 10, 20, NULL, NULL, 1),
+  ('00000000-0000-4000-b022-000000000001', '00000000-0000-4000-a002-000000000002', 'Employees promoted to senior roles within organization demonstrating clear career progression pathways', 10, 40, 22, 'progressing', 0),
+  ('00000000-0000-4000-b022-000000000002', '00000000-0000-4000-a002-000000000002', 'Revenue', 10, 20, 14, 'off-track', 1),
   -- Child 2-3 (GBS Onshore)
-  ('00000000-0000-4000-b023-000000000001', '00000000-0000-4000-a002-000000000003', 'Leaders trained', 0, 50, NULL, NULL, 0),
-  ('00000000-0000-4000-b023-000000000002', '00000000-0000-4000-a002-000000000003', 'Succession readiness', 30, 80, NULL, NULL, 1),
-  ('00000000-0000-4000-b023-000000000003', '00000000-0000-4000-a002-000000000003', 'Internal mobility rate tracking career moves across departments and functions measured quarterly', 15, 35, NULL, NULL, 2);
+  ('00000000-0000-4000-b023-000000000001', '00000000-0000-4000-a002-000000000003', 'Leaders trained', 0, 50, 28, 'on-track', 0),
+  ('00000000-0000-4000-b023-000000000002', '00000000-0000-4000-a002-000000000003', 'Succession readiness', 30, 80, 48, 'on-track', 1),
+  ('00000000-0000-4000-b023-000000000003', '00000000-0000-4000-a002-000000000003', 'Internal mobility rate tracking career moves across departments and functions measured quarterly', 15, 35, 21, 'progressing', 2);
+
+-- Actions for Child 2-1 (GCC India)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c021-000000000001', '00000000-0000-4000-a002-000000000001', 'Map decision rights for SC governance framework', 'Sanjay Dora', '2026-01-25', FALSE, NULL, '2026-01-08T09:00:00Z'),
+  ('00000000-0000-4000-c021-000000000002', '00000000-0000-4000-a002-000000000001', 'Draft RACI matrix for cross-functional forums', 'Sanjay Dora', '2026-03-10', FALSE, NULL, '2026-01-12T10:00:00Z');
+
+-- Actions for Child 2-2 (GCC Mexico)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c022-000000000001', '00000000-0000-4000-a002-000000000002', 'Launch mentorship pairing program for high-potential employees', 'Thiago Pinheiro', '2026-02-01', TRUE, '2026-02-01T15:00:00Z', '2026-01-10T08:00:00Z'),
+  ('00000000-0000-4000-c022-000000000002', '00000000-0000-4000-a002-000000000002', 'Set up quarterly talent review cadence with leadership', 'Thiago Pinheiro', '2026-03-15', FALSE, NULL, '2026-01-14T11:00:00Z');
 
 -- ============================================
 -- Global OKR 3 - Business Partnership
 -- ============================================
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
-  ('00000000-0000-4000-a000-000000000003', 'OKR-3', 'Become a trusted Business Partner by delivering strong operational results and top-tier stakeholder NPS', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Jack Shu', 'at-risk');
+  ('00000000-0000-4000-a000-000000000003', 'OKR-3', 'Become a trusted Business Partner by delivering strong operational results and top-tier stakeholder NPS', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Jack Shu', 'progressing');
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
@@ -91,16 +103,16 @@ VALUES
   ('00000000-0000-4000-b003-000000000002', '00000000-0000-4000-a000-000000000003', 'All critical payroll controls documented, tested, and signed off', 60, 85, 68, 'off-track', 1);
 
 -- Child OKRs for Global 3
-INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
+INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
 VALUES
-  ('00000000-0000-4000-a003-000000000001', NULL, 'Enhance stakeholder engagement', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GCC India', 'Alex Komrakov', 'never-started'),
-  ('00000000-0000-4000-a003-000000000002', NULL, 'Drive operational excellence through continuous improvement initiatives and best practice implementation across all service delivery teams', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GCC Mexico', 'Elena Schoeman', 'on-track'),
-  ('00000000-0000-4000-a003-000000000003', NULL, 'Reduce escalations', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'Capabilities/Tech', 'Dylan Jetha', 'never-started'),
-  ('00000000-0000-4000-a003-000000000004', NULL, 'Improve customer satisfaction and loyalty metrics across all touchpoints by implementing feedback-driven enhancements', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GPL', 'Preeti Naval Kumar', 'never-started');
+  ('00000000-0000-4000-a003-000000000001', NULL, 'Enhance stakeholder engagement', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GCC India', 'Alex Komrakov', NULL, NULL, NULL),
+  ('00000000-0000-4000-a003-000000000002', NULL, 'Drive operational excellence through continuous improvement initiatives and best practice implementation across all service delivery teams', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GCC Mexico', 'Elena Schoeman', 'on-track', 'SLA measurement is inconsistent across teams. Some regions define SLA differently, making it hard to benchmark and compare.', 'Need a unified SLA tracking tool and standardized definitions across all service delivery regions.'),
+  ('00000000-0000-4000-a003-000000000003', NULL, 'Reduce escalations', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'Capabilities/Tech', 'Dylan Jetha', 'progressing', NULL, NULL),
+  ('00000000-0000-4000-a003-000000000004', NULL, 'Improve customer satisfaction and loyalty metrics across all touchpoints by implementing feedback-driven enhancements', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000003', 'GPL', 'Preeti Naval Kumar', NULL, NULL, NULL);
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
-  -- Child 3-1 (GCC India)
+  -- Child 3-1 (GCC India) - intentionally no data
   ('00000000-0000-4000-b031-000000000001', '00000000-0000-4000-a003-000000000001', 'Stakeholder satisfaction score measured through quarterly surveys and feedback sessions with key business partners', 10, 30, NULL, NULL, 0),
   ('00000000-0000-4000-b031-000000000002', '00000000-0000-4000-a003-000000000001', 'Response time', 19, 25, NULL, NULL, 1),
   -- Child 3-2 (GCC Mexico)
@@ -108,8 +120,8 @@ VALUES
   ('00000000-0000-4000-b032-000000000002', '00000000-0000-4000-a003-000000000002', 'CSAT', 10, 20, 14, 'progressing', 1),
   ('00000000-0000-4000-b032-000000000003', '00000000-0000-4000-a003-000000000002', 'First contact resolution rate', 60, 90, 72, 'progressing', 2),
   -- Child 3-3 (Capabilities/Tech)
-  ('00000000-0000-4000-b033-000000000001', '00000000-0000-4000-a003-000000000003', 'Escalation rate', 25, 10, NULL, NULL, 0),
-  -- Child 3-4 (GPL)
+  ('00000000-0000-4000-b033-000000000001', '00000000-0000-4000-a003-000000000003', 'Escalation rate', 25, 10, 18, 'progressing', 0),
+  -- Child 3-4 (GPL) - intentionally no data
   ('00000000-0000-4000-b034-000000000001', '00000000-0000-4000-a003-000000000004', 'Net Promoter Score improvement across customer segments with focus on strategic accounts', 35, 65, NULL, NULL, 0),
   ('00000000-0000-4000-b034-000000000002', '00000000-0000-4000-a003-000000000004', 'Retention', 85, 95, NULL, NULL, 1);
 
@@ -121,37 +133,56 @@ VALUES
   ('00000000-0000-4000-c032-000000000003', '00000000-0000-4000-a003-000000000002', 'Set up automated CSAT survey after ticket resolution', 'Dylan Jetha', '2026-01-31', TRUE, '2026-01-28T16:30:00Z', '2026-01-08T09:00:00Z'),
   ('00000000-0000-4000-c032-000000000004', '00000000-0000-4000-a003-000000000002', 'Publish best practices playbook for service delivery', 'Elena Schoeman', '2026-03-15', FALSE, NULL, '2026-01-15T14:00:00Z');
 
+-- Actions for Child 3-3 (Capabilities/Tech)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c033-000000000001', '00000000-0000-4000-a003-000000000003', 'Analyze top 10 escalation root causes from Q4', 'Dylan Jetha', '2026-01-28', FALSE, NULL, '2026-01-06T09:00:00Z'),
+  ('00000000-0000-4000-c033-000000000002', '00000000-0000-4000-a003-000000000003', 'Implement escalation auto-routing rules in ticketing system', 'Dylan Jetha', '2026-02-10', TRUE, '2026-02-03T14:00:00Z', '2026-01-10T10:00:00Z'),
+  ('00000000-0000-4000-c033-000000000003', '00000000-0000-4000-a003-000000000003', 'Train L1 support on new triage protocol', 'Alex Komrakov', '2026-03-01', FALSE, NULL, '2026-01-15T11:00:00Z');
+
 -- ============================================
 -- Global OKR 4 - Company Launch
 -- ============================================
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
-  ('00000000-0000-4000-a000-000000000004', 'OKR-4', 'Launch both companies with a compelling narrative', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Evan Sams', 'behind');
+  ('00000000-0000-4000-a000-000000000004', 'OKR-4', 'Launch both companies with a compelling narrative', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Evan Sams', 'off-track');
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
-  ('00000000-0000-4000-b004-000000000001', '00000000-0000-4000-a000-000000000004', 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', 20, 60, NULL, NULL, 0),
-  ('00000000-0000-4000-b004-000000000002', '00000000-0000-4000-a000-000000000004', 'Media coverage', 8, 28, NULL, NULL, 1);
+  ('00000000-0000-4000-b004-000000000001', '00000000-0000-4000-a000-000000000004', 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', 20, 60, 32, 'progressing', 0),
+  ('00000000-0000-4000-b004-000000000002', '00000000-0000-4000-a000-000000000004', 'Media coverage', 8, 28, 14, 'off-track', 1);
 
 -- Child OKRs for Global 4
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
-  ('00000000-0000-4000-a004-000000000001', NULL, 'Execute communication plan', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GCC India', 'Preeti Naval Kumar', 'never-started'),
-  ('00000000-0000-4000-a004-000000000002', NULL, 'Ensure seamless brand transition across all customer-facing channels and internal platforms while maintaining service continuity', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GCC Mexico', 'Serge De Vos', 'never-started'),
-  ('00000000-0000-4000-a004-000000000003', NULL, 'Build excitement', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GBS Onshore', 'Juan Ramon Triana', 'never-started');
+  ('00000000-0000-4000-a004-000000000001', NULL, 'Execute communication plan', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GCC India', 'Preeti Naval Kumar', 'progressing'),
+  ('00000000-0000-4000-a004-000000000002', NULL, 'Ensure seamless brand transition across all customer-facing channels and internal platforms while maintaining service continuity', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GCC Mexico', 'Serge De Vos', 'off-track'),
+  ('00000000-0000-4000-a004-000000000003', NULL, 'Build excitement', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000004', 'GBS Onshore', 'Juan Ramon Triana', NULL);
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
   -- Child 4-1 (GCC India)
-  ('00000000-0000-4000-b041-000000000001', '00000000-0000-4000-a004-000000000001', 'Employee awareness score measured through pulse surveys conducted monthly during transition period', 13, 30, NULL, NULL, 0),
-  ('00000000-0000-4000-b041-000000000002', '00000000-0000-4000-a004-000000000001', 'Comms delivered', 14, 25, NULL, NULL, 1),
+  ('00000000-0000-4000-b041-000000000001', '00000000-0000-4000-a004-000000000001', 'Employee awareness score measured through pulse surveys conducted monthly during transition period', 13, 30, 20, 'progressing', 0),
+  ('00000000-0000-4000-b041-000000000002', '00000000-0000-4000-a004-000000000001', 'Comms delivered', 14, 25, 18, 'off-track', 1),
   -- Child 4-2 (GCC Mexico)
-  ('00000000-0000-4000-b042-000000000001', '00000000-0000-4000-a004-000000000002', 'Brand consistency score', 10, 40, NULL, NULL, 0),
-  ('00000000-0000-4000-b042-000000000002', '00000000-0000-4000-a004-000000000002', 'Revenue', 10, 20, NULL, NULL, 1),
-  ('00000000-0000-4000-b042-000000000003', '00000000-0000-4000-a004-000000000002', 'Customer awareness of new brand identity measured through recognition surveys and social media sentiment analysis', 20, 80, NULL, NULL, 2),
-  -- Child 4-3 (GBS Onshore)
+  ('00000000-0000-4000-b042-000000000001', '00000000-0000-4000-a004-000000000002', 'Brand consistency score', 10, 40, 18, 'off-track', 0),
+  ('00000000-0000-4000-b042-000000000002', '00000000-0000-4000-a004-000000000002', 'Revenue', 10, 20, 13, 'off-track', 1),
+  ('00000000-0000-4000-b042-000000000003', '00000000-0000-4000-a004-000000000002', 'Customer awareness of new brand identity measured through recognition surveys and social media sentiment analysis', 20, 80, 32, 'progressing', 2),
+  -- Child 4-3 (GBS Onshore) - intentionally no data
   ('00000000-0000-4000-b043-000000000001', '00000000-0000-4000-a004-000000000003', 'Event attendance', 50, 90, NULL, NULL, 0),
   ('00000000-0000-4000-b043-000000000002', '00000000-0000-4000-a004-000000000003', 'Social engagement', 100, 500, NULL, NULL, 1);
+
+-- Actions for Child 4-1 (GCC India)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c041-000000000001', '00000000-0000-4000-a004-000000000001', 'Send first all-hands transition update email', 'Preeti Naval Kumar', '2026-02-01', FALSE, NULL, '2026-01-12T09:00:00Z'),
+  ('00000000-0000-4000-c041-000000000002', '00000000-0000-4000-a004-000000000001', 'Create FAQ document for employee questions about the transition', 'Preeti Naval Kumar', '2026-02-28', FALSE, NULL, '2026-01-15T10:00:00Z');
+
+-- Actions for Child 4-2 (GCC Mexico)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c042-000000000001', '00000000-0000-4000-a004-000000000002', 'Complete brand asset migration checklist', 'Serge De Vos', '2026-01-30', TRUE, '2026-01-30T12:00:00Z', '2026-01-08T08:00:00Z'),
+  ('00000000-0000-4000-c042-000000000002', '00000000-0000-4000-a004-000000000002', 'Brief customer-facing teams on new brand guidelines', 'Serge De Vos', '2026-03-05', FALSE, NULL, '2026-01-14T09:00:00Z');
 
 -- ============================================
 -- Global OKR 5 - GBS Separation
@@ -166,13 +197,13 @@ VALUES
   ('00000000-0000-4000-b005-000000000002', '00000000-0000-4000-a000-000000000005', 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', 10, 40, 28, 'on-track', 1);
 
 -- Child OKRs for Global 5
-INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
+INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
 VALUES
-  ('00000000-0000-4000-a005-000000000001', NULL, 'Complete technology migration', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GCC India', 'Thiago Marchi', 'at-risk'),
-  ('00000000-0000-4000-a005-000000000002', NULL, 'Ensure business continuity throughout the separation process with zero critical service interruptions for stakeholders and customers', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GCC Mexico', 'Eric Ruys', 'never-started'),
-  ('00000000-0000-4000-a005-000000000003', NULL, 'Finalize legal and compliance requirements for both entities including regulatory filings and contractual obligations', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GPL', 'Juan Ramon Triana', 'on-track'),
-  ('00000000-0000-4000-a005-000000000004', NULL, 'Train teams', '2026-01-11T18:38:15.684Z', '00000000-0000-4000-a000-000000000005', 'GBS Onshore', 'Amanda Jones', 'never-started'),
-  ('00000000-0000-4000-a005-000000000005', NULL, 'Migrate critical infrastructure', '2026-01-12T13:18:49.497Z', '00000000-0000-4000-a000-000000000005', 'Capabilities/Tech', 'Dylan Jetha', 'never-started');
+  ('00000000-0000-4000-a005-000000000001', NULL, 'Complete technology migration', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GCC India', 'Thiago Marchi', 'progressing', 'Legacy system complexity is higher than estimated. Some integrations have undocumented dependencies that surface during migration testing.', 'Need additional vendor support for the legacy ERP decommissioning and extended access to staging environments for parallel testing.'),
+  ('00000000-0000-4000-a005-000000000002', NULL, 'Ensure business continuity throughout the separation process with zero critical service interruptions for stakeholders and customers', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GCC Mexico', 'Eric Ruys', 'off-track', NULL, NULL),
+  ('00000000-0000-4000-a005-000000000003', NULL, 'Finalize legal and compliance requirements for both entities including regulatory filings and contractual obligations', '2026-01-10T17:15:11.172Z', '00000000-0000-4000-a000-000000000005', 'GPL', 'Juan Ramon Triana', 'on-track', 'Regulatory timeline for entity B filing is uncertain due to pending government review. This could delay the overall separation schedule.', 'Need additional legal counsel bandwidth to handle parallel filings across multiple jurisdictions.'),
+  ('00000000-0000-4000-a005-000000000004', NULL, 'Train teams', '2026-01-11T18:38:15.684Z', '00000000-0000-4000-a000-000000000005', 'GBS Onshore', 'Amanda Jones', 'progressing', NULL, NULL),
+  ('00000000-0000-4000-a005-000000000005', NULL, 'Migrate critical infrastructure', '2026-01-12T13:18:49.497Z', '00000000-0000-4000-a000-000000000005', 'Capabilities/Tech', 'Dylan Jetha', NULL, NULL, NULL);
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
@@ -180,17 +211,17 @@ VALUES
   ('00000000-0000-4000-b051-000000000001', '00000000-0000-4000-a005-000000000001', 'Systems migrated', 10, 30, 22, 'on-track', 0),
   ('00000000-0000-4000-b051-000000000002', '00000000-0000-4000-a005-000000000001', 'Data integrity validation completion rate across all critical business systems and applications', 19, 25, 20, 'off-track', 1),
   -- Child 5-2 (GCC Mexico)
-  ('00000000-0000-4000-b052-000000000001', '00000000-0000-4000-a005-000000000002', 'Uptime', 10, 40, NULL, NULL, 0),
-  ('00000000-0000-4000-b052-000000000002', '00000000-0000-4000-a005-000000000002', 'Incidents', 10, 20, NULL, NULL, 1),
+  ('00000000-0000-4000-b052-000000000001', '00000000-0000-4000-a005-000000000002', 'Uptime', 10, 40, 28, 'progressing', 0),
+  ('00000000-0000-4000-b052-000000000002', '00000000-0000-4000-a005-000000000002', 'Incidents', 10, 20, 15, 'off-track', 1),
   -- Child 5-3 (GPL)
   ('00000000-0000-4000-b053-000000000001', '00000000-0000-4000-a005-000000000003', 'Contracts reviewed and updated to reflect new organizational structure and legal entity requirements', 13, 34, 30, 'on-track', 0),
   ('00000000-0000-4000-b053-000000000002', '00000000-0000-4000-a005-000000000003', 'Compliance score', 24, 25, 24, 'off-track', 1),
   ('00000000-0000-4000-b053-000000000003', '00000000-0000-4000-a005-000000000003', 'Audit readiness', 50, 100, 85, 'on-track', 2),
   -- Child 5-4 (GBS Onshore)
-  ('00000000-0000-4000-b054-000000000001', '00000000-0000-4000-a005-000000000004', 'Comprehensive training program completion rate for all affected employees across both new organizations', 10, 50, NULL, NULL, 0),
-  ('00000000-0000-4000-b054-000000000002', '00000000-0000-4000-a005-000000000004', 'Readiness assessment score for day one operations including process knowledge and system access verification', 13, 15, NULL, NULL, 1),
-  ('00000000-0000-4000-b054-000000000003', '00000000-0000-4000-a005-000000000004', 'Knowledge transfer', 11, 100, NULL, NULL, 2),
-  -- Child 5-5 (Capabilities/Tech)
+  ('00000000-0000-4000-b054-000000000001', '00000000-0000-4000-a005-000000000004', 'Comprehensive training program completion rate for all affected employees across both new organizations', 10, 50, 30, 'progressing', 0),
+  ('00000000-0000-4000-b054-000000000002', '00000000-0000-4000-a005-000000000004', 'Readiness assessment score for day one operations including process knowledge and system access verification', 13, 15, 14, 'on-track', 1),
+  ('00000000-0000-4000-b054-000000000003', '00000000-0000-4000-a005-000000000004', 'Knowledge transfer', 11, 100, 45, 'progressing', 2),
+  -- Child 5-5 (Capabilities/Tech) - intentionally no data
   ('00000000-0000-4000-b055-000000000001', '00000000-0000-4000-a005-000000000005', 'Infrastructure components successfully transitioned to new environment', 14, 20, NULL, NULL, 0);
 
 -- Actions for Child 5-1 (GCC India)
@@ -200,12 +231,24 @@ VALUES
   ('00000000-0000-4000-c051-000000000002', '00000000-0000-4000-a005-000000000001', 'Validate data integrity checksums for batch 1', 'Thiago Marchi', '2026-01-28', TRUE, '2026-01-27T11:00:00Z', '2026-01-10T09:00:00Z'),
   ('00000000-0000-4000-c051-000000000003', '00000000-0000-4000-a005-000000000001', 'Coordinate downtime window with infrastructure team', 'Dylan Jetha', '2026-02-20', FALSE, NULL, '2026-01-12T14:00:00Z');
 
+-- Actions for Child 5-2 (GCC Mexico)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c052-000000000001', '00000000-0000-4000-a005-000000000002', 'Document critical service dependencies and failover paths', 'Eric Ruys', '2026-01-20', FALSE, NULL, '2026-01-05T09:00:00Z'),
+  ('00000000-0000-4000-c052-000000000002', '00000000-0000-4000-a005-000000000002', 'Run failover test for primary services', 'Eric Ruys', '2026-02-25', FALSE, NULL, '2026-01-12T10:00:00Z');
+
 -- Actions for Child 5-3 (GPL)
 INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
 VALUES
   ('00000000-0000-4000-c053-000000000001', '00000000-0000-4000-a005-000000000003', 'Submit regulatory filings for new entity A', 'Juan Ramon Triana', '2026-01-30', TRUE, '2026-01-29T10:00:00Z', '2026-01-10T08:00:00Z'),
   ('00000000-0000-4000-c053-000000000002', '00000000-0000-4000-a005-000000000003', 'Review vendor contracts for entity reassignment', 'Juan Ramon Triana', '2026-02-01', FALSE, NULL, '2026-01-10T08:30:00Z'),
   ('00000000-0000-4000-c053-000000000003', '00000000-0000-4000-a005-000000000003', 'Conduct internal audit readiness assessment', 'Amanda Jones', '2026-02-28', FALSE, NULL, '2026-01-15T09:00:00Z');
+
+-- Actions for Child 5-4 (GBS Onshore)
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c054-000000000001', '00000000-0000-4000-a005-000000000004', 'Complete training curriculum design for both entities', 'Amanda Jones', '2026-02-05', TRUE, '2026-02-05T16:00:00Z', '2026-01-10T08:00:00Z'),
+  ('00000000-0000-4000-c054-000000000002', '00000000-0000-4000-a005-000000000004', 'Schedule first wave of team training sessions', 'Amanda Jones', '2026-03-01', FALSE, NULL, '2026-01-15T09:00:00Z');
 
 -- Verify the migration
 SELECT 'OKRs inserted: ' || COUNT(*) FROM okrs;

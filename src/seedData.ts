@@ -17,10 +17,9 @@ export const seedOKRs: OKR[] = [
     owner: 'Hardik Bhatt',
     status: 'progressing',
   },
-  // Child OKRs for Global 1 - varied lengths
   {
     id: 'child-1-1',
-    objective: 'Deliver savings', // Very short
+    objective: 'Deliver savings',
     parentId: 'global-1',
     area: 'GCC India',
     keyResults: [
@@ -33,7 +32,7 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-1-2',
-    objective: 'Become a trusted Business Partner by delivering strong operational results and top tier stakeholder NPS through consistent excellence', // Long
+    objective: 'Become a trusted Business Partner by delivering strong operational results and top tier stakeholder NPS through consistent excellence',
     parentId: 'global-1',
     area: 'GCC Mexico',
     keyResults: [
@@ -46,13 +45,15 @@ export const seedOKRs: OKR[] = [
       { id: 'act-1-2-2', text: 'Schedule NPS deep-dive workshop with regional teams', owner: 'Juan Montoya', dueDate: '2026-02-01', completed: false, createdAt: '2026-01-12T09:00:00Z' },
       { id: 'act-1-2-3', text: 'Launch stakeholder feedback survey for Q1', owner: 'Elena Schoeman', dueDate: '2026-03-01', completed: false, createdAt: '2026-01-15T11:00:00Z' },
     ],
+    challenges: 'Stakeholder alignment across regions is taking longer than expected. Different teams have conflicting priorities which slows down decision-making.',
+    needs: 'Need cross-functional support from Finance and Operations leadership to align on shared KPIs and reporting cadence.',
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Juan Montoya',
     status: 'progressing',
   },
   {
     id: 'child-1-3',
-    objective: 'Improve process efficiency', // Short
+    objective: 'Improve process efficiency',
     parentId: 'global-1',
     area: 'GPL',
     keyResults: [
@@ -80,25 +81,33 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-2-1',
-    objective: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all regions and business units', // Very long
+    objective: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions across all regions and business units',
     parentId: 'global-2',
     area: 'GCC India',
     keyResults: [
-      { id: 'kr-2-1-1', metricName: 'Savings', from: 10, to: 30 }, // Very short
-      { id: 'kr-2-1-2', metricName: 'Team engagement score improvement', from: 19, to: 25 }, // Medium
+      { id: 'kr-2-1-1', metricName: 'Savings', from: 10, to: 30, current: 15, status: 'progressing' },
+      { id: 'kr-2-1-2', metricName: 'Team engagement score improvement', from: 19, to: 25, current: 22, status: 'on-track' },
+    ],
+    actions: [
+      { id: 'act-2-1-1', text: 'Map decision rights for SC governance framework', owner: 'Sanjay Dora', dueDate: '2026-01-25', completed: false, createdAt: '2026-01-08T09:00:00Z' },
+      { id: 'act-2-1-2', text: 'Draft RACI matrix for cross-functional forums', owner: 'Sanjay Dora', dueDate: '2026-03-10', completed: false, createdAt: '2026-01-12T10:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Sanjay Dora',
-    status: 'off-track',
+    status: 'progressing',
   },
   {
     id: 'child-2-2',
-    objective: 'Grow talent', // Very short
+    objective: 'Grow talent',
     parentId: 'global-2',
     area: 'GCC Mexico',
     keyResults: [
-      { id: 'kr-2-2-1', metricName: 'Employees promoted to senior roles within organization demonstrating clear career progression pathways', from: 10, to: 40 }, // Long
-      { id: 'kr-2-2-2', metricName: 'Revenue', from: 10, to: 20 }, // Very short
+      { id: 'kr-2-2-1', metricName: 'Employees promoted to senior roles within organization demonstrating clear career progression pathways', from: 10, to: 40, current: 22, status: 'progressing' },
+      { id: 'kr-2-2-2', metricName: 'Revenue', from: 10, to: 20, current: 14, status: 'off-track' },
+    ],
+    actions: [
+      { id: 'act-2-2-1', text: 'Launch mentorship pairing program for high-potential employees', owner: 'Thiago Pinheiro', dueDate: '2026-02-01', completed: true, completedAt: '2026-02-01T15:00:00Z', createdAt: '2026-01-10T08:00:00Z' },
+      { id: 'act-2-2-2', text: 'Set up quarterly talent review cadence with leadership', owner: 'Thiago Pinheiro', dueDate: '2026-03-15', completed: false, createdAt: '2026-01-14T11:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Thiago Pinheiro',
@@ -106,17 +115,17 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-2-3',
-    objective: 'Build leadership capabilities across all levels', // Medium
+    objective: 'Build leadership capabilities across all levels',
     parentId: 'global-2',
     area: 'GBS Onshore',
     keyResults: [
-      { id: 'kr-2-3-1', metricName: 'Leaders trained', from: 0, to: 50 }, // Short
-      { id: 'kr-2-3-2', metricName: 'Succession readiness', from: 30, to: 80 }, // Short
-      { id: 'kr-2-3-3', metricName: 'Internal mobility rate tracking career moves across departments and functions measured quarterly', from: 15, to: 35 }, // Long
+      { id: 'kr-2-3-1', metricName: 'Leaders trained', from: 0, to: 50, current: 28, status: 'on-track' },
+      { id: 'kr-2-3-2', metricName: 'Succession readiness', from: 30, to: 80, current: 48, status: 'on-track' },
+      { id: 'kr-2-3-3', metricName: 'Internal mobility rate tracking career moves across departments and functions measured quarterly', from: 15, to: 35, current: 21, status: 'progressing' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Amanda Jones',
-    status: 'off-track',
+    status: 'on-track',
   },
 
   // ============================================
@@ -136,20 +145,19 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-3-1',
-    objective: 'Enhance stakeholder engagement', // Short
+    objective: 'Enhance stakeholder engagement',
     parentId: 'global-3',
     area: 'GCC India',
     keyResults: [
-      { id: 'kr-3-1-1', metricName: 'Stakeholder satisfaction score measured through quarterly surveys and feedback sessions with key business partners', from: 10, to: 30 }, // Very long
-      { id: 'kr-3-1-2', metricName: 'Response time', from: 19, to: 25 }, // Short
+      { id: 'kr-3-1-1', metricName: 'Stakeholder satisfaction score measured through quarterly surveys and feedback sessions with key business partners', from: 10, to: 30 },
+      { id: 'kr-3-1-2', metricName: 'Response time', from: 19, to: 25 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Alex Komrakov',
-    status: 'off-track',
   },
   {
     id: 'child-3-2',
-    objective: 'Drive operational excellence through continuous improvement initiatives and best practice implementation across all service delivery teams', // Very long
+    objective: 'Drive operational excellence through continuous improvement initiatives and best practice implementation across all service delivery teams',
     parentId: 'global-3',
     area: 'GCC Mexico',
     keyResults: [
@@ -163,34 +171,40 @@ export const seedOKRs: OKR[] = [
       { id: 'act-3-2-3', text: 'Set up automated CSAT survey after ticket resolution', owner: 'Dylan Jetha', dueDate: '2026-01-31', completed: true, completedAt: '2026-01-28T16:30:00Z', createdAt: '2026-01-08T09:00:00Z' },
       { id: 'act-3-2-4', text: 'Publish best practices playbook for service delivery', owner: 'Elena Schoeman', dueDate: '2026-03-15', completed: false, createdAt: '2026-01-15T14:00:00Z' },
     ],
+    challenges: 'SLA measurement is inconsistent across teams. Some regions define SLA differently, making it hard to benchmark and compare.',
+    needs: 'Need a unified SLA tracking tool and standardized definitions across all service delivery regions.',
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Elena Schoeman',
     status: 'on-track',
   },
   {
     id: 'child-3-3',
-    objective: 'Reduce escalations', // Very short
+    objective: 'Reduce escalations',
     parentId: 'global-3',
     area: 'Capabilities/Tech',
     keyResults: [
-      { id: 'kr-3-3-1', metricName: 'Escalation rate', from: 25, to: 10 }, // Short
+      { id: 'kr-3-3-1', metricName: 'Escalation rate', from: 25, to: 10, current: 18, status: 'progressing' },
+    ],
+    actions: [
+      { id: 'act-3-3-1', text: 'Analyze top 10 escalation root causes from Q4', owner: 'Dylan Jetha', dueDate: '2026-01-28', completed: false, createdAt: '2026-01-06T09:00:00Z' },
+      { id: 'act-3-3-2', text: 'Implement escalation auto-routing rules in ticketing system', owner: 'Dylan Jetha', dueDate: '2026-02-10', completed: true, completedAt: '2026-02-03T14:00:00Z', createdAt: '2026-01-10T10:00:00Z' },
+      { id: 'act-3-3-3', text: 'Train L1 support on new triage protocol', owner: 'Alex Komrakov', dueDate: '2026-03-01', completed: false, createdAt: '2026-01-15T11:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Dylan Jetha',
-    status: 'off-track',
+    status: 'progressing',
   },
   {
     id: 'child-3-4',
-    objective: 'Improve customer satisfaction and loyalty metrics across all touchpoints by implementing feedback-driven enhancements', // Long
+    objective: 'Improve customer satisfaction and loyalty metrics across all touchpoints by implementing feedback-driven enhancements',
     parentId: 'global-3',
     area: 'GPL',
     keyResults: [
-      { id: 'kr-3-4-1', metricName: 'Net Promoter Score improvement across customer segments with focus on strategic accounts', from: 35, to: 65 }, // Long
-      { id: 'kr-3-4-2', metricName: 'Retention', from: 85, to: 95 }, // Very short
+      { id: 'kr-3-4-1', metricName: 'Net Promoter Score improvement across customer segments with focus on strategic accounts', from: 35, to: 65 },
+      { id: 'kr-3-4-2', metricName: 'Retention', from: 85, to: 95 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Preeti Naval Kumar',
-    status: 'off-track',
   },
 
   // ============================================
@@ -201,8 +215,8 @@ export const seedOKRs: OKR[] = [
     displayId: 'OKR-4',
     objective: 'Launch both companies with a compelling narrative',
     keyResults: [
-      { id: 'kr-4-1', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 20, to: 60 },
-      { id: 'kr-4-2', metricName: 'Media coverage', from: 8, to: 28 },
+      { id: 'kr-4-1', metricName: 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', from: 20, to: 60, current: 32, status: 'progressing' },
+      { id: 'kr-4-2', metricName: 'Media coverage', from: 8, to: 28, current: 14, status: 'off-track' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Evan Sams',
@@ -210,26 +224,34 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-4-1',
-    objective: 'Execute communication plan', // Short
+    objective: 'Execute communication plan',
     parentId: 'global-4',
     area: 'GCC India',
     keyResults: [
-      { id: 'kr-4-1-1', metricName: 'Employee awareness score measured through pulse surveys conducted monthly during transition period', from: 13, to: 30 }, // Long
-      { id: 'kr-4-1-2', metricName: 'Comms delivered', from: 14, to: 25 }, // Short
+      { id: 'kr-4-1-1', metricName: 'Employee awareness score measured through pulse surveys conducted monthly during transition period', from: 13, to: 30, current: 20, status: 'progressing' },
+      { id: 'kr-4-1-2', metricName: 'Comms delivered', from: 14, to: 25, current: 18, status: 'off-track' },
+    ],
+    actions: [
+      { id: 'act-4-1-1', text: 'Send first all-hands transition update email', owner: 'Preeti Naval Kumar', dueDate: '2026-02-01', completed: false, createdAt: '2026-01-12T09:00:00Z' },
+      { id: 'act-4-1-2', text: 'Create FAQ document for employee questions about the transition', owner: 'Preeti Naval Kumar', dueDate: '2026-02-28', completed: false, createdAt: '2026-01-15T10:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Preeti Naval Kumar',
-    status: 'off-track',
+    status: 'progressing',
   },
   {
     id: 'child-4-2',
-    objective: 'Ensure seamless brand transition across all customer-facing channels and internal platforms while maintaining service continuity', // Very long
+    objective: 'Ensure seamless brand transition across all customer-facing channels and internal platforms while maintaining service continuity',
     parentId: 'global-4',
     area: 'GCC Mexico',
     keyResults: [
-      { id: 'kr-4-2-1', metricName: 'Brand consistency score', from: 10, to: 40 }, // Medium
-      { id: 'kr-4-2-2', metricName: 'Revenue', from: 10, to: 20 }, // Very short
-      { id: 'kr-4-2-3', metricName: 'Customer awareness of new brand identity measured through recognition surveys and social media sentiment analysis', from: 20, to: 80 }, // Very long
+      { id: 'kr-4-2-1', metricName: 'Brand consistency score', from: 10, to: 40, current: 18, status: 'off-track' },
+      { id: 'kr-4-2-2', metricName: 'Revenue', from: 10, to: 20, current: 13, status: 'off-track' },
+      { id: 'kr-4-2-3', metricName: 'Customer awareness of new brand identity measured through recognition surveys and social media sentiment analysis', from: 20, to: 80, current: 32, status: 'progressing' },
+    ],
+    actions: [
+      { id: 'act-4-2-1', text: 'Complete brand asset migration checklist', owner: 'Serge De Vos', dueDate: '2026-01-30', completed: true, completedAt: '2026-01-30T12:00:00Z', createdAt: '2026-01-08T08:00:00Z' },
+      { id: 'act-4-2-2', text: 'Brief customer-facing teams on new brand guidelines', owner: 'Serge De Vos', dueDate: '2026-03-05', completed: false, createdAt: '2026-01-14T09:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Serge De Vos',
@@ -237,16 +259,15 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-4-3',
-    objective: 'Build excitement', // Very short
+    objective: 'Build excitement',
     parentId: 'global-4',
     area: 'GBS Onshore',
     keyResults: [
-      { id: 'kr-4-3-1', metricName: 'Event attendance', from: 50, to: 90 }, // Short
-      { id: 'kr-4-3-2', metricName: 'Social engagement', from: 100, to: 500 }, // Short
+      { id: 'kr-4-3-1', metricName: 'Event attendance', from: 50, to: 90 },
+      { id: 'kr-4-3-2', metricName: 'Social engagement', from: 100, to: 500 },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Juan Ramon Triana',
-    status: 'off-track',
   },
 
   // ============================================
@@ -266,7 +287,7 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-5-1',
-    objective: 'Complete technology migration', // Short
+    objective: 'Complete technology migration',
     parentId: 'global-5',
     area: 'GCC India',
     keyResults: [
@@ -278,18 +299,24 @@ export const seedOKRs: OKR[] = [
       { id: 'act-5-1-2', text: 'Validate data integrity checksums for batch 1', owner: 'Thiago Marchi', dueDate: '2026-01-28', completed: true, completedAt: '2026-01-27T11:00:00Z', createdAt: '2026-01-10T09:00:00Z' },
       { id: 'act-5-1-3', text: 'Coordinate downtime window with infrastructure team', owner: 'Dylan Jetha', dueDate: '2026-02-20', completed: false, createdAt: '2026-01-12T14:00:00Z' },
     ],
+    challenges: 'Legacy system complexity is higher than estimated. Some integrations have undocumented dependencies that surface during migration testing.',
+    needs: 'Need additional vendor support for the legacy ERP decommissioning and extended access to staging environments for parallel testing.',
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Thiago Marchi',
     status: 'progressing',
   },
   {
     id: 'child-5-2',
-    objective: 'Ensure business continuity throughout the separation process with zero critical service interruptions for stakeholders and customers', // Very long
+    objective: 'Ensure business continuity throughout the separation process with zero critical service interruptions for stakeholders and customers',
     parentId: 'global-5',
     area: 'GCC Mexico',
     keyResults: [
-      { id: 'kr-5-2-1', metricName: 'Uptime', from: 10, to: 40 }, // Very short
-      { id: 'kr-5-2-2', metricName: 'Incidents', from: 10, to: 20 }, // Very short
+      { id: 'kr-5-2-1', metricName: 'Uptime', from: 10, to: 40, current: 28, status: 'progressing' },
+      { id: 'kr-5-2-2', metricName: 'Incidents', from: 10, to: 20, current: 15, status: 'off-track' },
+    ],
+    actions: [
+      { id: 'act-5-2-1', text: 'Document critical service dependencies and failover paths', owner: 'Eric Ruys', dueDate: '2026-01-20', completed: false, createdAt: '2026-01-05T09:00:00Z' },
+      { id: 'act-5-2-2', text: 'Run failover test for primary services', owner: 'Eric Ruys', dueDate: '2026-02-25', completed: false, createdAt: '2026-01-12T10:00:00Z' },
     ],
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Eric Ruys',
@@ -297,7 +324,7 @@ export const seedOKRs: OKR[] = [
   },
   {
     id: 'child-5-3',
-    objective: 'Finalize legal and compliance requirements for both entities including regulatory filings and contractual obligations', // Long
+    objective: 'Finalize legal and compliance requirements for both entities including regulatory filings and contractual obligations',
     parentId: 'global-5',
     area: 'GPL',
     keyResults: [
@@ -310,34 +337,39 @@ export const seedOKRs: OKR[] = [
       { id: 'act-5-3-2', text: 'Review vendor contracts for entity reassignment', owner: 'Juan Ramon Triana', dueDate: '2026-02-01', completed: false, createdAt: '2026-01-10T08:30:00Z' },
       { id: 'act-5-3-3', text: 'Conduct internal audit readiness assessment', owner: 'Amanda Jones', dueDate: '2026-02-28', completed: false, createdAt: '2026-01-15T09:00:00Z' },
     ],
+    challenges: 'Regulatory timeline for entity B filing is uncertain due to pending government review. This could delay the overall separation schedule.',
+    needs: 'Need additional legal counsel bandwidth to handle parallel filings across multiple jurisdictions.',
     createdAt: '2026-01-10T19:20:26.372Z',
     owner: 'Juan Ramon Triana',
     status: 'on-track',
   },
   {
     id: 'child-5-4',
-    objective: 'Train teams', // Very short
+    objective: 'Train teams',
     parentId: 'global-5',
     area: 'GBS Onshore',
     keyResults: [
-      { id: 'kr-5-4-1', metricName: 'Comprehensive training program completion rate for all affected employees across both new organizations', from: 10, to: 50 }, // Very long
-      { id: 'kr-5-4-2', metricName: 'Readiness assessment score for day one operations including process knowledge and system access verification', from: 13, to: 15 }, // Very long
-      { id: 'kr-5-4-3', metricName: 'Knowledge transfer', from: 11, to: 100 }, // Short
+      { id: 'kr-5-4-1', metricName: 'Comprehensive training program completion rate for all affected employees across both new organizations', from: 10, to: 50, current: 30, status: 'progressing' },
+      { id: 'kr-5-4-2', metricName: 'Readiness assessment score for day one operations including process knowledge and system access verification', from: 13, to: 15, current: 14, status: 'on-track' },
+      { id: 'kr-5-4-3', metricName: 'Knowledge transfer', from: 11, to: 100, current: 45, status: 'progressing' },
+    ],
+    actions: [
+      { id: 'act-5-4-1', text: 'Complete training curriculum design for both entities', owner: 'Amanda Jones', dueDate: '2026-02-05', completed: true, completedAt: '2026-02-05T16:00:00Z', createdAt: '2026-01-10T08:00:00Z' },
+      { id: 'act-5-4-2', text: 'Schedule first wave of team training sessions', owner: 'Amanda Jones', dueDate: '2026-03-01', completed: false, createdAt: '2026-01-15T09:00:00Z' },
     ],
     createdAt: '2026-01-11T18:38:15.684Z',
     owner: 'Amanda Jones',
-    status: 'off-track',
+    status: 'progressing',
   },
   {
     id: 'child-5-5',
-    objective: 'Migrate critical infrastructure', // Short
+    objective: 'Migrate critical infrastructure',
     parentId: 'global-5',
     area: 'Capabilities/Tech',
     keyResults: [
-      { id: 'kr-5-5-1', metricName: 'Infrastructure components successfully transitioned to new environment', from: 14, to: 20 }, // Medium
+      { id: 'kr-5-5-1', metricName: 'Infrastructure components successfully transitioned to new environment', from: 14, to: 20 },
     ],
     createdAt: '2026-01-12T13:18:49.497Z',
     owner: 'Dylan Jetha',
-    status: 'off-track',
   },
 ];

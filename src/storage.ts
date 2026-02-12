@@ -3,7 +3,7 @@ import { seedOKRs } from './seedData';
 
 const STORAGE_KEY = 'okrs';
 const VERSION_KEY = 'okrs_version';
-const DATA_VERSION = 3;
+const DATA_VERSION = 4;
 
 // Sort OKRs by display_id number (OKR-1, OKR-2, etc.)
 function sortByDisplayId(okrs: OKR[]): OKR[] {

@@ -270,8 +270,8 @@ body {
 }
 
 .sidebar-icon {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,8 +280,15 @@ body {
 
 .sidebar-icon img {
   display: block;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
+  opacity: 0.55;
+  transition: opacity 0.1s;
+}
+
+.sidebar-item:hover .sidebar-icon img,
+.sidebar-item.active .sidebar-icon img {
+  opacity: 1;
 }
 
 .sidebar-label {
