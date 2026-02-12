@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { OKR, OKRStatus, KeyResult, KeyResultStatus, Action } from '../types';
 
 type View = 'management' | 'tree' | 'dashboards' | 'users';
@@ -71,14 +71,16 @@ interface CircularProgressProps {
   color: string;
   size?: number;
   label?: string;
+  animate?: boolean;
 }
 
-function CircularProgress({ actualProgress, color, size = 80, label }: CircularProgressProps) {
+function CircularProgress({ actualProgress, color, size = 80, label, animate }: CircularProgressProps) {
   const isLarge = size >= 80;
   const strokeWidth = isLarge ? 8 : 3;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const actualOffset = circumference - (actualProgress / 100) * circumference;
+  const displayOffset = animate === false ? circumference : actualOffset;
   const center = size / 2;
 
   return (
@@ -87,10 +89,10 @@ function CircularProgress({ actualProgress, color, size = 80, label }: CircularP
       <circle
         cx={center} cy={center} r={radius}
         fill="none" stroke={color} strokeWidth={strokeWidth}
-        strokeDasharray={circumference} strokeDashoffset={actualOffset}
+        strokeDasharray={circumference} strokeDashoffset={displayOffset}
         strokeLinecap="round"
         transform={`rotate(-90 ${center} ${center})`}
-        style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+        style={{ transition: 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)' }}
       />
       {isLarge && label ? (
         <>
@@ -119,17 +121,20 @@ function CircularProgress({ actualProgress, color, size = 80, label }: CircularP
 
 
 // ─── Compact KR Bar ─────────────────────────────────────────────
-function CompactKRBar({ label, progress, color, title }: {
+function CompactKRBar({ label, progress, color, title, animate, delay }: {
   label: string;
   progress: number;
   color: string;
   title?: string;
+  animate?: boolean;
+  delay?: number;
 }) {
+  const displayWidth = animate === false ? 0 : progress;
   return (
     <div className="exec-kr-compact" title={title}>
       <span className="exec-kr-compact__label"><span className="tree-card-kr-icon">◉</span> {label}</span>
       <div className="exec-kr-compact__bar">
-        <div className="exec-kr-compact__bar-fill" style={{ width: `${progress}%`, background: color }} />
+        <div className="exec-kr-compact__bar-fill" style={{ width: `${displayWidth}%`, background: color, transitionDelay: delay ? `${delay}ms` : undefined }} />
       </div>
       <span className="exec-kr-compact__pct">{progress}%</span>
     </div>
@@ -211,6 +216,12 @@ function AreaOKRRow({ areaOkr, index, onActionClick }: { areaOkr: OKR; index: nu
 
 // ─── OKR Card ───────────────────────────────────────────────────
 function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: OKR; children: OKR[]; onClick?: () => void; onActionClick?: (globalOkrId: string, areaOkrId: string) => void }) {
+  const [animate, setAnimate] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setAnimate(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   const progress = calculateOKRProgress(globalOkr);
   const status: OKRStatus = globalOkr.status || 'off-track';
   const color = getStatusColor(status);
@@ -224,7 +235,7 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
       {/* Section A: OKR Overview */}
       <div className="exec-okr-card__overview">
         <div title={globalOkr.objective} style={{ cursor: 'default' }}>
-          <CircularProgress actualProgress={progress} color={color} size={120} />
+          <CircularProgress actualProgress={progress} color={color} size={120} animate={animate} />
         </div>
         <div className="exec-kr-list">
           {globalOkr.keyResults.length === 0 ? (
@@ -237,6 +248,8 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
                 progress={calculateKRProgress(kr)}
                 color={getKRColor(kr.status)}
                 title={kr.metricName}
+                animate={animate}
+                delay={index * 80}
               />
             ))
           )}
@@ -266,6 +279,12 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
 // ─── Main Component ─────────────────────────────────────────────
 export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: ExecutiveDashboardProps) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [animationKey, setAnimationKey] = useState(0);
+
+  useEffect(() => {
+    setAnimationKey(k => k + 1);
+  }, [activeFilter]);
+
   const globalOKRs = okrs.filter(okr => okr.displayId && !okr.parentId);
 
   const summaryCounts = { 'on-track': 0, progressing: 0, 'off-track': 0 };
@@ -348,7 +367,7 @@ Actions
       <div className="exec-okr-list">
         {filteredOKRs.map(okr => {
           const children = okrs.filter(o => o.parentId === okr.id);
-          return <OKRCard key={okr.id} globalOkr={okr} children={children} onClick={onOkrClick ? () => onOkrClick(okr.id) : undefined} onActionClick={onActionClick} />;
+          return <OKRCard key={`${okr.id}-${animationKey}`} globalOkr={okr} children={children} onClick={onOkrClick ? () => onOkrClick(okr.id) : undefined} onActionClick={onActionClick} />;
         })}
       </div>
 

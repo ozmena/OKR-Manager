@@ -3491,7 +3491,7 @@ body {
 .exec-kr-compact__bar-fill {
   height: 100%;
   border-radius: 3px;
-  transition: width 0.4s ease;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .exec-kr-compact__pct {
