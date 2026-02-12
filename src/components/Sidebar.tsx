@@ -1,8 +1,8 @@
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
-  currentView: 'home' | 'management' | 'tree' | 'dashboards' | 'users';
-  onViewChange: (view: 'home' | 'management' | 'tree' | 'dashboards' | 'users') => void;
+  currentView: 'management' | 'tree' | 'dashboards' | 'users';
+  onViewChange: (view: 'management' | 'tree' | 'dashboards' | 'users') => void;
 }
 
 export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: SidebarProps) {
@@ -10,7 +10,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
     <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
         {!isCollapsed && (
-          <button className="sidebar-title" onClick={() => onViewChange('home')}>
+          <button className="sidebar-title" onClick={() => onViewChange('dashboards')}>
             Vector<span className="sidebar-arrow">↗</span>
           </button>
         )}
@@ -21,12 +21,17 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
 
       <nav className="sidebar-nav">
         <button
-          className={`sidebar-item ${currentView === 'home' ? 'active' : ''}`}
-          onClick={() => onViewChange('home')}
-          title="Home"
+          className={`sidebar-item ${currentView === 'dashboards' ? 'active' : ''}`}
+          onClick={() => onViewChange('dashboards')}
+          title="Dashboards"
         >
-          <span className="sidebar-icon" style={{ fontSize: '22px' }}>⌂</span>
-          {!isCollapsed && <span className="sidebar-label">Home</span>}
+          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◫</span>
+          {!isCollapsed && (
+            <>
+              <span className="sidebar-label">Dashboard</span>
+              <span className="sidebar-tag sidebar-tag-new">New</span>
+            </>
+          )}
         </button>
         <button
           className={`sidebar-item ${currentView === 'management' ? 'active' : ''}`}
@@ -43,19 +48,6 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
         >
           <span className="sidebar-icon">△</span>
           {!isCollapsed && <span className="sidebar-label">OKR Map</span>}
-        </button>
-        <button
-          className={`sidebar-item ${currentView === 'dashboards' ? 'active' : ''}`}
-          onClick={() => onViewChange('dashboards')}
-          title="Dashboards"
-        >
-          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◫</span>
-          {!isCollapsed && (
-            <>
-              <span className="sidebar-label">Dashboards</span>
-              <span className="sidebar-tag sidebar-tag-new">New</span>
-            </>
-          )}
         </button>
         <button
           className={`sidebar-item ${currentView === 'users' ? 'active' : ''}`}

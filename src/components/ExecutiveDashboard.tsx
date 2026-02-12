@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { OKR, OKRStatus, KeyResult, KeyResultStatus, Action } from '../types';
 
-type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
+type View = 'management' | 'tree' | 'dashboards' | 'users';
 
 interface ExecutiveDashboardProps {
   okrs: OKR[];
@@ -116,22 +117,6 @@ function CircularProgress({ actualProgress, color, size = 80, label }: CircularP
   );
 }
 
-
-// ─── Summary Card ───────────────────────────────────────────────
-function SummaryCard({ count, label, bgColor, textColor, accentColor }: {
-  count: number;
-  label: string;
-  bgColor: string;
-  textColor: string;
-  accentColor: string;
-}) {
-  return (
-    <div className="exec-summary-card" style={{ background: bgColor }}>
-      <div className="exec-summary-card__count" style={{ color: accentColor }}>{count}</div>
-      <div className="exec-summary-card__label" style={{ color: textColor }}>{label}</div>
-    </div>
-  );
-}
 
 // ─── Compact KR Bar ─────────────────────────────────────────────
 function CompactKRBar({ label, progress, color, title }: {
@@ -280,6 +265,7 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
 
 // ─── Main Component ─────────────────────────────────────────────
 export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: ExecutiveDashboardProps) {
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const globalOKRs = okrs.filter(okr => okr.displayId && !okr.parentId);
 
   const summaryCounts = { 'on-track': 0, progressing: 0, 'off-track': 0 };
@@ -288,44 +274,85 @@ export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: Executiv
     summaryCounts[bucket]++;
   });
 
+  const filteredOKRs = (() => {
+    if (!activeFilter) return globalOKRs;
+    if (['on-track', 'progressing', 'off-track'].includes(activeFilter)) {
+      return globalOKRs.filter(okr => getSummaryBucket(okr.status || 'off-track') === activeFilter);
+    }
+    const actionType = activeFilter.replace('action-', '') as 'overdue' | 'completed' | 'open';
+    return globalOKRs.filter(globalOkr => {
+      const children = okrs.filter(o => o.parentId === globalOkr.id);
+      return children.some(child => {
+        const counts = getAreaActionCounts(child.actions || []);
+        return counts[actionType] > 0;
+      });
+    });
+  })();
+
+  const actionCounts = { overdue: 0, completed: 0, open: 0 };
+  okrs.filter(o => o.parentId).forEach(okr => {
+    const counts = getAreaActionCounts(okr.actions || []);
+    actionCounts.overdue += counts.overdue;
+    actionCounts.completed += counts.completed;
+    actionCounts.open += counts.open;
+  });
+
   return (
     <div className="exec-dashboard">
       <header className="exec-dashboard-header">
         <h1>Dashboard</h1>
       </header>
 
-      <div className="exec-summary-row">
-        <SummaryCard
-          count={summaryCounts['on-track']}
-          label="ON TRACK"
-          bgColor="var(--status-green-bg)"
-          textColor="var(--status-green-text)"
-          accentColor="var(--status-green)"
-        />
-        <SummaryCard
-          count={summaryCounts.progressing}
-          label="PROGRESSING"
-          bgColor="var(--status-yellow-bg)"
-          textColor="var(--status-yellow-text)"
-          accentColor="var(--status-yellow)"
-        />
-        <SummaryCard
-          count={summaryCounts['off-track']}
-          label="OFF TRACK"
-          bgColor="var(--status-red-bg)"
-          textColor="var(--status-red-text)"
-          accentColor="var(--status-red)"
-        />
+      <div className="exec-summary-header">
+        <div className="exec-summary-section">
+          <div className="exec-summary-section__title">
+            <span className="tree-card-icon tree-card-icon-parent">◎</span> OKRs
+          </div>
+          <div className="exec-summary-section__cards">
+            <div className={`exec-metric-card exec-metric-card--green${activeFilter === 'on-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'on-track' ? null : 'on-track')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#2CBF96" strokeWidth="2"/><path d="M6 10L9 13L14 7" stroke="#2CBF96" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> On track</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-ontrack-count)' }}>{summaryCounts['on-track']}</div>
+            </div>
+            <div className={`exec-metric-card exec-metric-card--yellow${activeFilter === 'progressing' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'progressing' ? null : 'progressing')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#D08121" strokeWidth="2"/><path d="M6 12L9 9L11 11L14 7" stroke="#D08121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Progressing</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-progressing-count)' }}>{summaryCounts.progressing}</div>
+            </div>
+            <div className={`exec-metric-card exec-metric-card--red${activeFilter === 'off-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'off-track' ? null : 'off-track')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#DB536D" strokeWidth="2"/><path d="M7 7L13 13M13 7L7 13" stroke="#DB536D" strokeWidth="2" strokeLinecap="round"/></svg> Off track</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-offtrack-count)' }}>{summaryCounts['off-track']}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="exec-summary-section">
+          <div className="exec-summary-section__title">
+            <span className="tree-card-icon tree-card-icon-child">◎</span> Actions
+          </div>
+          <div className="exec-summary-section__cards">
+            <div className={`exec-metric-card exec-metric-card--overdue${activeFilter === 'action-overdue' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-overdue' ? null : 'action-overdue')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#DB536D" strokeWidth="2"/><path d="M10 5V10" stroke="#DB536D" strokeWidth="2" strokeLinecap="round"/><circle cx="10" cy="14" r="1" fill="#DB536D"/></svg> Overdue</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-overdue-count)' }}>{actionCounts.overdue}</div>
+            </div>
+            <div className={`exec-metric-card exec-metric-card--completed${activeFilter === 'action-completed' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-completed' ? null : 'action-completed')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#2CBF96" strokeWidth="2"/><path d="M6 10L9 13L14 7" stroke="#2CBF96" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Completed</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-completed-count)' }}>{actionCounts.completed}</div>
+            </div>
+            <div className={`exec-metric-card exec-metric-card--open${activeFilter === 'action-open' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-open' ? null : 'action-open')} style={{ cursor: 'pointer' }}>
+              <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="black" strokeWidth="2"/><circle cx="10" cy="10" r="3" stroke="black" strokeWidth="2"/></svg> Open</div>
+              <div className="exec-metric-card__count" style={{ color: 'var(--exec-open-count)' }}>{actionCounts.open}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="exec-okr-list">
-        {globalOKRs.map(okr => {
+        {filteredOKRs.map(okr => {
           const children = okrs.filter(o => o.parentId === okr.id);
           return <OKRCard key={okr.id} globalOkr={okr} children={children} onClick={onOkrClick ? () => onOkrClick(okr.id) : undefined} onActionClick={onActionClick} />;
         })}
       </div>
 
-      {globalOKRs.length === 0 && (
+      {filteredOKRs.length === 0 && (
         <div className="exec-empty-state">
           <p>No Global OKRs found. Create OKRs in the OKR List to see them here.</p>
         </div>

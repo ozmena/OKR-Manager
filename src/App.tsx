@@ -16,12 +16,11 @@ import { OKRForm } from './components/OKRForm';
 import { OKRTreeView } from './components/OKRTreeView';
 import { HelpButton } from './components/HelpButton';
 import { HelpModal } from './components/HelpModal';
-import { HomePage } from './components/HomePage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
 import { captureEvent, capturePageView } from './lib/posthog';
 import './App.css';
 
-type View = 'home' | 'management' | 'tree' | 'dashboards' | 'users';
+type View = 'management' | 'tree' | 'dashboards' | 'users';
 type TreeViewMode = 'tracking' | 'setting';
 
 function App() {
@@ -29,7 +28,7 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [editingOKR, setEditingOKR] = useState<OKR | null>(null);
   const [parentIdForNewOKR, setParentIdForNewOKR] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<View>('home');
+  const [currentView, setCurrentView] = useState<View>('dashboards');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
@@ -211,11 +210,6 @@ function App() {
           <p>Loading OKRs...</p>
         </div>
       );
-    }
-
-    // Home page has its own full-page layout
-    if (currentView === 'home') {
-      return <HomePage okrs={okrs} onNavigate={setCurrentView} />;
     }
 
     // Executive Dashboard

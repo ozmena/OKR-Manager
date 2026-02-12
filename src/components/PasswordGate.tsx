@@ -69,9 +69,10 @@ export function PasswordGate({ children }: PasswordGateProps) {
         </h1>
 
         <p className="password-gate-description">
-          Create, cascade, and track objectives so every team
-          moves in the same direction.
+          Dream. Align. Achieve.
         </p>
+
+        <p className="password-gate-subtitle">An OKR platform to align every team.</p>
 
         <div className="password-gate-card">
           <h2 className="password-gate-card-label">Demo Access</h2>

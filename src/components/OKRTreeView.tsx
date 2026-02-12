@@ -68,6 +68,7 @@ interface TreeCardProps {
   onEditChange: (value: string) => void;
   onSaveEdit: () => void;
   onCancelEdit: () => void;
+  onGetAIFeedback?: () => void;
 }
 
 // Key Result Card component for child OKRs
@@ -192,7 +193,7 @@ function KeyResultCard({ kr, okrId, functionName, mode, editingField, editValue,
   );
 }
 
-function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCheckIn, mode, editingField, editValue, onStartEdit, onEditChange, onSaveEdit, onCancelEdit }: TreeCardProps) {
+function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCheckIn, mode, editingField, editValue, onStartEdit, onEditChange, onSaveEdit, onCancelEdit, onGetAIFeedback }: TreeCardProps) {
   const allChildren = allOkrs.filter(o => o.parentId === okr.id);
   // Filter children by selected area and owner
   const children = allChildren.filter(child => {
@@ -345,6 +346,15 @@ function TreeCard({ okr, allOkrs, functionMap, selectedArea, selectedOwner, onCh
               <span className={`kr-card-status kr-card-status-${getStatusDisplay(okr.status as KeyResultStatus).color}`}>
                 ○ {getStatusDisplay(okr.status as KeyResultStatus).label}
               </span>
+            )}
+            {mode === 'setting' && (
+              <button
+                className="tree-card-ai-btn"
+                title="Get AI feedback on this OKR"
+                onClick={(e) => { e.stopPropagation(); onGetAIFeedback?.(); }}
+              >
+                ✨
+              </button>
             )}
           </div>
         </div>
@@ -826,15 +836,6 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode, initialSelectedOkrId, onI
                   </select>
                 </div>
               )}
-              {mode === 'setting' && (
-                <button
-                  className="ai-feedback-btn"
-                  onClick={handleGetTreeAIFeedback}
-                >
-                  <span className="ai-feedback-btn-icon">✨</span>
-                  Get Feedback
-                </button>
-              )}
             </div>
           </div>
           <div className="tree-container-wrapper">
@@ -865,6 +866,7 @@ export function OKRTreeView({ okrs, onUpdateOKR, mode, initialSelectedOkrId, onI
                     onEditChange={handleEditChange}
                     onSaveEdit={handleSaveEdit}
                     onCancelEdit={handleCancelEdit}
+                    onGetAIFeedback={handleGetTreeAIFeedback}
                   />
                 )}
               </div>
