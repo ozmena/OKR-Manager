@@ -74,7 +74,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
           Dream. Align. Achieve.
         </p>
 
-        <p className="password-gate-subtitle">An OKR platform for enterprises.</p>
+        <p className="password-gate-subtitle">An OKR platform for enterprise leaders.</p>
 
         <div className="password-gate-card">
           <h2 className="password-gate-card-label">Demo Access</h2>
