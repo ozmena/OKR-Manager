@@ -91,10 +91,28 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <section className="help-guides">
             <h3>Navigating Vector</h3>
 
-            <Accordion title="Home">
+            <Accordion title="Dashboard">
               <p className="help-description">
-                Your dashboard with quick statistics: Global OKRs count, total Key Results, and On Track percentage.
+                Your default landing page with an executive overview of all OKRs and actions.
               </p>
+              <ul className="help-list">
+                <li>
+                  <strong>Summary Cards</strong>
+                  <p>See OKR counts by status (On Track, Progressing, Off Track) and action counts (Overdue, Completed, Open) at a glance.</p>
+                </li>
+                <li>
+                  <strong>Filter by Status</strong>
+                  <p>Click any status or action card to filter the OKR list below. Click again to deselect.</p>
+                </li>
+                <li>
+                  <strong>OKR Cards</strong>
+                  <p>Each Global OKR shows circular progress, key result bars, and area OKR breakdowns with action badges.</p>
+                </li>
+                <li>
+                  <strong>Navigate to OKR Map</strong>
+                  <p>Click an OKR title to jump to OKR Map in Tracking mode. Click an action badge to open the check-in with actions visible.</p>
+                </li>
+              </ul>
             </Accordion>
 
             <Accordion title="OKR List">
@@ -145,11 +163,6 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               </ul>
             </Accordion>
 
-            <Accordion title="Dashboards & Users">
-              <p className="help-description">
-                Coming soon! We are cooking up something great for you.
-              </p>
-            </Accordion>
           </section>
 
           {/* Check-in Feature */}
@@ -169,6 +182,14 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 <li>
                   <strong>What do you need to achieve your OKRs?</strong>
                   <p>Record decisions, support, or resources needed from leadership.</p>
+                </li>
+                <li>
+                  <strong>OKR Status</strong>
+                  <p>Set the overall OKR status: On Track, Progressing, or Off Track.</p>
+                </li>
+                <li>
+                  <strong>Actions</strong>
+                  <p>Create and manage action items with text, owner, due date, and completion tracking.</p>
                 </li>
                 <li>
                   <strong>Comments</strong>

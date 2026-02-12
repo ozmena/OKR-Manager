@@ -25,7 +25,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           onClick={() => onViewChange('dashboards')}
           title="Dashboards"
         >
-          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◫</span>
+          <span className="sidebar-icon"><img src="/icons/icon-dashboard.png" alt="" width="32" height="32" /></span>
           {!isCollapsed && (
             <>
               <span className="sidebar-label">Dashboard</span>
@@ -38,7 +38,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           onClick={() => onViewChange('management')}
           title="OKR List"
         >
-          <span className="sidebar-icon">◎</span>
+          <span className="sidebar-icon"><img src="/icons/icon-list.png" alt="" width="32" height="32" /></span>
           {!isCollapsed && <span className="sidebar-label">OKR List</span>}
         </button>
         <button
@@ -46,7 +46,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           onClick={() => onViewChange('tree')}
           title="OKR Map"
         >
-          <span className="sidebar-icon">△</span>
+          <span className="sidebar-icon"><img src="/icons/icon-map.png" alt="" width="32" height="32" /></span>
           {!isCollapsed && <span className="sidebar-label">OKR Map</span>}
         </button>
         <button
@@ -54,7 +54,7 @@ export function Sidebar({ isCollapsed, onToggle, currentView, onViewChange }: Si
           onClick={() => onViewChange('users')}
           title="Users"
         >
-          <span className="sidebar-icon" style={{ fontSize: '20px' }}>◇</span>
+          <span className="sidebar-icon"><img src="/icons/icon-user.png" alt="" width="32" height="32" /></span>
           {!isCollapsed && (
             <>
               <span className="sidebar-label">Users</span>

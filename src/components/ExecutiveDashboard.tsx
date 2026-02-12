@@ -306,7 +306,7 @@ export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: Executiv
       <div className="exec-summary-header">
         <div className="exec-summary-section">
           <div className="exec-summary-section__title">
-            <span className="tree-card-icon tree-card-icon-parent">◎</span> OKRs
+OKRs
           </div>
           <div className="exec-summary-section__cards">
             <div className={`exec-metric-card exec-metric-card--green${activeFilter === 'on-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'on-track' ? null : 'on-track')} style={{ cursor: 'pointer' }}>
@@ -326,7 +326,7 @@ export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: Executiv
 
         <div className="exec-summary-section">
           <div className="exec-summary-section__title">
-            <span className="tree-card-icon tree-card-icon-child">◎</span> Actions
+Actions
           </div>
           <div className="exec-summary-section__cards">
             <div className={`exec-metric-card exec-metric-card--overdue${activeFilter === 'action-overdue' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-overdue' ? null : 'action-overdue')} style={{ cursor: 'pointer' }}>

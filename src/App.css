@@ -270,10 +270,18 @@ body {
 }
 
 .sidebar-icon {
-  font-size: 18px;
-  width: 24px;
-  text-align: center;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+.sidebar-icon img {
+  display: block;
+  width: 32px;
+  height: 32px;
 }
 
 .sidebar-label {

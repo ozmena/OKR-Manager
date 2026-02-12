@@ -13,6 +13,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
     // Check if already authenticated in this session
@@ -61,6 +62,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
           <span className="password-gate-logo-text">Vector</span>
           <span className="password-gate-logo-arrow">↗</span>
         </div>
+        <button className="password-gate-about-btn" onClick={() => setShowAbout(true)}>About</button>
       </div>
 
       <div className="password-gate-hero">
@@ -72,7 +74,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
           Dream. Align. Achieve.
         </p>
 
-        <p className="password-gate-subtitle">An OKR platform to align every team.</p>
+        <p className="password-gate-subtitle">An OKR platform for enterprises.</p>
 
         <div className="password-gate-card">
           <h2 className="password-gate-card-label">Demo Access</h2>
@@ -94,6 +96,27 @@ export function PasswordGate({ children }: PasswordGateProps) {
       <footer className="password-gate-footer">
         Vector V0.8 by Open Change B.V.
       </footer>
+
+      {showAbout && (
+        <div className="password-gate-modal-overlay" onClick={() => setShowAbout(false)}>
+          <div className="password-gate-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="password-gate-modal-brand">
+              <span className="password-gate-modal-logo">Vector</span>
+              <span className="password-gate-modal-logo-arrow">↗</span>
+            </div>
+            <p className="password-gate-modal-tagline">Dream. Align. Achieve.</p>
+            <div className="password-gate-modal-divider" />
+            <p className="password-gate-modal-text">
+              OKRs are simple and powerful, but somehow, most tools make them complicated. We believe it should be the other way around. Vector makes OKRs easy to set, fun to track, and clear enough to act on.
+            </p>
+            <p className="password-gate-modal-text">
+              When the energy of an entire organization flows toward the same goals, that's when real magic happens.
+            </p>
+            <p className="password-gate-modal-signoff">Designed with love by Open Change in the Netherlands 🇳🇱</p>
+            <button className="password-gate-modal-close-btn" onClick={() => setShowAbout(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
