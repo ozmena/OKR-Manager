@@ -20,6 +20,14 @@ VALUES
   ('00000000-0000-4000-b001-000000000002', '00000000-0000-4000-a000-000000000001', 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', 13, 24, 17, 'progressing', 1),
   ('00000000-0000-4000-b001-000000000003', '00000000-0000-4000-a000-000000000001', 'Processes automated', 24, 35, 26, 'off-track', 2);
 
+-- Actions for Global OKR 1
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c001-000000000001', '00000000-0000-4000-a000-000000000001', 'Review Q1 market share targets with regional leads', 'Hardik Bhatt', '2026-01-20', TRUE, '2026-01-20T16:00:00Z', '2026-01-10T08:00:00Z'),
+  ('00000000-0000-4000-c001-000000000002', '00000000-0000-4000-a000-000000000001', 'Align automation roadmap with IT and Operations', 'Hardik Bhatt', '2026-02-01', FALSE, NULL, '2026-01-12T09:00:00Z'),
+  ('00000000-0000-4000-c001-000000000003', '00000000-0000-4000-a000-000000000001', 'Present innovation pipeline to executive committee', 'Elena Schoeman', '2026-03-15', FALSE, NULL, '2026-01-15T10:00:00Z'),
+  ('00000000-0000-4000-c001-000000000004', '00000000-0000-4000-a000-000000000001', 'Conduct competitive landscape analysis for top 3 markets', 'Deepa Abi', '2026-03-30', FALSE, NULL, '2026-01-18T11:00:00Z');
+
 -- Child OKRs for Global 1
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
 VALUES
@@ -57,6 +65,13 @@ INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_
 VALUES
   ('00000000-0000-4000-b002-000000000001', '00000000-0000-4000-a000-000000000002', 'Top talent', 10, 30, 24, 'on-track', 0),
   ('00000000-0000-4000-b002-000000000002', '00000000-0000-4000-a000-000000000002', 'Adherence to agreed Finance WoW, measured through cycle reviews and stakeholder feedback', 45, 65, 52, 'progressing', 1);
+
+-- Actions for Global OKR 2
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c002-000000000001', '00000000-0000-4000-a000-000000000002', 'Define talent pipeline criteria with HR leadership', 'Mariana Avila', '2026-01-25', TRUE, '2026-01-25T14:00:00Z', '2026-01-08T09:00:00Z'),
+  ('00000000-0000-4000-c002-000000000002', '00000000-0000-4000-a000-000000000002', 'Launch GBS-wide skills assessment survey', 'Mariana Avila', '2026-01-31', FALSE, NULL, '2026-01-10T10:00:00Z'),
+  ('00000000-0000-4000-c002-000000000003', '00000000-0000-4000-a000-000000000002', 'Set up quarterly talent review board with business partners', 'Amanda Jones', '2026-03-20', FALSE, NULL, '2026-01-14T11:00:00Z');
 
 -- Child OKRs for Global 2
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
@@ -101,6 +116,13 @@ INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_
 VALUES
   ('00000000-0000-4000-b003-000000000001', '00000000-0000-4000-a000-000000000003', 'Stakeholder NPS', 40, 70, 62, 'on-track', 0),
   ('00000000-0000-4000-b003-000000000002', '00000000-0000-4000-a000-000000000003', 'All critical payroll controls documented, tested, and signed off', 60, 85, 68, 'off-track', 1);
+
+-- Actions for Global OKR 3
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c003-000000000001', '00000000-0000-4000-a000-000000000003', 'Kick off NPS baseline measurement across all regions', 'Jack Shu', '2026-02-05', TRUE, '2026-02-05T15:00:00Z', '2026-01-12T08:00:00Z'),
+  ('00000000-0000-4000-c003-000000000002', '00000000-0000-4000-a000-000000000003', 'Establish payroll controls testing cadence', 'Jack Shu', '2026-02-10', FALSE, NULL, '2026-01-14T09:00:00Z'),
+  ('00000000-0000-4000-c003-000000000003', '00000000-0000-4000-a000-000000000003', 'Draft stakeholder communication plan for Q2', 'Alex Komrakov', '2026-04-01', FALSE, NULL, '2026-01-18T10:00:00Z');
 
 -- Child OKRs for Global 3
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
@@ -152,6 +174,12 @@ VALUES
   ('00000000-0000-4000-b004-000000000001', '00000000-0000-4000-a000-000000000004', 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', 20, 60, 32, 'progressing', 0),
   ('00000000-0000-4000-b004-000000000002', '00000000-0000-4000-a000-000000000004', 'Media coverage', 8, 28, 14, 'off-track', 1);
 
+-- Actions for Global OKR 4
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c004-000000000001', '00000000-0000-4000-a000-000000000004', 'Finalize brand narrative and key messaging framework', 'Evan Sams', '2026-01-28', FALSE, NULL, '2026-01-08T09:00:00Z'),
+  ('00000000-0000-4000-c004-000000000002', '00000000-0000-4000-a000-000000000004', 'Brief PR agency on launch timeline and milestones', 'Evan Sams', '2026-03-10', FALSE, NULL, '2026-01-12T10:00:00Z');
+
 -- Child OKRs for Global 4
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
 VALUES
@@ -195,6 +223,13 @@ INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_
 VALUES
   ('00000000-0000-4000-b005-000000000001', '00000000-0000-4000-a000-000000000005', 'Separation milestones', 0, 100, 45, 'progressing', 0),
   ('00000000-0000-4000-b005-000000000002', '00000000-0000-4000-a000-000000000005', 'Supply Chain Governance Model (decision rights, RACI, forums, cadence) formally approved and communicated for SC functions', 10, 40, 28, 'on-track', 1);
+
+-- Actions for Global OKR 5
+INSERT INTO actions (id, okr_id, text, owner, due_date, completed, completed_at, created_at)
+VALUES
+  ('00000000-0000-4000-c005-000000000001', '00000000-0000-4000-a000-000000000005', 'Complete separation readiness checklist for all workstreams', 'Morne Fouche', '2026-02-01', TRUE, '2026-02-01T17:00:00Z', '2026-01-10T08:00:00Z'),
+  ('00000000-0000-4000-c005-000000000002', '00000000-0000-4000-a000-000000000005', 'Secure sign-off on Day 1 operating model', 'Morne Fouche', '2026-02-08', FALSE, NULL, '2026-01-12T09:00:00Z'),
+  ('00000000-0000-4000-c005-000000000003', '00000000-0000-4000-a000-000000000005', 'Conduct end-to-end separation dry run', 'Thiago Marchi', '2026-03-25', FALSE, NULL, '2026-01-15T10:00:00Z');
 
 -- Child OKRs for Global 5
 INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs)
@@ -250,7 +285,165 @@ VALUES
   ('00000000-0000-4000-c054-000000000001', '00000000-0000-4000-a005-000000000004', 'Complete training curriculum design for both entities', 'Amanda Jones', '2026-02-05', TRUE, '2026-02-05T16:00:00Z', '2026-01-10T08:00:00Z'),
   ('00000000-0000-4000-c054-000000000002', '00000000-0000-4000-a005-000000000004', 'Schedule first wave of team training sessions', 'Amanda Jones', '2026-03-01', FALSE, NULL, '2026-01-15T09:00:00Z');
 
+-- ============================================
+-- Quality Checklist Data
+-- ============================================
+-- child-1-1 (GCC India, OKR-1): 8/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a001-000000000001', 'direction', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'cascading', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'understanding', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'measurability', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'prioritization', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'ownership', TRUE),
+  ('00000000-0000-4000-a001-000000000001', 'strategic-thinking', TRUE);
+
+-- child-1-2 (GCC Mexico, OKR-1): 7/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a001-000000000002', 'direction', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'cascading', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'understanding', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'measurability', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'prioritization', FALSE),
+  ('00000000-0000-4000-a001-000000000002', 'ownership', TRUE),
+  ('00000000-0000-4000-a001-000000000002', 'strategic-thinking', TRUE);
+
+-- child-1-3 (GPL, OKR-1): 5/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a001-000000000003', 'direction', TRUE),
+  ('00000000-0000-4000-a001-000000000003', 'stakeholder-alignment', FALSE),
+  ('00000000-0000-4000-a001-000000000003', 'cascading', TRUE),
+  ('00000000-0000-4000-a001-000000000003', 'understanding', FALSE),
+  ('00000000-0000-4000-a001-000000000003', 'measurability', TRUE),
+  ('00000000-0000-4000-a001-000000000003', 'prioritization', FALSE),
+  ('00000000-0000-4000-a001-000000000003', 'ownership', TRUE),
+  ('00000000-0000-4000-a001-000000000003', 'strategic-thinking', TRUE);
+
+-- child-2-1 (GCC India, OKR-2): 3/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a002-000000000001', 'direction', TRUE),
+  ('00000000-0000-4000-a002-000000000001', 'stakeholder-alignment', FALSE),
+  ('00000000-0000-4000-a002-000000000001', 'cascading', FALSE),
+  ('00000000-0000-4000-a002-000000000001', 'understanding', FALSE),
+  ('00000000-0000-4000-a002-000000000001', 'measurability', TRUE),
+  ('00000000-0000-4000-a002-000000000001', 'prioritization', FALSE),
+  ('00000000-0000-4000-a002-000000000001', 'ownership', TRUE),
+  ('00000000-0000-4000-a002-000000000001', 'strategic-thinking', FALSE);
+
+-- child-2-2 (GCC Mexico, OKR-2): 7/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a002-000000000002', 'direction', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'cascading', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'understanding', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'measurability', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'prioritization', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'ownership', TRUE),
+  ('00000000-0000-4000-a002-000000000002', 'strategic-thinking', FALSE);
+
+-- child-2-3 (GBS Onshore, OKR-2): 8/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a002-000000000003', 'direction', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'cascading', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'understanding', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'measurability', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'prioritization', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'ownership', TRUE),
+  ('00000000-0000-4000-a002-000000000003', 'strategic-thinking', TRUE);
+
+-- child-3-2 (GCC Mexico, OKR-3): 6/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a003-000000000002', 'direction', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'cascading', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'understanding', FALSE),
+  ('00000000-0000-4000-a003-000000000002', 'measurability', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'prioritization', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'ownership', TRUE),
+  ('00000000-0000-4000-a003-000000000002', 'strategic-thinking', FALSE);
+
+-- child-3-3 (Capabilities/Tech, OKR-3): 4/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a003-000000000003', 'direction', TRUE),
+  ('00000000-0000-4000-a003-000000000003', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a003-000000000003', 'cascading', FALSE),
+  ('00000000-0000-4000-a003-000000000003', 'understanding', FALSE),
+  ('00000000-0000-4000-a003-000000000003', 'measurability', TRUE),
+  ('00000000-0000-4000-a003-000000000003', 'prioritization', FALSE),
+  ('00000000-0000-4000-a003-000000000003', 'ownership', TRUE),
+  ('00000000-0000-4000-a003-000000000003', 'strategic-thinking', FALSE);
+
+-- child-4-1 (GCC India, OKR-4): 2/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a004-000000000001', 'direction', TRUE),
+  ('00000000-0000-4000-a004-000000000001', 'stakeholder-alignment', FALSE),
+  ('00000000-0000-4000-a004-000000000001', 'cascading', FALSE),
+  ('00000000-0000-4000-a004-000000000001', 'understanding', FALSE),
+  ('00000000-0000-4000-a004-000000000001', 'measurability', TRUE),
+  ('00000000-0000-4000-a004-000000000001', 'prioritization', FALSE),
+  ('00000000-0000-4000-a004-000000000001', 'ownership', FALSE),
+  ('00000000-0000-4000-a004-000000000001', 'strategic-thinking', FALSE);
+
+-- child-4-2 (GCC Mexico, OKR-4): 5/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a004-000000000002', 'direction', TRUE),
+  ('00000000-0000-4000-a004-000000000002', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a004-000000000002', 'cascading', TRUE),
+  ('00000000-0000-4000-a004-000000000002', 'understanding', FALSE),
+  ('00000000-0000-4000-a004-000000000002', 'measurability', TRUE),
+  ('00000000-0000-4000-a004-000000000002', 'prioritization', FALSE),
+  ('00000000-0000-4000-a004-000000000002', 'ownership', TRUE),
+  ('00000000-0000-4000-a004-000000000002', 'strategic-thinking', FALSE);
+
+-- child-5-1 (GCC India, OKR-5): 7/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a005-000000000001', 'direction', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'cascading', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'understanding', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'measurability', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'prioritization', TRUE),
+  ('00000000-0000-4000-a005-000000000001', 'ownership', FALSE),
+  ('00000000-0000-4000-a005-000000000001', 'strategic-thinking', TRUE);
+
+-- child-5-2 (GCC Mexico, OKR-5): 3/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a005-000000000002', 'direction', TRUE),
+  ('00000000-0000-4000-a005-000000000002', 'stakeholder-alignment', FALSE),
+  ('00000000-0000-4000-a005-000000000002', 'cascading', TRUE),
+  ('00000000-0000-4000-a005-000000000002', 'understanding', FALSE),
+  ('00000000-0000-4000-a005-000000000002', 'measurability', FALSE),
+  ('00000000-0000-4000-a005-000000000002', 'prioritization', FALSE),
+  ('00000000-0000-4000-a005-000000000002', 'ownership', TRUE),
+  ('00000000-0000-4000-a005-000000000002', 'strategic-thinking', FALSE);
+
+-- child-5-3 (GPL, OKR-5): 8/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a005-000000000003', 'direction', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'cascading', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'understanding', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'measurability', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'prioritization', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'ownership', TRUE),
+  ('00000000-0000-4000-a005-000000000003', 'strategic-thinking', TRUE);
+
+-- child-5-4 (GBS Onshore, OKR-5): 6/8
+INSERT INTO quality_checklist (okr_id, item_id, checked) VALUES
+  ('00000000-0000-4000-a005-000000000004', 'direction', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'stakeholder-alignment', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'cascading', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'understanding', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'measurability', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'prioritization', FALSE),
+  ('00000000-0000-4000-a005-000000000004', 'ownership', TRUE),
+  ('00000000-0000-4000-a005-000000000004', 'strategic-thinking', FALSE);
+
 -- Verify the migration
 SELECT 'OKRs inserted: ' || COUNT(*) FROM okrs;
 SELECT 'Key Results inserted: ' || COUNT(*) FROM key_results;
 SELECT 'Actions inserted: ' || COUNT(*) FROM actions;
+SELECT 'Quality checklist items inserted: ' || COUNT(*) FROM quality_checklist;

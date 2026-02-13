@@ -162,11 +162,11 @@ export function OKRForm({ onSubmit, onCancel, initialOKR, parentId, parentOKR }:
           </label>
           <button
             type="button"
-            className="ai-feedback-btn"
+            className="tree-card-ai-btn tree-card-ai-btn--purple"
+            title="Get AI feedback on this OKR"
             onClick={handleGetAIFeedback}
           >
-            <span className="ai-feedback-btn-icon">✨</span>
-            Get Feedback
+            ✨
           </button>
         </div>
         <textarea

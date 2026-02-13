@@ -63,12 +63,17 @@ export async function getOKRsFromSupabase(): Promise<OKR[]> {
     )
   );
 
-  // Sort by display_id number (OKR-1, OKR-2, etc.) for global OKRs
+  // Sort: global OKRs by displayId number, children by createdAt
   return okrs.sort((a, b) => {
-    // Global OKRs (with displayId) should be sorted by their number
-    const aNum = a.displayId ? parseInt(a.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
-    const bNum = b.displayId ? parseInt(b.displayId.replace(/\D/g, ''), 10) || 0 : Infinity;
-    return aNum - bNum;
+    if (a.displayId && b.displayId) {
+      const aNum = parseInt(a.displayId.replace(/\D/g, ''), 10) || 0;
+      const bNum = parseInt(b.displayId.replace(/\D/g, ''), 10) || 0;
+      return aNum - bNum;
+    }
+    if (a.displayId) return -1;
+    if (b.displayId) return 1;
+    const timeDiff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    return timeDiff !== 0 ? timeDiff : a.id.localeCompare(b.id);
   });
 }
 

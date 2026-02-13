@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import './PasswordGate.css';
 
 interface PasswordGateProps {
@@ -8,12 +9,21 @@ interface PasswordGateProps {
 const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD;
 const SESSION_KEY = 'okr_authenticated';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function PasswordGate({ children }: PasswordGateProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showAbout, setShowAbout] = useState(false);
+
+  // Waitlist sign-up state
+  const [showSignup, setShowSignup] = useState(false);
+  const [email, setEmail] = useState('');
+  const [signupError, setSignupError] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     // Check if already authenticated in this session
@@ -38,6 +48,42 @@ export function PasswordGate({ children }: PasswordGateProps) {
     } else {
       setError('Incorrect password');
       setPassword('');
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSignupError('');
+
+    const trimmed = email.trim().toLowerCase();
+    if (!EMAIL_REGEX.test(trimmed)) {
+      setSignupError('Please enter a valid email address');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      if (!supabase) {
+        setSignupError('Service temporarily unavailable. Please try again later.');
+        return;
+      }
+      const { error: insertError } = await supabase
+        .from('waitlist')
+        .insert({ email: trimmed });
+
+      if (insertError) {
+        if (insertError.code === '23505') {
+          setSignupError('This email is already on the waitlist');
+        } else {
+          setSignupError('Something went wrong. Please try again.');
+        }
+        return;
+      }
+      setSignupSuccess(true);
+    } catch {
+      setSignupError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -76,21 +122,63 @@ export function PasswordGate({ children }: PasswordGateProps) {
 
         <p className="password-gate-subtitle">An OKR platform for enterprise leaders.</p>
 
-        <div className="password-gate-card">
-          <h2 className="password-gate-card-label">Demo Access</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your access code"
-              autoFocus
-              className={error ? 'error' : ''}
-            />
-            {error && <p className="password-gate-error">{error}</p>}
-            <button type="submit">Continue</button>
-          </form>
-        </div>
+        {!showSignup ? (
+          <>
+            <div className="password-gate-card">
+              <h2 className="password-gate-card-label">Demo Access</h2>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your access code"
+                  autoFocus
+                  className={error ? 'error' : ''}
+                />
+                {error && <p className="password-gate-error">{error}</p>}
+                <button type="submit">Continue</button>
+              </form>
+            </div>
+            <button
+              className="password-gate-toggle-link"
+              onClick={() => { setShowSignup(true); setSignupError(''); setSignupSuccess(false); }}
+            >
+              No access code? Sign up to receive one
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="password-gate-card">
+              <h2 className="password-gate-card-label">Request Access</h2>
+              {signupSuccess ? (
+                <p className="password-gate-success">
+                  You're on the waitlist! We'll send you an access code soon.
+                </p>
+              ) : (
+                <form onSubmit={handleSignup}>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your business email"
+                    autoFocus
+                    className={signupError ? 'error' : ''}
+                  />
+                  {signupError && <p className="password-gate-error">{signupError}</p>}
+                  <button type="submit" disabled={submitting}>
+                    {submitting ? 'Signing up...' : 'Sign Up'}
+                  </button>
+                </form>
+              )}
+            </div>
+            <button
+              className="password-gate-toggle-link"
+              onClick={() => { setShowSignup(false); setError(''); }}
+            >
+              Already have a code? Enter it here
+            </button>
+          </>
+        )}
       </div>
 
       <footer className="password-gate-footer">

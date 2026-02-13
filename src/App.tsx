@@ -23,22 +23,66 @@ import './App.css';
 type View = 'management' | 'tree' | 'dashboards' | 'users';
 type TreeViewMode = 'tracking' | 'setting';
 
+function viewToPath(view: View, mode?: TreeViewMode, filter?: string | null): string {
+  if (view === 'tree') return mode === 'tracking' ? '/okr-map?mode=tracking' : '/okr-map';
+  if (view === 'management') return '/okr-list';
+  if (view === 'users') return '/users';
+  return filter ? `/?filter=${filter}` : '/';
+}
+
+function pathToView(): { view: View; mode: TreeViewMode; filter: string | null } {
+  const path = window.location.pathname;
+  const params = new URLSearchParams(window.location.search);
+  if (path.startsWith('/okr-map')) return { view: 'tree', mode: params.get('mode') === 'tracking' ? 'tracking' : 'setting', filter: null };
+  if (path === '/okr-list') return { view: 'management', mode: 'setting', filter: null };
+  if (path === '/users') return { view: 'users', mode: 'setting', filter: null };
+  return { view: 'dashboards', mode: 'setting', filter: params.get('filter') };
+}
+
 function App() {
+  const initial = pathToView();
   const [okrs, setOkrs] = useState<OKR[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingOKR, setEditingOKR] = useState<OKR | null>(null);
   const [parentIdForNewOKR, setParentIdForNewOKR] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<View>('dashboards');
+  const [currentView, setCurrentView] = useState<View>(initial.view);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showChangelog, setShowChangelog] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>('setting');
+  const [treeViewMode, setTreeViewMode] = useState<TreeViewMode>(initial.mode);
   const [pendingOkrId, setPendingOkrId] = useState<string | null>(null);
   const [pendingCheckInOkrId, setPendingCheckInOkrId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [useSupabase] = useState(isSupabaseConfigured());
+  const [dashboardFilter, setDashboardFilter] = useState<string | null>(initial.filter);
+
+  // Navigate to a view and push browser history
+  const navigateTo = useCallback((view: View, mode?: TreeViewMode) => {
+    const resolvedMode = mode ?? (view === 'tree' ? treeViewMode : 'setting');
+    setCurrentView(view);
+    if (view === 'tree' && mode) setTreeViewMode(mode);
+    window.history.pushState(null, '', viewToPath(view, resolvedMode, view === 'dashboards' ? dashboardFilter : null));
+  }, [treeViewMode, dashboardFilter]);
+
+  // Update dashboard filter and sync URL (replaceState, not pushState)
+  const handleDashboardFilterChange = useCallback((filter: string | null) => {
+    setDashboardFilter(filter);
+    window.history.replaceState(null, '', viewToPath('dashboards', undefined, filter));
+  }, []);
+
+  // Listen for browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const { view, mode, filter } = pathToView();
+      setCurrentView(view);
+      setTreeViewMode(mode);
+      setDashboardFilter(filter);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Track page view when view changes
   useEffect(() => {
@@ -191,15 +235,13 @@ function App() {
 
   const handleDashboardOkrClick = (okrId: string) => {
     setPendingOkrId(okrId);
-    setTreeViewMode('tracking');
-    setCurrentView('tree');
+    navigateTo('tree', 'tracking');
   };
 
   const handleDashboardActionClick = (globalOkrId: string, areaOkrId: string) => {
     setPendingOkrId(globalOkrId);
     setPendingCheckInOkrId(areaOkrId);
-    setTreeViewMode('tracking');
-    setCurrentView('tree');
+    navigateTo('tree', 'tracking');
   };
 
   const renderContent = () => {
@@ -214,7 +256,7 @@ function App() {
 
     // Executive Dashboard
     if (currentView === 'dashboards') {
-      return <ExecutiveDashboard okrs={okrs} onNavigate={setCurrentView} onOkrClick={handleDashboardOkrClick} onActionClick={handleDashboardActionClick} />;
+      return <ExecutiveDashboard okrs={okrs} onNavigate={navigateTo} onOkrClick={handleDashboardOkrClick} onActionClick={handleDashboardActionClick} activeFilter={dashboardFilter} onFilterChange={handleDashboardFilterChange} />;
     }
 
     // Users coming soon page
@@ -237,13 +279,13 @@ function App() {
             <div className={`mode-switch ${treeViewMode === 'tracking' ? 'tracking' : 'setting'}`}>
               <button
                 className={`mode-switch-option ${treeViewMode === 'setting' ? 'active' : ''}`}
-                onClick={() => { const next = treeViewMode === 'setting' ? 'tracking' : 'setting'; setTreeViewMode(next); captureEvent('mode_switched', { mode: next }); }}
+                onClick={() => { const next: TreeViewMode = treeViewMode === 'setting' ? 'tracking' : 'setting'; navigateTo('tree', next); captureEvent('mode_switched', { mode: next }); }}
               >
                 OKR Setting
               </button>
               <button
                 className={`mode-switch-option ${treeViewMode === 'tracking' ? 'active' : ''}`}
-                onClick={() => { const next = treeViewMode === 'tracking' ? 'setting' : 'tracking'; setTreeViewMode(next); captureEvent('mode_switched', { mode: next }); }}
+                onClick={() => { const next: TreeViewMode = treeViewMode === 'tracking' ? 'setting' : 'tracking'; navigateTo('tree', next); captureEvent('mode_switched', { mode: next }); }}
               >
                 OKR Tracking
               </button>
@@ -312,7 +354,7 @@ function App() {
         isCollapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
         currentView={currentView}
-        onViewChange={setCurrentView}
+        onViewChange={navigateTo}
       />
       <div className={`app-content ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
         {error && (

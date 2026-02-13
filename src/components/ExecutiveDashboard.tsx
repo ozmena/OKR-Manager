@@ -8,6 +8,8 @@ interface ExecutiveDashboardProps {
   onNavigate: (view: View) => void;
   onOkrClick?: (okrId: string) => void;
   onActionClick?: (globalOkrId: string, areaOkrId: string) => void;
+  activeFilter: string | null;
+  onFilterChange: (filter: string | null) => void;
 }
 
 // ─── Progress calculations ──────────────────────────────────────
@@ -234,7 +236,7 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
       </h3>
       {/* Section A: OKR Overview */}
       <div className="exec-okr-card__overview">
-        <div title={globalOkr.objective} style={{ cursor: 'default' }}>
+        <div title="Average of key results progress" style={{ cursor: 'default' }}>
           <CircularProgress actualProgress={progress} color={color} size={120} animate={animate} />
         </div>
         <div className="exec-kr-list">
@@ -277,8 +279,7 @@ function OKRCard({ globalOkr, children, onClick, onActionClick }: { globalOkr: O
 }
 
 // ─── Main Component ─────────────────────────────────────────────
-export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: ExecutiveDashboardProps) {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick, activeFilter, onFilterChange }: ExecutiveDashboardProps) {
   const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
@@ -328,15 +329,15 @@ export function ExecutiveDashboard({ okrs, onOkrClick, onActionClick }: Executiv
 OKRs
           </div>
           <div className="exec-summary-section__cards">
-            <div className={`exec-metric-card exec-metric-card--green${activeFilter === 'on-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'on-track' ? null : 'on-track')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--green${activeFilter === 'on-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'on-track' ? null : 'on-track')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#2CBF96" strokeWidth="2"/><path d="M6 10L9 13L14 7" stroke="#2CBF96" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> On track</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-ontrack-count)' }}>{summaryCounts['on-track']}</div>
             </div>
-            <div className={`exec-metric-card exec-metric-card--yellow${activeFilter === 'progressing' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'progressing' ? null : 'progressing')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--yellow${activeFilter === 'progressing' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'progressing' ? null : 'progressing')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#D08121" strokeWidth="2"/><path d="M6 12L9 9L11 11L14 7" stroke="#D08121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Progressing</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-progressing-count)' }}>{summaryCounts.progressing}</div>
             </div>
-            <div className={`exec-metric-card exec-metric-card--red${activeFilter === 'off-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'off-track' ? null : 'off-track')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--red${activeFilter === 'off-track' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'off-track' ? null : 'off-track')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#DB536D" strokeWidth="2"/><path d="M7 7L13 13M13 7L7 13" stroke="#DB536D" strokeWidth="2" strokeLinecap="round"/></svg> Off track</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-offtrack-count)' }}>{summaryCounts['off-track']}</div>
             </div>
@@ -348,15 +349,15 @@ OKRs
 Actions
           </div>
           <div className="exec-summary-section__cards">
-            <div className={`exec-metric-card exec-metric-card--overdue${activeFilter === 'action-overdue' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-overdue' ? null : 'action-overdue')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--overdue${activeFilter === 'action-overdue' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'action-overdue' ? null : 'action-overdue')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#DB536D" strokeWidth="2"/><path d="M10 5V10" stroke="#DB536D" strokeWidth="2" strokeLinecap="round"/><circle cx="10" cy="14" r="1" fill="#DB536D"/></svg> Overdue</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-overdue-count)' }}>{actionCounts.overdue}</div>
             </div>
-            <div className={`exec-metric-card exec-metric-card--completed${activeFilter === 'action-completed' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-completed' ? null : 'action-completed')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--completed${activeFilter === 'action-completed' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'action-completed' ? null : 'action-completed')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#2CBF96" strokeWidth="2"/><path d="M6 10L9 13L14 7" stroke="#2CBF96" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Completed</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-completed-count)' }}>{actionCounts.completed}</div>
             </div>
-            <div className={`exec-metric-card exec-metric-card--open${activeFilter === 'action-open' ? ' exec-metric-card--shadow' : ''}`} onClick={() => setActiveFilter(prev => prev === 'action-open' ? null : 'action-open')} style={{ cursor: 'pointer' }}>
+            <div className={`exec-metric-card exec-metric-card--open${activeFilter === 'action-open' ? ' exec-metric-card--shadow' : ''}`} onClick={() => onFilterChange(activeFilter === 'action-open' ? null : 'action-open')} style={{ cursor: 'pointer' }}>
               <div className="exec-metric-card__label"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="black" strokeWidth="2"/><circle cx="10" cy="10" r="3" stroke="black" strokeWidth="2"/></svg> Open</div>
               <div className="exec-metric-card__count" style={{ color: 'var(--exec-open-count)' }}>{actionCounts.open}</div>
             </div>
