@@ -27,6 +27,9 @@ export const seedOKRs: OKR[] = [
     createdAt: '2026-01-10T17:15:11.172Z',
     owner: 'Hardik Bhatt',
     status: 'progressing',
+    challenges: 'Feb 14 — Budget approval delayed, waiting on procurement.\nFeb 3 — Team capacity issue for Q1 rollout.',
+    needs: 'Feb 14 — Need sign-off on budget by Feb 21.',
+    comments: 'Feb 14 — Agreed to escalate to leadership sync. Owner to prepare one-pager.',
   },
   {
     id: 'child-1-1',

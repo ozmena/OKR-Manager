@@ -10,9 +10,9 @@ DELETE FROM okrs;
 -- ============================================
 -- Global OKR 1 - Market Leadership
 -- ============================================
-INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status)
+INSERT INTO okrs (id, display_id, objective, created_at, parent_id, area, owner, status, challenges, needs, comments)
 VALUES
-  ('00000000-0000-4000-a000-000000000001', 'OKR-1', 'Become the market leader, more innovative and automated processes', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Hardik Bhatt', 'progressing');
+  ('00000000-0000-4000-a000-000000000001', 'OKR-1', 'Become the market leader, more innovative and automated processes', '2026-01-10T17:15:11.172Z', NULL, NULL, 'Hardik Bhatt', 'progressing', E'Feb 14 \u2014 Budget approval delayed, waiting on procurement.\nFeb 3 \u2014 Team capacity issue for Q1 rollout.', 'Feb 14 — Need sign-off on budget by Feb 21.', 'Feb 14 — Agreed to escalate to leadership sync. Owner to prepare one-pager.');
 
 INSERT INTO key_results (id, okr_id, metric_name, from_value, to_value, current_value, status, sort_order)
 VALUES
